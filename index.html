@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission Control</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #c9d1d9; min-height: 100vh; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 40px 32px; overflow-x: auto; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 { font-size: 36px; font-weight: 700; background: linear-gradient(135deg, #58a6ff, #1f6feb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    .header p { color: #8b949e; font-size: 14px; }
+    .stats-bar { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+    .stat { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 20px; text-align: center; }
+    .stat-value { font-size: 24px; font-weight: 700; color: #58a6ff; }
+    .stat-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+    .category-tabs { display: flex; justify-content: center; gap: 10px; margin: 24px 0; flex-wrap: wrap; }
+    .category-tab { padding: 10px 20px; border: 1px solid #30363d; border-radius: 20px; background: transparent; color: #8b949e; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+    .category-tab:hover { border-color: #58a6ff; color: #c9d1d9; }
+    .category-tab.active { background: #1f6feb; border-color: #1f6feb; color: white; }
+    .action-buttons { display: flex; justify-content: center; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+    .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; }
+    .btn-primary { background: #1f6feb; color: white; border: none; }
+    .btn-primary:hover { background: #388bfd; }
+    .btn-secondary { background: transparent; color: #8b949e; border: 1px solid #30363d; }
+    .btn-secondary:hover { border-color: #8b949e; color: #c9d1d9; }
+    .weekly-focus { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+    .weekly-focus h2 { font-size: 16px; font-weight: 600; color: #58a6ff; margin-bottom: 16px; }
+    .weekly-focus-tasks { min-height: 40px; }
+    .weekly-focus-empty { color: #484f58; font-size: 14px; text-align: center; padding: 8px; }
+    .focus-task { background: #21262d; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #58a6ff; }
+    .focus-task-title { font-size: 14px; font-weight: 500; color: #c9d1d9; }
+    .focus-task-remove { background: none; border: none; color: #484f58; cursor: pointer; font-size: 16px; }
+    .focus-task-remove:hover { color: #f85149; }
+    .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; min-width: 900px; }
+    .column { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px; min-height: 500px; }
+    .column-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #30363d; }
+    .column-title { font-size: 13px; font-weight: 700; color: #58a6ff; text-transform: uppercase; letter-spacing: 0.5px; }
+    .column-count { background: #1f6feb; color: white; min-width: 24px; height: 24px; border-radius: 12px; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; padding: 0 8px; }
+    .tasks { display: flex; flex-direction: column; gap: 12px; min-height: 400px; }
+    .tasks.drag-over { background: rgba(31, 111, 235, 0.1); border-radius: 8px; }
+    .tasks-empty { color: #484f58; font-size: 13px; text-align: center; padding: 40px 20px; }
+    .task { background: #21262d; border-radius: 8px; padding: 14px; cursor: grab; transition: all 0.2s ease; border-left: 3px solid #3fb950; }
+    .task:hover { background: #262c36; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+    .task.dragging { opacity: 0.5; cursor: grabbing; }
+    .task.growth { border-left-color: #58a6ff; }
+    .task.creative { border-left-color: #a371f7; }
+    .task.product { border-left-color: #f78166; }
+    .task.team { border-left-color: #d29922; }
+    .task.ops { border-left-color: #3fb950; }
+    .task-title { font-size: 14px; font-weight: 600; color: #c9d1d9; margin-bottom: 6px; }
+    .task-desc { font-size: 12px; color: #8b949e; margin-bottom: 8px; line-height: 1.4; }
+    .task-timestamps { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; font-size: 10px; color: #6e7681; background: rgba(0,0,0,0.2); padding: 6px 8px; border-radius: 4px; }
+    .task-timestamps .ts-row { display: flex; justify-content: space-between; }
+    .task-timestamps .ts-label { color: #484f58; }
+    .task-timestamps .ts-value { color: #8b949e; }
+    .task-timestamps .ts-value.completed { color: #3fb950; }
+    .task-time { display: flex; gap: 12px; margin-bottom: 8px; font-size: 11px; }
+    .task-time-item { display: flex; align-items: center; gap: 4px; color: #8b949e; }
+    .task-time-item.over { color: #f85149; }
+    .task-time-item.under { color: #3fb950; }
+    .task-attachment { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #58a6ff; background: rgba(88, 166, 255, 0.1); padding: 4px 8px; border-radius: 4px; text-decoration: none; margin-bottom: 8px; }
+    .task-attachment:hover { background: rgba(88, 166, 255, 0.2); }
+    .task-footer { display: flex; align-items: center; justify-content: space-between; }
+    .task-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .task-tag { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 4px; background: #30363d; color: #8b949e; }
+    .task-tag.growth { background: rgba(88, 166, 255, 0.2); color: #58a6ff; }
+    .task-tag.creative { background: rgba(163, 113, 247, 0.2); color: #a371f7; }
+    .task-tag.product { background: rgba(247, 129, 102, 0.2); color: #f78166; }
+    .task-tag.team { background: rgba(210, 153, 34, 0.2); color: #d29922; }
+    .task-tag.ops { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
+    .task-tag.focus { background: rgba(56, 139, 253, 0.2); color: #388bfd; }
+    .task-actions { display: flex; gap: 4px; }
+    .task-action { background: transparent; border: none; color: #484f58; padding: 4px 6px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.15s ease; }
+    .task-action:hover { background: #30363d; color: #c9d1d9; }
+    .task-action.delete:hover { background: rgba(248, 81, 73, 0.2); color: #f85149; }
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; width: 100%; max-width: 500px; }
+    .modal h3 { font-size: 18px; font-weight: 600; color: #c9d1d9; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #8b949e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; background: #21262d; border: 1px solid #30363d; border-radius: 8px; padding: 12px; color: #c9d1d9; font-size: 14px; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.2); }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-group { flex: 1; }
+    .form-group-check { display: flex; align-items: center; gap: 10px; }
+    .form-group-check input { width: auto; }
+    .form-group-check label { margin-bottom: 0; text-transform: none; font-size: 14px; }
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .modal-actions .btn { flex: 1; justify-content: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 Mission Control</h1>
+      <p>Jarvis Task Tracker • Time tracked • Deliverables attached</p>
+    </div>
+    
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-value" id="totalTasks">0</div>
+        <div class="stat-label">Total Tasks</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="completedTasks">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="totalTime">0h</div>
+        <div class="stat-label">Time Logged</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="avgEfficiency">—</div>
+        <div class="stat-label">Efficiency</div>
+      </div>
+    </div>
+    
+    <div class="category-tabs">
+      <button class="category-tab active" data-category="all">All</button>
+      <button class="category-tab" data-category="growth">📈 Growth</button>
+      <button class="category-tab" data-category="creative">🎨 Creative</button>
+      <button class="category-tab" data-category="product">🚀 Product</button>
+      <button class="category-tab" data-category="team">👥 Team</button>
+      <button class="category-tab" data-category="ops">⚙️ Ops</button>
+    </div>
+    
+    <div class="action-buttons">
+      <button class="btn btn-primary" onclick="openModal()">+ Add Task</button>
+      <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('importInput').click()">Import JSON</button>
+      <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+    
+    <div class="weekly-focus">
+      <h2>🎯 This Week's Focus</h2>
+      <div class="weekly-focus-tasks" id="focusTasks">
+        <div class="weekly-focus-empty">No focus tasks this week.</div>
+      </div>
+    </div>
+    
+    <div class="board">
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">📋 BACKLOG</span>
+          <span class="column-count" data-count="backlog">0</span>
+        </div>
+        <div class="tasks" data-status="backlog"><div class="tasks-empty">Drop tasks here</div></div>
+      </div>
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">⚡ IN PROGRESS</span>
+          <span class="column-count" data-count="in-progress">0</span>
+        </div>
+        <div class="tasks" data-status="in-progress"><div class="tasks-empty">Drop tasks here</div></div>
+      </div>
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">👀 REVIEW</span>
+          <span class="column-count" data-count="review">0</span>
+        </div>
+        <div class="tasks" data-status="review"><div class="tasks-empty">Drop tasks here</div></div>
+      </div>
+      <div class="column">
+        <div class="column-header">
+          <span class="column-title">✅ DONE</span>
+          <span class="column-count" data-count="done">0</span>
+        </div>
+        <div class="tasks" data-status="done"><div class="tasks-empty">Drop tasks here</div></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h3 id="modalTitle">Add New Task</h3>
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="taskTitle" placeholder="What needs to be done?">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="taskDesc" placeholder="Add details, notes, or context..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="taskCategory">
+            <option value="ops">⚙️ Ops</option>
+            <option value="growth">📈 Growth</option>
+            <option value="creative">🎨 Creative</option>
+            <option value="product">🚀 Product</option>
+            <option value="team">👥 Team</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="taskStatus">
+            <option value="backlog">Backlog</option>
+            <option value="in-progress">In Progress</option>
+            <option value="review">Review</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Time Estimate (min)</label>
+          <input type="number" id="taskEstimate" placeholder="30" min="0">
+        </div>
+        <div class="form-group">
+          <label>Actual Time (min)</label>
+          <input type="number" id="taskActual" placeholder="0" min="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Started At</label>
+          <input type="datetime-local" id="taskStartedAt">
+        </div>
+        <div class="form-group">
+          <label>Completed At</label>
+          <input type="datetime-local" id="taskCompletedAt">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Attachment / Deliverable</label>
+        <input type="text" id="taskAttachment" placeholder="Link or file path">
+      </div>
+      <div class="form-group">
+        <label>Attachment Label</label>
+        <input type="text" id="taskAttachmentLabel" placeholder="e.g., Org Chart, Report">
+      </div>
+      <div class="form-group form-group-check">
+        <input type="checkbox" id="taskFocus">
+        <label for="taskFocus">🎯 Add to This Week's Focus</label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" id="modalSubmit" onclick="saveTask()">Add Task</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let tasks = [];
+    let currentCategory = 'all';
+    let editingId = null;
+    
+    // All historical tasks with timestamps
+    const EMBEDDED_TASKS = [
+      // 2026-02-03
+      {
+        id: 1738540800000,
+        title: "Initial setup and orientation",
+        desc: "Session established, workspace configured",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 60,
+        actual: 60,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-03T12:00:00",
+        completedAt: "2026-02-03T13:00:00"
+      },
+      // 2026-02-04
+      {
+        id: 1738627200000,
+        title: "Morning brief",
+        desc: "Delivered morning summary via Telegram",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 30,
+        actual: 142,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-04T06:00:00",
+        completedAt: "2026-02-04T08:22:00"
+      },
+      {
+        id: 1738627200001,
+        title: "Capture business context",
+        desc: "Documented org structure, financials, team, KPIs",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 45,
+        actual: 36,
+        attachment: "/memory/business-context.md",
+        attachmentLabel: "Business Context",
+        createdAt: "2026-02-04T14:00:00",
+        completedAt: "2026-02-04T14:36:00"
+      },
+      {
+        id: 1738627200002,
+        title: "Build company scorecard",
+        desc: "KPIs dashboard with current metrics",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 15,
+        actual: 1,
+        attachment: "/ops/company-scorecard.md",
+        attachmentLabel: "Company Scorecard",
+        createdAt: "2026-02-04T14:36:00",
+        completedAt: "2026-02-04T14:37:00"
+      },
+      {
+        id: 1738627200003,
+        title: "Build founder leverage assessment",
+        desc: "Identified where Michael is trapped/needed",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 15,
+        actual: 1,
+        attachment: "/ops/founder-leverage-assessment.md",
+        attachmentLabel: "Leverage Assessment",
+        createdAt: "2026-02-04T14:36:00",
+        completedAt: "2026-02-04T14:37:00"
+      },
+      {
+        id: 1738627200004,
+        title: "Build 10-year risks doc",
+        desc: "7 risks ranked with mitigation strategies",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 15,
+        actual: 1,
+        attachment: "/ops/10-year-risks.md",
+        attachmentLabel: "10-Year Risks",
+        createdAt: "2026-02-04T14:37:00",
+        completedAt: "2026-02-04T14:38:00"
+      },
+      {
+        id: 1738627200005,
+        title: "Configure project categories",
+        desc: "Set up Growth, Creative, Product, Team, Ops categories",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 30,
+        actual: 42,
+        attachment: "/canvas/projects/index.html",
+        attachmentLabel: "Mission Control",
+        createdAt: "2026-02-04T19:00:00",
+        completedAt: "2026-02-04T19:42:00"
+      },
+      // 2026-02-05
+      {
+        id: 1738771200001,
+        title: "Create Jarvis-Memory.md",
+        desc: "Consolidated memory file for rules, context, lessons",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 10,
+        actual: 5,
+        attachment: "/Jarvis-Memory.md",
+        attachmentLabel: "Jarvis Memory",
+        createdAt: "2026-02-05T10:30:00",
+        completedAt: "2026-02-05T10:35:00"
+      },
+      {
+        id: 1738771200002,
+        title: "Create Mission-Control.md",
+        desc: "Task tracker with timestamps and deliverables",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 10,
+        actual: 5,
+        attachment: "/Mission-Control.md",
+        attachmentLabel: "Mission Control MD",
+        createdAt: "2026-02-05T10:30:00",
+        completedAt: "2026-02-05T10:35:00"
+      },
+      {
+        id: 1738771200003,
+        title: "Review Loom - Project Management Overview",
+        desc: "Watched 11:29 video, documented Monday.com boards, Shopify, Triple Whale, Slack usage",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 20,
+        actual: 15,
+        attachment: "/memory/2026-02-05.md",
+        attachmentLabel: "Daily Notes",
+        createdAt: "2026-02-05T10:47:00",
+        completedAt: "2026-02-05T10:52:00"
+      },
+      {
+        id: 1738771200004,
+        title: "Set up Google OAuth (jarvis@apebornfitness.com)",
+        desc: "Gmail, Calendar, Drive, Contacts, Docs, Sheets access configured",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 15,
+        actual: 1,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T10:56:00",
+        completedAt: "2026-02-05T10:57:00"
+      },
+      {
+        id: 1738771200005,
+        title: "Accept Monday.com invite",
+        desc: "Viewer access to Apeborn Fitness workspace - all boards visible",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 5,
+        actual: 5,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T10:57:00",
+        completedAt: "2026-02-05T11:02:00"
+      },
+      {
+        id: 1738771200006,
+        title: "Accept Shopify invite",
+        desc: "APE BORN store access (initially limited)",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 5,
+        actual: 5,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T11:06:00",
+        completedAt: "2026-02-05T11:11:00"
+      },
+      {
+        id: 1738771200007,
+        title: "Shopify permissions expanded",
+        desc: "Products, Collections, Inventory, Purchase orders, Transfers access granted",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 5,
+        actual: 9,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T11:11:00",
+        completedAt: "2026-02-05T11:20:00"
+      },
+      {
+        id: 1738771200008,
+        title: "Initial context ingestion",
+        desc: "Created initial-observations.md, shopify-products.md",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 20,
+        actual: 14,
+        attachment: "/memory/initial-observations.md",
+        attachmentLabel: "Initial Observations",
+        createdAt: "2026-02-05T11:11:00",
+        completedAt: "2026-02-05T11:25:00"
+      },
+      {
+        id: 1738771200010,
+        title: "Set up Slack read-only integration",
+        desc: "Created Slack app (Jarvis) with view-only permissions, configured bot token, connected to 18 channels",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 30,
+        actual: 14,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T12:07:00",
+        completedAt: "2026-02-05T12:21:00"
+      },
+      {
+        id: 1738771200011,
+        title: "Set up audio transcription",
+        desc: "Configured OpenAI Whisper API for voice message transcription",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 10,
+        actual: 2,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T12:28:00",
+        completedAt: "2026-02-05T12:30:00"
+      },
+      {
+        id: 1738771200012,
+        title: "Build Org Chart",
+        desc: "Pulled Slack roster (27 users), gathered team structure from Michael via voice notes, documented reporting lines",
+        category: "team",
+        status: "done",
+        focus: false,
+        estimate: 45,
+        actual: 17,
+        attachment: "/ORG_CHART.md",
+        attachmentLabel: "Org Chart (MD)",
+        createdAt: "2026-02-05T12:26:00",
+        completedAt: "2026-02-05T12:43:00"
+      },
+      {
+        id: 1738771200013,
+        title: "Generate visual org chart image",
+        desc: "Installed Graphviz, created color-coded PNG visualization of team structure",
+        category: "team",
+        status: "done",
+        focus: false,
+        estimate: 15,
+        actual: 7,
+        attachment: "/orgchart.png",
+        attachmentLabel: "Org Chart (PNG)",
+        createdAt: "2026-02-05T12:43:00",
+        completedAt: "2026-02-05T12:50:00"
+      },
+      {
+        id: 1738771200014,
+        title: "Add time & timestamp features to Mission Control",
+        desc: "Updated dashboard with time estimates, actual time, start/complete timestamps, attachment links, stats bar, efficiency calc",
+        category: "ops",
+        status: "done",
+        focus: false,
+        estimate: 30,
+        actual: 12,
+        attachment: "/canvas/projects/index.html",
+        attachmentLabel: "Mission Control",
+        createdAt: "2026-02-05T12:58:00",
+        completedAt: "2026-02-05T13:10:00"
+      },
+      // Backlog
+      {
+        id: 1738771200020,
+        title: "Read culture doc on Monday.com",
+        desc: "Core values, vision, heuristics - most important doc per Michael",
+        category: "ops",
+        status: "backlog",
+        focus: true,
+        estimate: 30,
+        actual: 0,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T10:50:00",
+        completedAt: null
+      },
+      {
+        id: 1738771200021,
+        title: "Monitor Fathom for Manoop call transcript",
+        desc: "Waiting for meeting transcript to come through webhook - first test of integration",
+        category: "ops",
+        status: "backlog",
+        focus: false,
+        estimate: 5,
+        actual: 0,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T12:02:00",
+        completedAt: null
+      },
+      {
+        id: 1738771200022,
+        title: "Get Triple Whale access",
+        desc: "Michael checking if view access is possible - source of truth for analytics",
+        category: "ops",
+        status: "backlog",
+        focus: false,
+        estimate: 5,
+        actual: 0,
+        attachment: null,
+        attachmentLabel: null,
+        createdAt: "2026-02-05T10:50:00",
+        completedAt: null
+      }
+    ];
+    
+    function init() {
+      const stored = localStorage.getItem('mission-control-tasks-v2');
+      if (stored) {
+        tasks = JSON.parse(stored);
+      } else {
+        tasks = EMBEDDED_TASKS;
+        saveTasks();
+      }
+      renderTasks();
+    }
+    
+    function formatDateTime(isoString) {
+      if (!isoString) return '—';
+      const d = new Date(isoString);
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      const hours = d.getHours().toString().padStart(2, '0');
+      const mins = d.getMinutes().toString().padStart(2, '0');
+      return `${month}/${day} ${hours}:${mins}`;
+    }
+    
+    function toLocalInput(isoString) {
+      if (!isoString) return '';
+      const d = new Date(isoString);
+      const offset = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - offset * 60000);
+      return local.toISOString().slice(0, 16);
+    }
+    
+    function fromLocalInput(localString) {
+      if (!localString) return null;
+      return new Date(localString).toISOString();
+    }
+    
+    function openModal(id = null) {
+      editingId = id;
+      const modal = document.getElementById('modal');
+      if (id) {
+        const task = tasks.find(t => t.id === id);
+        if (task) {
+          document.getElementById('modalTitle').textContent = 'Edit Task';
+          document.getElementById('modalSubmit').textContent = 'Save Changes';
+          document.getElementById('taskTitle').value = task.title;
+          document.getElementById('taskDesc').value = task.desc || '';
+          document.getElementById('taskCategory').value = task.category;
+          document.getElementById('taskStatus').value = task.status;
+          document.getElementById('taskEstimate').value = task.estimate || '';
+          document.getElementById('taskActual').value = task.actual || '';
+          document.getElementById('taskStartedAt').value = toLocalInput(task.createdAt);
+          document.getElementById('taskCompletedAt').value = toLocalInput(task.completedAt);
+          document.getElementById('taskAttachment').value = task.attachment || '';
+          document.getElementById('taskAttachmentLabel').value = task.attachmentLabel || '';
+          document.getElementById('taskFocus').checked = task.focus;
+        }
+      } else {
+        document.getElementById('modalTitle').textContent = 'Add New Task';
+        document.getElementById('modalSubmit').textContent = 'Add Task';
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskDesc').value = '';
+        document.getElementById('taskEstimate').value = '';
+        document.getElementById('taskActual').value = '';
+        document.getElementById('taskStartedAt').value = toLocalInput(new Date().toISOString());
+        document.getElementById('taskCompletedAt').value = '';
+        document.getElementById('taskAttachment').value = '';
+        document.getElementById('taskAttachmentLabel').value = '';
+        document.getElementById('taskFocus').checked = false;
+      }
+      modal.classList.add('active');
+      document.getElementById('taskTitle').focus();
+    }
+    
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+      editingId = null;
+    }
+    
+    function saveTask() {
+      const title = document.getElementById('taskTitle').value.trim();
+      if (!title) return;
+      
+      const status = document.getElementById('taskStatus').value;
+      const taskData = {
+        title,
+        desc: document.getElementById('taskDesc').value.trim(),
+        category: document.getElementById('taskCategory').value,
+        status,
+        focus: document.getElementById('taskFocus').checked,
+        estimate: parseInt(document.getElementById('taskEstimate').value) || 0,
+        actual: parseInt(document.getElementById('taskActual').value) || 0,
+        createdAt: fromLocalInput(document.getElementById('taskStartedAt').value) || new Date().toISOString(),
+        completedAt: fromLocalInput(document.getElementById('taskCompletedAt').value),
+        attachment: document.getElementById('taskAttachment').value.trim() || null,
+        attachmentLabel: document.getElementById('taskAttachmentLabel').value.trim() || null
+      };
+      
+      // Auto-set completedAt if moving to done
+      if (status === 'done' && !taskData.completedAt) {
+        taskData.completedAt = new Date().toISOString();
+      }
+      
+      if (editingId) {
+        const idx = tasks.findIndex(t => t.id === editingId);
+        if (idx !== -1) {
+          tasks[idx] = { ...tasks[idx], ...taskData };
+        }
+      } else {
+        tasks.push({ id: Date.now(), ...taskData });
+      }
+      
+      saveTasks();
+      renderTasks();
+      closeModal();
+    }
+    
+    function deleteTask(id) {
+      if (confirm('Delete this task?')) {
+        tasks = tasks.filter(t => t.id !== id);
+        saveTasks();
+        renderTasks();
+      }
+    }
+    
+    function moveTask(id, newStatus) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.status = newStatus;
+        if (newStatus === 'done' && !task.completedAt) {
+          task.completedAt = new Date().toISOString();
+        }
+        saveTasks();
+        renderTasks();
+      }
+    }
+    
+    function toggleFocus(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.focus = !task.focus;
+        saveTasks();
+        renderTasks();
+      }
+    }
+    
+    function saveTasks() {
+      localStorage.setItem('mission-control-tasks-v2', JSON.stringify(tasks));
+    }
+    
+    function exportJSON() {
+      const data = JSON.stringify(tasks, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'mission-control-tasks.json';
+      a.click();
+    }
+    
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            tasks = imported;
+            saveTasks();
+            renderTasks();
+          }
+        } catch (err) {
+          alert('Invalid JSON file');
+        }
+      };
+      reader.readAsText(file);
+    }
+    
+    function formatTime(minutes) {
+      if (!minutes) return '—';
+      if (minutes < 60) return minutes + 'm';
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      return m > 0 ? `${h}h ${m}m` : `${h}h`;
+    }
+    
+    function renderTasks() {
+      const statuses = ['backlog', 'in-progress', 'review', 'done'];
+      
+      // Update stats
+      const completed = tasks.filter(t => t.status === 'done');
+      const totalActual = tasks.reduce((sum, t) => sum + (t.actual || 0), 0);
+      const totalEstimate = completed.reduce((sum, t) => sum + (t.estimate || 0), 0);
+      const efficiency = totalEstimate > 0 ? Math.round((totalEstimate / completed.reduce((sum, t) => sum + (t.actual || 0), 0)) * 100) : 0;
+      
+      document.getElementById('totalTasks').textContent = tasks.length;
+      document.getElementById('completedTasks').textContent = completed.length;
+      document.getElementById('totalTime').textContent = formatTime(totalActual);
+      document.getElementById('avgEfficiency').textContent = efficiency > 0 ? efficiency + '%' : '—';
+      
+      // Render focus tasks
+      const focusTasks = tasks.filter(t => t.focus && t.status !== 'done');
+      const focusContainer = document.getElementById('focusTasks');
+      if (focusTasks.length === 0) {
+        focusContainer.innerHTML = '<div class="weekly-focus-empty">No focus tasks this week.</div>';
+      } else {
+        focusContainer.innerHTML = focusTasks.map(task => `
+          <div class="focus-task">
+            <span class="focus-task-title">${task.title}</span>
+            <button class="focus-task-remove" onclick="toggleFocus(${task.id})">×</button>
+          </div>
+        `).join('');
+      }
+      
+      // Render columns
+      statuses.forEach(status => {
+        const container = document.querySelector(`.tasks[data-status="${status}"]`);
+        const filteredTasks = tasks.filter(t => 
+          t.status === status && 
+          (currentCategory === 'all' || t.category === currentCategory)
+        ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        if (filteredTasks.length === 0) {
+          container.innerHTML = '<div class="tasks-empty">Drop tasks here</div>';
+        } else {
+          container.innerHTML = filteredTasks.map(task => {
+            const timeClass = task.actual > task.estimate ? 'over' : (task.actual < task.estimate ? 'under' : '');
+            return `
+            <div class="task ${task.category}" draggable="true" data-id="${task.id}">
+              <div class="task-title">${task.title}</div>
+              ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
+              <div class="task-timestamps">
+                <div class="ts-row"><span class="ts-label">Started:</span><span class="ts-value">${formatDateTime(task.createdAt)}</span></div>
+                <div class="ts-row"><span class="ts-label">Completed:</span><span class="ts-value ${task.completedAt ? 'completed' : ''}">${formatDateTime(task.completedAt)}</span></div>
+              </div>
+              <div class="task-time">
+                ${task.estimate ? `<span class="task-time-item">⏱ Est: ${formatTime(task.estimate)}</span>` : ''}
+                ${task.actual ? `<span class="task-time-item ${timeClass}">✓ Actual: ${formatTime(task.actual)}</span>` : ''}
+              </div>
+              ${task.attachment ? `<a href="${task.attachment}" class="task-attachment" target="_blank">📎 ${task.attachmentLabel || task.attachment}</a>` : ''}
+              <div class="task-footer">
+                <div class="task-tags">
+                  <span class="task-tag ${task.category}">${task.category}</span>
+                  ${task.focus ? '<span class="task-tag focus">focus</span>' : ''}
+                </div>
+                <div class="task-actions">
+                  <button class="task-action" onclick="openModal(${task.id})" title="Edit">✏️</button>
+                  <button class="task-action" onclick="toggleFocus(${task.id})" title="Toggle focus">🎯</button>
+                  <button class="task-action delete" onclick="deleteTask(${task.id})" title="Delete">×</button>
+                </div>
+              </div>
+            </div>
+          `}).join('');
+        }
+        
+        document.querySelector(`[data-count="${status}"]`).textContent = filteredTasks.length;
+      });
+      
+      setupDragAndDrop();
+    }
+    
+    function setupDragAndDrop() {
+      document.querySelectorAll('.task').forEach(task => {
+        task.addEventListener('dragstart', () => task.classList.add('dragging'));
+        task.addEventListener('dragend', () => task.classList.remove('dragging'));
+      });
+      
+      document.querySelectorAll('.tasks').forEach(container => {
+        container.addEventListener('dragover', (e) => { e.preventDefault(); container.classList.add('drag-over'); });
+        container.addEventListener('dragleave', () => container.classList.remove('drag-over'));
+        container.addEventListener('drop', (e) => {
+          e.preventDefault();
+          container.classList.remove('drag-over');
+          const dragging = document.querySelector('.dragging');
+          if (dragging) moveTask(parseInt(dragging.dataset.id), container.dataset.status);
+        });
+      });
+    }
+    
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCategory = tab.dataset.category;
+        renderTasks();
+      });
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+    
+    init();
+  </script>
+</body>
+</html>
