@@ -114,8 +114,8 @@
         <div class="stat-label">Time Logged</div>
       </div>
       <div class="stat">
-        <div class="stat-value" id="avgEfficiency">—</div>
-        <div class="stat-label">Efficiency</div>
+        <div class="stat-value" id="timeSaved">—</div>
+        <div class="stat-label">Time Saved</div>
       </div>
       <div class="stat">
         <div class="stat-value" style="color: #3fb950;">125</div>
@@ -732,12 +732,13 @@
       const completed = tasks.filter(t => t.status === 'done');
       const totalActual = tasks.reduce((sum, t) => sum + (t.actual || 0), 0);
       const totalEstimate = completed.reduce((sum, t) => sum + (t.estimate || 0), 0);
-      const efficiency = totalEstimate > 0 ? Math.round((totalEstimate / completed.reduce((sum, t) => sum + (t.actual || 0), 0)) * 100) : 0;
+      const totalActualCompleted = completed.reduce((sum, t) => sum + (t.actual || 0), 0);
+      const timeSaved = totalEstimate - totalActualCompleted;
       
       document.getElementById('totalTasks').textContent = tasks.length;
       document.getElementById('completedTasks').textContent = completed.length;
       document.getElementById('totalTime').textContent = formatTime(totalActual);
-      document.getElementById('avgEfficiency').textContent = efficiency > 0 ? efficiency + '%' : '—';
+      document.getElementById('timeSaved').textContent = timeSaved > 0 ? formatTime(timeSaved) : '—';
       
       // Render focus tasks
       const focusTasks = tasks.filter(t => t.focus && t.status !== 'done');
