@@ -457,12 +457,23 @@
     ];
     
     function init() {
-      const stored = localStorage.getItem('mission-control-tasks-v2');
-      if (stored) {
-        tasks = JSON.parse(stored);
-      } else {
+      // Version 3 - Feb 9 2026 update. Bump to force refresh of embedded tasks.
+      const CURRENT_VERSION = 'v3-20260209';
+      const storedVersion = localStorage.getItem('mission-control-version');
+      
+      if (storedVersion !== CURRENT_VERSION) {
+        // New version - load fresh embedded tasks
         tasks = EMBEDDED_TASKS;
+        localStorage.setItem('mission-control-version', CURRENT_VERSION);
         saveTasks();
+      } else {
+        const stored = localStorage.getItem('mission-control-tasks-v2');
+        if (stored) {
+          tasks = JSON.parse(stored);
+        } else {
+          tasks = EMBEDDED_TASKS;
+          saveTasks();
+        }
       }
       renderTasks();
     }
