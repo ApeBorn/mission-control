@@ -91,6 +91,22 @@
     .form-group-check label { margin-bottom: 0; text-transform: none; font-size: 14px; }
     .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
     .modal-actions .btn { flex: 1; justify-content: center; }
+    .weekly-notes-section { background: #161b22; border: 1px solid #30363d; border-radius: 12px; margin-bottom: 32px; overflow: hidden; }
+    .weekly-notes-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; cursor: pointer; transition: background 0.2s; }
+    .weekly-notes-header:hover { background: #21262d; }
+    .weekly-notes-header h2 { font-size: 16px; font-weight: 600; color: #58a6ff; margin: 0; }
+    .toggle-icon { color: #8b949e; font-size: 12px; transition: transform 0.2s; }
+    .toggle-icon.collapsed { transform: rotate(-90deg); }
+    .weekly-notes-content { padding: 0 24px 24px; }
+    .weekly-notes-content.hidden { display: none; }
+    .week-selector { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; padding-top: 8px; }
+    .current-week { font-size: 16px; font-weight: 600; color: #c9d1d9; min-width: 180px; text-align: center; }
+    .notes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    @media (max-width: 768px) { .notes-grid { grid-template-columns: 1fr; } }
+    .note-card { background: #21262d; border-radius: 8px; padding: 16px; }
+    .note-card label { display: block; font-size: 13px; font-weight: 600; color: #8b949e; margin-bottom: 10px; }
+    .note-card textarea { width: 100%; min-height: 100px; background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 12px; color: #c9d1d9; font-size: 14px; resize: vertical; line-height: 1.5; }
+    .note-card textarea:focus { outline: none; border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.2); }
   </style>
 </head>
 <body>
@@ -143,6 +159,38 @@
       <h2>🎯 This Week's Focus</h2>
       <div class="weekly-focus-tasks" id="focusTasks">
         <div class="weekly-focus-empty">No focus tasks this week.</div>
+      </div>
+    </div>
+    
+    <div class="weekly-notes-section">
+      <div class="weekly-notes-header" onclick="toggleWeeklyNotes()">
+        <h2>📝 Weekly Notes</h2>
+        <span class="toggle-icon" id="notesToggle">▼</span>
+      </div>
+      <div class="weekly-notes-content" id="weeklyNotesContent">
+        <div class="week-selector">
+          <button class="btn btn-secondary" onclick="changeWeek(-1)">← Prev</button>
+          <span class="current-week" id="currentWeekLabel">Week of Feb 10, 2026</span>
+          <button class="btn btn-secondary" onclick="changeWeek(1)">Next →</button>
+        </div>
+        <div class="notes-grid">
+          <div class="note-card">
+            <label>🎯 Wins This Week</label>
+            <textarea id="noteWins" placeholder="What went well?" onchange="saveWeeklyNotes()"></textarea>
+          </div>
+          <div class="note-card">
+            <label>⚠️ Challenges / Blockers</label>
+            <textarea id="noteChallenges" placeholder="What got in the way?" onchange="saveWeeklyNotes()"></textarea>
+          </div>
+          <div class="note-card">
+            <label>💡 Learnings & Insights</label>
+            <textarea id="noteLearnings" placeholder="What did you learn?" onchange="saveWeeklyNotes()"></textarea>
+          </div>
+          <div class="note-card">
+            <label>🚀 Next Week Priorities</label>
+            <textarea id="noteNextWeek" placeholder="What's the focus for next week?" onchange="saveWeeklyNotes()"></textarea>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -253,6 +301,8 @@
     let tasks = [];
     let currentCategory = 'all';
     let editingId = null;
+    let weeklyNotes = {};
+    let currentWeekOffset = 0;
     
     // All historical tasks with timestamps - UPDATED 2026-02-09
     const EMBEDDED_TASKS = [
@@ -832,7 +882,69 @@
       if (e.key === 'Escape') closeModal();
     });
     
+    // Weekly Notes Functions
+    function getWeekKey(offset = 0) {
+      const now = new Date();
+      now.setDate(now.getDate() + (offset * 7));
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Monday
+      const monday = new Date(now.setDate(diff));
+      return monday.toISOString().split('T')[0];
+    }
+    
+    function getWeekLabel(offset = 0) {
+      const now = new Date();
+      now.setDate(now.getDate() + (offset * 7));
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(now.setDate(diff));
+      const options = { month: 'short', day: 'numeric', year: 'numeric' };
+      return 'Week of ' + monday.toLocaleDateString('en-US', options);
+    }
+    
+    function loadWeeklyNotes() {
+      const stored = localStorage.getItem('mission-control-weekly-notes');
+      if (stored) {
+        weeklyNotes = JSON.parse(stored);
+      }
+      renderWeeklyNotes();
+    }
+    
+    function renderWeeklyNotes() {
+      const weekKey = getWeekKey(currentWeekOffset);
+      const notes = weeklyNotes[weekKey] || {};
+      document.getElementById('currentWeekLabel').textContent = getWeekLabel(currentWeekOffset);
+      document.getElementById('noteWins').value = notes.wins || '';
+      document.getElementById('noteChallenges').value = notes.challenges || '';
+      document.getElementById('noteLearnings').value = notes.learnings || '';
+      document.getElementById('noteNextWeek').value = notes.nextWeek || '';
+    }
+    
+    function saveWeeklyNotes() {
+      const weekKey = getWeekKey(currentWeekOffset);
+      weeklyNotes[weekKey] = {
+        wins: document.getElementById('noteWins').value,
+        challenges: document.getElementById('noteChallenges').value,
+        learnings: document.getElementById('noteLearnings').value,
+        nextWeek: document.getElementById('noteNextWeek').value
+      };
+      localStorage.setItem('mission-control-weekly-notes', JSON.stringify(weeklyNotes));
+    }
+    
+    function changeWeek(direction) {
+      currentWeekOffset += direction;
+      renderWeeklyNotes();
+    }
+    
+    function toggleWeeklyNotes() {
+      const content = document.getElementById('weeklyNotesContent');
+      const toggle = document.getElementById('notesToggle');
+      content.classList.toggle('hidden');
+      toggle.classList.toggle('collapsed');
+    }
+    
     init();
+    loadWeeklyNotes();
   </script>
 </body>
 </html>
