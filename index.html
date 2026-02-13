@@ -584,24 +584,19 @@
       }
     ];
     
-    function init() {
-      // Version 4 - Feb 10 2026 update. Bump to force refresh of embedded tasks.
-      const CURRENT_VERSION = 'v7-20260213';
-      const storedVersion = localStorage.getItem('mission-control-version');
-      
-      if (storedVersion !== CURRENT_VERSION) {
-        // New version - load fresh embedded tasks
-        tasks = EMBEDDED_TASKS;
-        localStorage.setItem('mission-control-version', CURRENT_VERSION);
-        saveTasks();
-      } else {
-        const stored = localStorage.getItem('mission-control-tasks-v2');
-        if (stored) {
-          tasks = JSON.parse(stored);
+    async function init() {
+      // v8: Single source of truth - always load from tasks.json
+      try {
+        const response = await fetch('tasks.json?v=' + Date.now());
+        if (response.ok) {
+          tasks = await response.json();
         } else {
+          console.warn('Failed to load tasks.json, using embedded fallback');
           tasks = EMBEDDED_TASKS;
-          saveTasks();
         }
+      } catch (e) {
+        console.warn('Error loading tasks.json:', e);
+        tasks = EMBEDDED_TASKS;
       }
       renderTasks();
     }
