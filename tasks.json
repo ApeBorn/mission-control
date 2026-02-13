@@ -32,4 +32,3 @@
   {"id":1739390400003,"title":"Agent System - Truth & Reality","desc":"Single source of truth agent. Reconciles TW, Shopify, Finance data. Sub-module: TW Analytics.","category":"ops","status":"done","focus":false,"estimate":120,"actual":45,"attachment":"/agents/truth-reality/SCOPE.md","attachmentLabel":"Truth & Reality Spec","createdAt":"2026-02-11T10:00:00","completedAt":"2026-02-13T12:50:00"},
   {"id":1739390400004,"title":"Agent System - Execution & Throughput","desc":"Catch slippage, ownership gaps, bottlenecks. Track commitments vs delivery. Defined in AGENTS.md.","category":"ops","status":"done","focus":false,"estimate":90,"actual":30,"attachment":null,"attachmentLabel":null,"createdAt":"2026-02-11T10:00:00","completedAt":"2026-02-13T12:50:00"}
 ]
-// 1771005162
