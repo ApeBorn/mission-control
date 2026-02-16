@@ -90,7 +90,7 @@
     
     <div class="hq-container">
       <div class="hq-title">JARVIS HQ</div>
-      <div class="hq-subtitle">6 agents • 3 active • 3 awaiting deployment</div>
+      <div class="hq-subtitle">6 agents • 3 active • 1 sub-module • 3 awaiting deployment</div>
       
       <div class="floor-plan">
         <!-- Active Agents at Desks -->
@@ -127,8 +127,20 @@
           <div class="desk"></div>
         </div>
         
+        <!-- Capital Intelligence Sub-Module -->
+        <div class="room active" style="border-color: #58a6ff; background: linear-gradient(135deg, #1a1f35, #21262d);">
+          <span class="room-label" style="color: #58a6ff;">💰 Sub-Module</span>
+          <div class="agent">
+            <div class="agent-avatar" style="background: linear-gradient(135deg, #1f6feb, #58a6ff);">💰</div>
+            <div class="agent-name">Capital Intelligence</div>
+            <div class="agent-role">AUM • CAGR • $100M→$1T</div>
+            <div class="agent-status active"><span class="status-dot active"></span> Active</div>
+          </div>
+          <div class="desk"></div>
+        </div>
+        
         <!-- Kitchen - Proposed Agents Waiting -->
-        <div class="room kitchen">
+        <div class="room kitchen" style="grid-column: span 2;">
           <span class="room-label">🍳 Kitchen — Awaiting Activation</span>
           <div class="kitchen-content">
             <div class="kitchen-agent">
@@ -137,7 +149,7 @@
               <div class="agent-role">Team & culture health</div>
             </div>
             <div class="kitchen-agent">
-              <div class="agent-avatar" style="background: linear-gradient(135deg, #f78166, #da3633);">💰</div>
+              <div class="agent-avatar" style="background: linear-gradient(135deg, #f78166, #da3633);">📈</div>
               <div class="agent-name">Strategy & Capital</div>
               <div class="agent-role">Bets & opportunity cost</div>
             </div>
@@ -195,13 +207,22 @@
           <div class="detail-status proposed">⬜ Proposed</div>
         </div>
         
-        <div class="detail-card proposed">
+        <div class="detail-card active">
           <div class="detail-header">
             <span class="detail-emoji">💰</span>
+            <span class="detail-name">Capital Intelligence</span>
+          </div>
+          <div class="detail-purpose">AUM tracking, CAGR monitoring, milestone ladder ($100M → $1B → $10B → $100B → $1T). Institutional-grade capital allocation math.</div>
+          <div class="detail-status active">🟢 Active (sub-module)</div>
+        </div>
+        
+        <div class="detail-card proposed">
+          <div class="detail-header">
+            <span class="detail-emoji">📈</span>
             <span class="detail-name">Strategy & Capital</span>
           </div>
-          <div class="detail-purpose">Bets, opportunity cost, long-term compounding. Keep Michael in capital allocator mode.</div>
-          <div class="detail-status proposed">⬜ Proposed</div>
+          <div class="detail-purpose">Bets, opportunity cost, long-term compounding. Keep Michael in capital allocator mode. (Capital Intelligence is early activation)</div>
+          <div class="detail-status proposed">⬜ Proposed (partial via CI)</div>
         </div>
         
         <div class="detail-card proposed">
