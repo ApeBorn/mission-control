@@ -3,238 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent HQ | Mission Control</title>
+  <title>Agent HQ | Capital Operating System</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
-    .header { text-align: center; margin-bottom: 32px; }
-    .header h1 { font-size: 36px; font-weight: 700; background: linear-gradient(135deg, #58a6ff, #a371f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
-    .header p { color: #8b949e; font-size: 14px; margin-bottom: 16px; }
-    .back-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #21262d; border: 1px solid #30363d; border-radius: 8px; color: #8b949e; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s; }
-    .back-link:hover { border-color: #58a6ff; color: #58a6ff; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; 
+      background: #0a0a0a; 
+      color: #e5e5e5; 
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
     
-    .hq-container { background: linear-gradient(135deg, #1a1f35 0%, #161b22 100%); border: 2px solid #30363d; border-radius: 16px; padding: 32px; position: relative; overflow: hidden; }
-    .hq-title { position: absolute; top: 16px; left: 24px; font-size: 18px; font-weight: 700; color: #58a6ff; }
-    .hq-subtitle { position: absolute; top: 40px; left: 24px; font-size: 12px; color: #6e7681; }
+    .header { margin-bottom: 24px; }
+    .header h1 { font-size: 18px; font-weight: 600; color: #fff; }
+    .header .meta { font-size: 11px; color: #666; margin-top: 4px; }
+    .back-link { 
+      display: inline-block; 
+      margin-top: 12px;
+      font-size: 12px; 
+      color: #666; 
+      text-decoration: none; 
+    }
+    .back-link:hover { color: #888; }
     
-    .floor-plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 60px; }
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 600px) { .agents-grid { grid-template-columns: 1fr; } }
     
-    .room { background: #21262d; border: 2px solid #30363d; border-radius: 12px; padding: 20px; min-height: 180px; position: relative; transition: all 0.3s ease; }
-    .room:hover { border-color: #58a6ff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(88, 166, 255, 0.15); }
-    .room.active { border-color: #3fb950; box-shadow: 0 0 20px rgba(63, 185, 80, 0.2); }
-    .room.proposed { border-style: dashed; opacity: 0.7; }
-    .room.proposed:hover { opacity: 1; }
+    .agent-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .agent-card.active { border-left: 3px solid #22c55e; }
+    .agent-card.proposed { border-left: 3px solid #666; opacity: 0.6; }
     
-    .room-label { position: absolute; top: -10px; left: 16px; background: #161b22; padding: 2px 10px; font-size: 11px; font-weight: 600; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px; }
-    .room.active .room-label { color: #3fb950; }
-    .room.proposed .room-label { color: #f0883e; }
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .agent-icon { font-size: 24px; }
+    .agent-name { font-size: 14px; font-weight: 600; color: #fff; }
+    .agent-status {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .agent-status.active { background: #14532d; color: #4ade80; }
+    .agent-status.proposed { background: #1a1a1a; color: #666; }
     
-    .agent { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
-    .agent-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 12px; position: relative; }
-    .room.active .agent-avatar { animation: pulse 2s infinite; }
-    @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.4); } 50% { box-shadow: 0 0 0 12px rgba(63, 185, 80, 0); } }
+    .agent-purpose {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+    }
+    .agent-focus {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #666;
+    }
+    .agent-focus strong { color: #888; }
     
-    .agent-name { font-size: 16px; font-weight: 700; color: #c9d1d9; margin-bottom: 4px; }
-    .agent-role { font-size: 12px; color: #8b949e; text-align: center; margin-bottom: 12px; }
-    .agent-status { display: flex; align-items: center; gap: 6px; font-size: 11px; padding: 4px 10px; border-radius: 12px; }
-    .agent-status.active { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
-    .agent-status.proposed { background: rgba(240, 136, 62, 0.2); color: #f0883e; }
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
-    .status-dot.active { background: #3fb950; animation: blink 1.5s infinite; }
-    .status-dot.proposed { background: #f0883e; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    
-    .desk { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 80%; height: 8px; background: linear-gradient(to bottom, #6e7681, #484f58); border-radius: 2px; }
-    .room.active .desk { background: linear-gradient(to bottom, #3fb950, #238636); }
-    
-    .kitchen { grid-column: span 3; background: linear-gradient(135deg, #2d1f1f 0%, #21262d 100%); border-color: #f0883e; min-height: 140px; }
-    .kitchen .room-label { color: #f0883e; }
-    .kitchen-content { display: flex; justify-content: center; gap: 60px; align-items: center; height: 100%; }
-    .kitchen-agent { text-align: center; opacity: 0.7; transition: opacity 0.2s; }
-    .kitchen-agent:hover { opacity: 1; }
-    .kitchen-agent .agent-avatar { width: 48px; height: 48px; font-size: 24px; margin-bottom: 8px; }
-    .kitchen-agent .agent-name { font-size: 13px; }
-    .kitchen-agent .agent-role { font-size: 10px; }
-    
-    .legend { display: flex; justify-content: center; gap: 32px; margin-top: 24px; padding-top: 24px; border-top: 1px solid #30363d; }
-    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #8b949e; }
-    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .legend-dot.active { background: #3fb950; }
-    .legend-dot.proposed { background: #f0883e; }
-    
-    .agent-details { margin-top: 40px; }
-    .agent-details h2 { font-size: 20px; font-weight: 600; color: #58a6ff; margin-bottom: 20px; }
-    .details-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    @media (max-width: 768px) { .details-grid { grid-template-columns: 1fr; } .floor-plan { grid-template-columns: 1fr; } .kitchen { grid-column: span 1; } }
-    
-    .detail-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; }
-    .detail-card.active { border-left: 3px solid #3fb950; }
-    .detail-card.proposed { border-left: 3px solid #f0883e; }
-    .detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-    .detail-emoji { font-size: 24px; }
-    .detail-name { font-size: 16px; font-weight: 600; color: #c9d1d9; }
-    .detail-purpose { font-size: 13px; color: #8b949e; line-height: 1.5; }
-    .detail-status { margin-top: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .detail-status.active { color: #3fb950; }
-    .detail-status.proposed { color: #f0883e; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 24px 0 12px 0;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>🤖 Agent Headquarters</h1>
-      <p>Agents move from Kitchen → Desk when activated</p>
+      <h1>AGENT HQ</h1>
+      <div class="meta">Jarvis Agent Roster • 4 Active • 3 Proposed</div>
       <a href="index.html" class="back-link">← Back to Mission Control</a>
     </div>
     
-    <div class="hq-container">
-      <div class="hq-title">JARVIS HQ</div>
-      <div class="hq-subtitle">6 agents • 3 active • 1 sub-module • 3 awaiting deployment</div>
+    <div class="section-label">Active Agents</div>
+    <div class="agents-grid">
       
-      <div class="floor-plan">
-        <!-- Active Agents at Desks -->
-        <div class="room active">
-          <span class="room-label">CEO Shadow</span>
-          <div class="agent">
-            <div class="agent-avatar" style="background: linear-gradient(135deg, #1f6feb, #388bfd);">👁️</div>
-            <div class="agent-name">CEO Shadow</div>
-            <div class="agent-role">Maximize founder leverage</div>
-            <div class="agent-status active"><span class="status-dot active"></span> Active</div>
-          </div>
-          <div class="desk"></div>
+      <div class="agent-card active">
+        <div class="agent-header">
+          <span class="agent-icon">👁️</span>
+          <span class="agent-name">CEO Shadow</span>
+          <span class="agent-status active">ACTIVE</span>
         </div>
-        
-        <div class="room active">
-          <span class="room-label">Truth & Reality</span>
-          <div class="agent">
-            <div class="agent-avatar" style="background: linear-gradient(135deg, #238636, #3fb950);">📊</div>
-            <div class="agent-name">Truth & Reality</div>
-            <div class="agent-role">Single source of truth</div>
-            <div class="agent-status active"><span class="status-dot active"></span> Active</div>
-          </div>
-          <div class="desk"></div>
-        </div>
-        
-        <div class="room active">
-          <span class="room-label">Execution</span>
-          <div class="agent">
-            <div class="agent-avatar" style="background: linear-gradient(135deg, #a371f7, #8957e5);">⚡</div>
-            <div class="agent-name">Execution & Throughput</div>
-            <div class="agent-role">Catch slippage & gaps</div>
-            <div class="agent-status active"><span class="status-dot active"></span> Active</div>
-          </div>
-          <div class="desk"></div>
-        </div>
-        
-        <!-- Capital Intelligence Sub-Module -->
-        <div class="room active" style="border-color: #58a6ff; background: linear-gradient(135deg, #1a1f35, #21262d);">
-          <span class="room-label" style="color: #58a6ff;">💰 Sub-Module</span>
-          <div class="agent">
-            <div class="agent-avatar" style="background: linear-gradient(135deg, #1f6feb, #58a6ff);">💰</div>
-            <div class="agent-name">Capital Intelligence</div>
-            <div class="agent-role">AUM • CAGR • $100M→$1T</div>
-            <div class="agent-status active"><span class="status-dot active"></span> Active</div>
-          </div>
-          <div class="desk"></div>
-        </div>
-        
-        <!-- Kitchen - Proposed Agents Waiting -->
-        <div class="room kitchen" style="grid-column: span 2;">
-          <span class="room-label">🍳 Kitchen — Awaiting Activation</span>
-          <div class="kitchen-content">
-            <div class="kitchen-agent">
-              <div class="agent-avatar" style="background: linear-gradient(135deg, #d29922, #f0883e);">👥</div>
-              <div class="agent-name">People & Incentives</div>
-              <div class="agent-role">Team & culture health</div>
-            </div>
-            <div class="kitchen-agent">
-              <div class="agent-avatar" style="background: linear-gradient(135deg, #f78166, #da3633);">📈</div>
-              <div class="agent-name">Strategy & Capital</div>
-              <div class="agent-role">Bets & opportunity cost</div>
-            </div>
-            <div class="kitchen-agent">
-              <div class="agent-avatar" style="background: linear-gradient(135deg, #6e7681, #484f58);">📡</div>
-              <div class="agent-name">External Signal</div>
-              <div class="agent-role">Filtered market inputs</div>
-            </div>
-          </div>
-        </div>
+        <div class="agent-purpose">Maximize founder leverage. Classify work (CEO/Operator/Noise), track decision quality, force transition to Allocator.</div>
+        <div class="agent-focus"><strong>AUM Impact:</strong> Time → Capital decisions → AUM velocity</div>
       </div>
       
-      <div class="legend">
-        <div class="legend-item"><span class="legend-dot active"></span> Active (at desk)</div>
-        <div class="legend-item"><span class="legend-dot proposed"></span> Proposed (in kitchen)</div>
+      <div class="agent-card active">
+        <div class="agent-header">
+          <span class="agent-icon">📊</span>
+          <span class="agent-name">Truth & Reality</span>
+          <span class="agent-status active">ACTIVE</span>
+        </div>
+        <div class="agent-purpose">Single source of truth. Reconcile data across TW, Shopify, Finance. Flag discrepancies that affect AUM calculation.</div>
+        <div class="agent-focus"><strong>AUM Impact:</strong> Data integrity → Accurate AUM → Sound decisions</div>
       </div>
+      
+      <div class="agent-card active">
+        <div class="agent-header">
+          <span class="agent-icon">⚡</span>
+          <span class="agent-name">Execution & Throughput</span>
+          <span class="agent-status active">ACTIVE</span>
+        </div>
+        <div class="agent-purpose">Catch slippage, ownership gaps, bottlenecks. Track commitments vs delivery on capital-impacting initiatives.</div>
+        <div class="agent-focus"><strong>AUM Impact:</strong> Execution speed → EBITDA growth → AUM</div>
+      </div>
+      
+      <div class="agent-card active">
+        <div class="agent-header">
+          <span class="agent-icon">💰</span>
+          <span class="agent-name">Capital Intelligence</span>
+          <span class="agent-status active">ACTIVE</span>
+        </div>
+        <div class="agent-purpose">AUM tracking, CAGR monitoring, milestone ladder. Institutional-grade capital allocation math.</div>
+        <div class="agent-focus"><strong>AUM Impact:</strong> Direct. This IS the AUM engine.</div>
+      </div>
+      
     </div>
     
-    <div class="agent-details">
-      <h2>Agent Roster</h2>
-      <div class="details-grid">
-        <div class="detail-card active">
-          <div class="detail-header">
-            <span class="detail-emoji">👁️</span>
-            <span class="detail-name">CEO Shadow</span>
-          </div>
-          <div class="detail-purpose">Maximize founder leverage — time, attention, decisions. Classify work (CEO/Operator/Noise), track decision quality, force improvement.</div>
-          <div class="detail-status active">🟢 Active (draft-only)</div>
+    <div class="section-label">Proposed Agents (Not Yet Deployed)</div>
+    <div class="agents-grid">
+      
+      <div class="agent-card proposed">
+        <div class="agent-header">
+          <span class="agent-icon">👥</span>
+          <span class="agent-name">People & Incentives</span>
+          <span class="agent-status proposed">PROPOSED</span>
         </div>
-        
-        <div class="detail-card active">
-          <div class="detail-header">
-            <span class="detail-emoji">📊</span>
-            <span class="detail-name">Truth & Reality</span>
-          </div>
-          <div class="detail-purpose">Single source of truth — reconcile data vs narratives across TW, Shopify, Finance, Slack. TW Analytics is a sub-module.</div>
-          <div class="detail-status active">🟢 Active (draft-only)</div>
-        </div>
-        
-        <div class="detail-card active">
-          <div class="detail-header">
-            <span class="detail-emoji">⚡</span>
-            <span class="detail-name">Execution & Throughput</span>
-          </div>
-          <div class="detail-purpose">Catch slippage, ownership gaps, bottlenecks. Track commitments vs delivery, measure execution velocity.</div>
-          <div class="detail-status active">🟢 Active (draft-only)</div>
-        </div>
-        
-        <div class="detail-card proposed">
-          <div class="detail-header">
-            <span class="detail-emoji">👥</span>
-            <span class="detail-name">People & Incentives</span>
-          </div>
-          <div class="detail-purpose">Team structure, incentive alignment, culture health. Catch misalignment early.</div>
-          <div class="detail-status proposed">⬜ Proposed</div>
-        </div>
-        
-        <div class="detail-card active">
-          <div class="detail-header">
-            <span class="detail-emoji">💰</span>
-            <span class="detail-name">Capital Intelligence</span>
-          </div>
-          <div class="detail-purpose">AUM tracking, CAGR monitoring, milestone ladder ($100M → $1B → $10B → $100B → $1T). Institutional-grade capital allocation math.</div>
-          <div class="detail-status active">🟢 Active (sub-module)</div>
-        </div>
-        
-        <div class="detail-card proposed">
-          <div class="detail-header">
-            <span class="detail-emoji">📈</span>
-            <span class="detail-name">Strategy & Capital</span>
-          </div>
-          <div class="detail-purpose">Bets, opportunity cost, long-term compounding. Keep Michael in capital allocator mode. (Capital Intelligence is early activation)</div>
-          <div class="detail-status proposed">⬜ Proposed (partial via CI)</div>
-        </div>
-        
-        <div class="detail-card proposed">
-          <div class="detail-header">
-            <span class="detail-emoji">📡</span>
-            <span class="detail-name">External Signal</span>
-          </div>
-          <div class="detail-purpose">Filtered inputs — only actionable systems. Reduce noise from market/competitor/learning inputs.</div>
-          <div class="detail-status proposed">⬜ Proposed</div>
-        </div>
+        <div class="agent-purpose">Team structure, incentive alignment, culture health. Catch misalignment that could impact execution.</div>
+        <div class="agent-focus"><strong>AUM Impact:</strong> Team quality → Execution → EBITDA</div>
       </div>
+      
+      <div class="agent-card proposed">
+        <div class="agent-header">
+          <span class="agent-icon">📈</span>
+          <span class="agent-name">Strategy & Capital</span>
+          <span class="agent-status proposed">PROPOSED</span>
+        </div>
+        <div class="agent-purpose">Bets, opportunity cost, long-term compounding. Keep founder in capital allocator mode.</div>
+        <div class="agent-focus"><strong>AUM Impact:</strong> Capital deployment → IRR → AUM growth</div>
+      </div>
+      
+      <div class="agent-card proposed">
+        <div class="agent-header">
+          <span class="agent-icon">📡</span>
+          <span class="agent-name">External Signal</span>
+          <span class="agent-status proposed">PROPOSED</span>
+        </div>
+        <div class="agent-purpose">Filtered market inputs. Surface only actionable intelligence that affects capital decisions.</div>
+        <div class="agent-focus"><strong>AUM Impact:</strong> Market timing → Entry/exit → IRR</div>
+      </div>
+      
     </div>
+    
   </div>
 </body>
 </html>

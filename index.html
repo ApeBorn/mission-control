@@ -3,1039 +3,654 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mission Control</title>
+  <title>Mission Control | Capital Operating System</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #c9d1d9; min-height: 100vh; }
-    .container { max-width: 1400px; margin: 0 auto; padding: 40px 32px; overflow-x: auto; }
-    .header { text-align: center; margin-bottom: 32px; }
-    .header h1 { font-size: 36px; font-weight: 700; background: linear-gradient(135deg, #58a6ff, #1f6feb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
-    .header p { color: #8b949e; font-size: 14px; }
-    .stats-bar { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
-    .stat { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px 20px; text-align: center; }
-    .stat-value { font-size: 24px; font-weight: 700; color: #58a6ff; }
-    .stat-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
-    .category-tabs { display: flex; justify-content: center; gap: 10px; margin: 24px 0; flex-wrap: wrap; }
-    .category-tab { padding: 10px 20px; border: 1px solid #30363d; border-radius: 20px; background: transparent; color: #8b949e; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
-    .category-tab:hover { border-color: #58a6ff; color: #c9d1d9; }
-    .category-tab.active { background: #1f6feb; border-color: #1f6feb; color: white; }
-    .action-buttons { display: flex; justify-content: center; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
-    .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; }
-    .btn-primary { background: #1f6feb; color: white; border: none; }
-    .btn-primary:hover { background: #388bfd; }
-    .btn-secondary { background: transparent; color: #8b949e; border: 1px solid #30363d; }
-    .btn-secondary:hover { border-color: #8b949e; color: #c9d1d9; }
-    .weekly-focus { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 32px; }
-    .weekly-focus h2 { font-size: 16px; font-weight: 600; color: #58a6ff; margin-bottom: 16px; }
-    .weekly-focus-tasks { min-height: 40px; }
-    .weekly-focus-empty { color: #484f58; font-size: 14px; text-align: center; padding: 8px; }
-    .focus-task { background: #21262d; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border-left: 3px solid #58a6ff; }
-    .focus-task-title { font-size: 14px; font-weight: 500; color: #c9d1d9; }
-    .focus-task-remove { background: none; border: none; color: #484f58; cursor: pointer; font-size: 16px; }
-    .focus-task-remove:hover { color: #f85149; }
-    .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; min-width: 900px; }
-    .column { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px; min-height: 500px; }
-    .column-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #30363d; }
-    .column-title { font-size: 13px; font-weight: 700; color: #58a6ff; text-transform: uppercase; letter-spacing: 0.5px; }
-    .column-count { background: #1f6feb; color: white; min-width: 24px; height: 24px; border-radius: 12px; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; padding: 0 8px; }
-    .tasks { display: flex; flex-direction: column; gap: 12px; min-height: 400px; }
-    .tasks.drag-over { background: rgba(31, 111, 235, 0.1); border-radius: 8px; }
-    .tasks-empty { color: #484f58; font-size: 13px; text-align: center; padding: 40px 20px; }
-    .task { background: #21262d; border-radius: 8px; padding: 14px; cursor: grab; transition: all 0.2s ease; border-left: 3px solid #3fb950; }
-    .task:hover { background: #262c36; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
-    .task.dragging { opacity: 0.5; cursor: grabbing; }
-    .task.growth { border-left-color: #58a6ff; }
-    .task.creative { border-left-color: #a371f7; }
-    .task.product { border-left-color: #f78166; }
-    .task.team { border-left-color: #d29922; }
-    .task.ops { border-left-color: #3fb950; }
-    .task-title { font-size: 14px; font-weight: 600; color: #c9d1d9; margin-bottom: 6px; }
-    .task-desc { font-size: 12px; color: #8b949e; margin-bottom: 8px; line-height: 1.4; }
-    .task-timestamps { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; font-size: 10px; color: #6e7681; background: rgba(0,0,0,0.2); padding: 6px 8px; border-radius: 4px; }
-    .task-timestamps .ts-row { display: flex; justify-content: space-between; }
-    .task-timestamps .ts-label { color: #484f58; }
-    .task-timestamps .ts-value { color: #8b949e; }
-    .task-timestamps .ts-value.completed { color: #3fb950; }
-    .task-time { display: flex; gap: 12px; margin-bottom: 8px; font-size: 11px; }
-    .task-time-item { display: flex; align-items: center; gap: 4px; color: #8b949e; }
-    .task-time-item.over { color: #f85149; }
-    .task-time-item.under { color: #3fb950; }
-    .task-attachment { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #58a6ff; background: rgba(88, 166, 255, 0.1); padding: 4px 8px; border-radius: 4px; text-decoration: none; margin-bottom: 8px; }
-    .task-attachment:hover { background: rgba(88, 166, 255, 0.2); }
-    .task-footer { display: flex; align-items: center; justify-content: space-between; }
-    .task-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .task-tag { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 4px; background: #30363d; color: #8b949e; }
-    .task-tag.growth { background: rgba(88, 166, 255, 0.2); color: #58a6ff; }
-    .task-tag.creative { background: rgba(163, 113, 247, 0.2); color: #a371f7; }
-    .task-tag.product { background: rgba(247, 129, 102, 0.2); color: #f78166; }
-    .task-tag.team { background: rgba(210, 153, 34, 0.2); color: #d29922; }
-    .task-tag.ops { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
-    .task-tag.focus { background: rgba(56, 139, 253, 0.2); color: #388bfd; }
-    .task-actions { display: flex; gap: 4px; }
-    .task-action { background: transparent; border: none; color: #484f58; padding: 4px 6px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.15s ease; }
-    .task-action:hover { background: #30363d; color: #c9d1d9; }
-    .task-action.delete:hover { background: rgba(248, 81, 73, 0.2); color: #f85149; }
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; padding: 20px; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; width: 100%; max-width: 500px; }
-    .modal h3 { font-size: 18px; font-weight: 600; color: #c9d1d9; margin-bottom: 24px; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #8b949e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; background: #21262d; border: 1px solid #30363d; border-radius: 8px; padding: 12px; color: #c9d1d9; font-size: 14px; }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.2); }
-    .form-row { display: flex; gap: 12px; }
-    .form-row .form-group { flex: 1; }
-    .form-group-check { display: flex; align-items: center; gap: 10px; }
-    .form-group-check input { width: auto; }
-    .form-group-check label { margin-bottom: 0; text-transform: none; font-size: 14px; }
-    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
-    .modal-actions .btn { flex: 1; justify-content: center; }
-    .weekly-notes-section { background: #161b22; border: 1px solid #30363d; border-radius: 12px; margin-bottom: 32px; overflow: hidden; }
-    .weekly-notes-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; cursor: pointer; transition: background 0.2s; }
-    .weekly-notes-header:hover { background: #21262d; }
-    .weekly-notes-header h2 { font-size: 16px; font-weight: 600; color: #58a6ff; margin: 0; }
-    .toggle-icon { color: #8b949e; font-size: 12px; transition: transform 0.2s; }
-    .toggle-icon.collapsed { transform: rotate(-90deg); }
-    .weekly-notes-content { padding: 0 24px 24px; }
-    .weekly-notes-content.hidden { display: none; }
-    .week-selector { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 20px; padding-top: 8px; }
-    .current-week { font-size: 16px; font-weight: 600; color: #c9d1d9; min-width: 180px; text-align: center; }
-    .notes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    @media (max-width: 768px) { .notes-grid { grid-template-columns: 1fr; } }
-    .note-card { background: #21262d; border-radius: 8px; padding: 16px; }
-    .note-card label { display: block; font-size: 13px; font-weight: 600; color: #8b949e; margin-bottom: 10px; }
-    .note-card textarea { width: 100%; min-height: 100px; background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 12px; color: #c9d1d9; font-size: 14px; resize: vertical; line-height: 1.5; }
-    .note-card textarea:focus { outline: none; border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.2); }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; 
+      background: #0a0a0a; 
+      color: #e5e5e5; 
+      min-height: 100vh;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    
+    /* Header */
+    .header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #222;
+    }
+    .header h1 { 
+      font-size: 18px; 
+      font-weight: 600; 
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+    .header-meta { 
+      font-size: 11px; 
+      color: #666; 
+    }
+    
+    /* Milestone Ladder - Always Visible */
+    .ladder {
+      background: linear-gradient(90deg, #0a0a0a, #111, #0a0a0a);
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 16px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .ladder-step {
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .ladder-step.current {
+      background: #1a3a1a;
+      color: #4ade80;
+      border: 1px solid #22c55e;
+    }
+    .ladder-step.next {
+      background: #3a2a1a;
+      color: #fbbf24;
+      border: 1px solid #f59e0b;
+    }
+    .ladder-arrow { color: #333; font-size: 14px; }
+    
+    /* Module Grid */
+    .modules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 900px) { .modules { grid-template-columns: 1fr; } }
+    
+    .module {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .module.full-width { grid-column: span 2; }
+    @media (max-width: 900px) { .module.full-width { grid-column: span 1; } }
+    
+    .module-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid #222;
+      font-size: 11px;
+      font-weight: 700;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .module-body { padding: 16px; }
+    
+    /* AUM Engine - Primary Module */
+    .aum-engine { border-color: #22c55e33; }
+    .aum-engine .module-header { background: #0a150a; color: #4ade80; }
+    
+    .aum-primary {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .aum-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -2px;
+    }
+    .aum-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+    }
+    .aum-secondary {
+      font-size: 14px;
+      color: #666;
+    }
+    .aum-secondary span { color: #888; }
+    
+    .aum-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #222;
+    }
+    .aum-metric {
+      text-align: center;
+    }
+    .aum-metric-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .aum-metric-value.green { color: #4ade80; }
+    .aum-metric-value.yellow { color: #fbbf24; }
+    .aum-metric-value.red { color: #ef4444; }
+    .aum-metric-label {
+      font-size: 10px;
+      color: #666;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    
+    /* Risk Module */
+    .risk-module { border-color: #ef444433; }
+    .risk-module .module-header { background: #150a0a; color: #f87171; }
+    .risk-module.safe .module-header { background: #0a150a; color: #4ade80; }
+    
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .risk-item {
+      background: #0a0a0a;
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+    }
+    .risk-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #4ade80;
+    }
+    .risk-value.warning { color: #fbbf24; }
+    .risk-value.danger { color: #ef4444; }
+    .risk-label {
+      font-size: 9px;
+      color: #666;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .mode-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .mode-badge.growth { background: #14532d; color: #4ade80; }
+    .mode-badge.defense { background: #713f12; color: #fbbf24; }
+    .mode-badge.protection { background: #7f1d1d; color: #fca5a5; }
+    
+    /* Founder Evolution */
+    .evolution-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .evo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .evo-label {
+      width: 80px;
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    .evo-bar-container {
+      flex: 1;
+      height: 24px;
+      background: #1a1a1a;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    .evo-bar {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .evo-bar.operator { background: linear-gradient(90deg, #7f1d1d, #dc2626); }
+    .evo-bar.allocator { background: linear-gradient(90deg, #14532d, #22c55e); }
+    .evo-bar.architect { background: linear-gradient(90deg, #1e3a5f, #3b82f6); }
+    .evo-target {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #fff;
+      opacity: 0.5;
+    }
+    .evo-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #222;
+    }
+    .evo-metric {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .evo-metric-label { color: #666; }
+    .evo-metric-value { color: #fff; font-weight: 600; }
+    
+    /* Phase Gates */
+    .phases {
+      display: flex;
+      gap: 8px;
+    }
+    .phase {
+      flex: 1;
+      background: #0a0a0a;
+      border: 1px solid #222;
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+      position: relative;
+    }
+    .phase.current {
+      border-color: #22c55e;
+      background: #0a150a;
+    }
+    .phase.locked { opacity: 0.5; }
+    .phase-num {
+      font-size: 10px;
+      color: #666;
+      text-transform: uppercase;
+    }
+    .phase-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      margin: 4px 0;
+    }
+    .phase.current .phase-name { color: #4ade80; }
+    .phase-gate {
+      font-size: 9px;
+      color: #666;
+    }
+    .phase-progress {
+      margin-top: 8px;
+      height: 3px;
+      background: #222;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .phase-progress-bar {
+      height: 100%;
+      background: #22c55e;
+      border-radius: 2px;
+    }
+    
+    /* Capital Log */
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .log-table th {
+      text-align: left;
+      padding: 8px;
+      color: #666;
+      font-size: 10px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #222;
+    }
+    .log-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #1a1a1a;
+      color: #ccc;
+    }
+    .log-table tr:last-child td { border-bottom: none; }
+    .log-amount { font-weight: 600; color: #fff; }
+    .log-irr { font-weight: 600; }
+    .log-irr.positive { color: #4ade80; }
+    .log-irr.negative { color: #ef4444; }
+    .log-irr.pending { color: #666; }
+    .log-empty {
+      text-align: center;
+      padding: 24px;
+      color: #444;
+      font-size: 12px;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #444;
+    }
+    .footer a { color: #666; text-decoration: none; }
+    .footer a:hover { color: #888; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>🎯 Mission Control</h1>
-      <p>Jarvis Task Tracker • Time tracked • Deliverables attached</p>
-      <div style="margin-top: 16px; display: flex; justify-content: center; gap: 12px;">
-        <a href="agents.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(135deg, #58a6ff, #a371f7); border-radius: 8px; color: white; text-decoration: none; font-size: 14px; font-weight: 600;">🤖 Agent Dashboard</a>
-        <a href="scorecard.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #21262d; border: 1px solid #30363d; border-radius: 8px; color: #8b949e; text-decoration: none; font-size: 14px; font-weight: 500;">📊 Scorecard</a>
-      </div>
+      <h1>MISSION CONTROL</h1>
+      <div class="header-meta">Capital Operating System • Updated <span id="lastUpdate">2026-02-16</span></div>
     </div>
     
-    <div class="stats-bar">
-      <div class="stat">
-        <div class="stat-value" id="totalTasks">0</div>
-        <div class="stat-label">Total Tasks</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value" id="completedTasks">0</div>
-        <div class="stat-label">Completed</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value" id="totalTime">0h</div>
-        <div class="stat-label">Time Logged</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value" id="timeSaved">—</div>
-        <div class="stat-label">Time Saved</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value" style="color: #3fb950;">125</div>
-        <div class="stat-label">📚 CEO Playbooks</div>
-      </div>
+    <!-- Milestone Ladder -->
+    <div class="ladder">
+      <div class="ladder-step current">$8.4M</div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step next">$100M</div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step">$1B</div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step">$10B</div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step">$100B</div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step">$1T</div>
     </div>
     
-    <!-- Capital Intelligence Block -->
-    <div class="weekly-focus" style="background: linear-gradient(135deg, #0d1117, #161b22); border: 2px solid #58a6ff; box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);">
-      <h2 style="display: flex; align-items: center; gap: 10px; font-size: 18px;">
-        💰 Capital Intelligence
-        <span style="font-size: 11px; font-weight: 400; color: #8b949e; margin-left: auto;">Updated: 2026-02-16</span>
-      </h2>
+    <!-- Module Grid -->
+    <div class="modules">
       
-      <!-- Main AUM Display -->
-      <div style="display: flex; align-items: center; justify-content: center; gap: 40px; margin: 24px 0; padding: 20px; background: #21262d; border-radius: 12px;">
-        <div style="text-align: center;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px;">Current AUM</div>
-          <div style="font-size: 42px; font-weight: 800; color: #58a6ff; line-height: 1.1;">$17.4M</div>
-          <div style="font-size: 12px; color: #6e7681;">Run Rate Basis</div>
+      <!-- Module 1: AUM Engine -->
+      <div class="module aum-engine full-width">
+        <div class="module-header">
+          <span>📊 AUM Engine</span>
+          <span style="font-weight: 400; text-transform: none;">Primary Scoreboard</span>
         </div>
-        <div style="font-size: 32px; color: #30363d;">→</div>
-        <div style="text-align: center;">
-          <div style="font-size: 11px; color: #d29922; text-transform: uppercase; letter-spacing: 1px;">Next Target</div>
-          <div style="font-size: 42px; font-weight: 800; color: #d29922; line-height: 1.1;">$100M</div>
-          <div style="font-size: 12px; color: #6e7681;">5.7x to go</div>
-        </div>
-      </div>
-      
-      <!-- CAGR Tracker -->
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
-        <div style="background: #21262d; border-radius: 8px; padding: 16px; text-align: center; border-left: 4px solid #3fb950;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px;">Current CAGR</div>
-          <div style="font-size: 28px; font-weight: 700; color: #3fb950;">~100%+</div>
-          <div style="font-size: 11px; color: #6e7681;">Revenue YoY: 3,500%</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 16px; text-align: center; border-left: 4px solid #d29922;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px;">Required CAGR</div>
-          <div style="font-size: 28px; font-weight: 700; color: #d29922;">79%</div>
-          <div style="font-size: 11px; color: #6e7681;">To $100M in 3 years</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 16px; text-align: center; border-left: 4px solid #3fb950;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px;">Status</div>
-          <div style="font-size: 28px; font-weight: 700; color: #3fb950;">🟢 AHEAD</div>
-          <div style="font-size: 11px; color: #6e7681;">ETA: Q1 2028</div>
-        </div>
-      </div>
-      
-      <!-- Key Metrics Row -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px;">
-        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #58a6ff;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">EBITDA Margin</div>
-          <div style="font-size: 18px; font-weight: 700; color: #58a6ff;">15%</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #a371f7;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">Multiple</div>
-          <div style="font-size: 18px; font-weight: 700; color: #a371f7;">4.0x</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #3fb950;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">Net Debt</div>
-          <div style="font-size: 18px; font-weight: 700; color: #3fb950;">$0</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #3fb950;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">Ruin Prob</div>
-          <div style="font-size: 18px; font-weight: 700; color: #3fb950;">&lt;1%</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #f78166;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">5yr RORE</div>
-          <div style="font-size: 18px; font-weight: 700; color: #f78166;">$6.14/$1</div>
-        </div>
-      </div>
-      
-      <!-- Milestone Ladder -->
-      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #30363d;">
-        <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Milestone Ladder</div>
-        <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; flex-wrap: wrap;">
-          <span style="color: #3fb950; font-weight: 700;">$17.4M</span>
-          <span style="color: #484f58;">→</span>
-          <span style="background: #d29922; color: #000; padding: 4px 10px; border-radius: 4px; font-weight: 700;">$100M</span>
-          <span style="color: #484f58;">→</span>
-          <span style="color: #6e7681;">$1B</span>
-          <span style="color: #484f58;">→</span>
-          <span style="color: #6e7681;">$10B</span>
-          <span style="color: #484f58;">→</span>
-          <span style="color: #6e7681;">$100B</span>
-          <span style="color: #484f58;">→</span>
-          <span style="color: #6e7681;">$1T</span>
-        </div>
-      </div>
-      
-      <!-- Ownership -->
-      <div style="margin-top: 12px; font-size: 11px; color: #6e7681;">
-        <strong style="color: #8b949e;">Ownership:</strong> APE BORN 90% + ArnoldAI 100% |
-        <strong style="color: #8b949e;">Entities:</strong> APE BORN ($16.2M) • ArnoldAI ($200k) • Cash ($1M)
-      </div>
-    </div>
-    
-    <div class="category-tabs">
-      <button class="category-tab active" data-category="all">All</button>
-      <button class="category-tab" data-category="growth">📈 Growth</button>
-      <button class="category-tab" data-category="creative">🎨 Creative</button>
-      <button class="category-tab" data-category="product">🚀 Product</button>
-      <button class="category-tab" data-category="team">👥 Team</button>
-      <button class="category-tab" data-category="ops">⚙️ Ops</button>
-    </div>
-    
-    <div class="action-buttons">
-      <button class="btn btn-primary" onclick="openModal()">+ Add Task</button>
-      <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
-      <button class="btn btn-secondary" onclick="document.getElementById('importInput').click()">Import JSON</button>
-      <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)">
-    </div>
-    
-    <div class="weekly-focus">
-      <h2>🎯 This Week's Focus</h2>
-      <div class="weekly-focus-tasks" id="focusTasks">
-        <div class="weekly-focus-empty">No focus tasks this week.</div>
-      </div>
-    </div>
-    
-    <div class="weekly-notes-section">
-      <div class="weekly-notes-header" onclick="toggleWeeklyNotes()">
-        <h2>📝 Weekly Notes</h2>
-        <span class="toggle-icon" id="notesToggle">▼</span>
-      </div>
-      <div class="weekly-notes-content" id="weeklyNotesContent">
-        <div class="week-selector">
-          <button class="btn btn-secondary" onclick="changeWeek(-1)">← Prev</button>
-          <span class="current-week" id="currentWeekLabel">Week of Feb 10, 2026</span>
-          <button class="btn btn-secondary" onclick="changeWeek(1)">Next →</button>
-        </div>
-        <div class="notes-grid">
-          <div class="note-card">
-            <label>🎯 Wins This Week</label>
-            <textarea id="noteWins" placeholder="What went well?" onchange="saveWeeklyNotes()"></textarea>
+        <div class="module-body">
+          <div class="aum-primary">
+            <div>
+              <div class="aum-value">$8.4M</div>
+              <div class="aum-label">Trailing AUM (Canonical)</div>
+            </div>
+            <div class="aum-secondary">
+              Run Rate: <span>$17.4M</span>
+            </div>
           </div>
-          <div class="note-card">
-            <label>⚠️ Challenges / Blockers</label>
-            <textarea id="noteChallenges" placeholder="What got in the way?" onchange="saveWeeklyNotes()"></textarea>
-          </div>
-          <div class="note-card">
-            <label>💡 Learnings & Insights</label>
-            <textarea id="noteLearnings" placeholder="What did you learn?" onchange="saveWeeklyNotes()"></textarea>
-          </div>
-          <div class="note-card">
-            <label>🚀 Next Week Priorities</label>
-            <textarea id="noteNextWeek" placeholder="What's the focus for next week?" onchange="saveWeeklyNotes()"></textarea>
+          
+          <div class="aum-metrics">
+            <div class="aum-metric">
+              <div class="aum-metric-value">11.9x</div>
+              <div class="aum-metric-label">To $100M</div>
+            </div>
+            <div class="aum-metric">
+              <div class="aum-metric-value">28%</div>
+              <div class="aum-metric-label">Required CAGR (10yr)</div>
+            </div>
+            <div class="aum-metric">
+              <div class="aum-metric-value green">~100%+</div>
+              <div class="aum-metric-label">Current CAGR Proxy</div>
+            </div>
+            <div class="aum-metric">
+              <div class="aum-metric-value green">+72 pts</div>
+              <div class="aum-metric-label">Gap (Ahead)</div>
+            </div>
           </div>
         </div>
       </div>
+      
+      <!-- Module 3: Risk & Guardrails -->
+      <div class="module risk-module safe">
+        <div class="module-header">
+          <span>🛡️ Risk & Guardrails</span>
+          <span class="mode-badge growth">GROWTH MODE</span>
+        </div>
+        <div class="module-body">
+          <div class="risk-grid">
+            <div class="risk-item">
+              <div class="risk-value">0x</div>
+              <div class="risk-label">Leverage</div>
+            </div>
+            <div class="risk-item">
+              <div class="risk-value">95%</div>
+              <div class="risk-label">Concentration</div>
+            </div>
+            <div class="risk-item">
+              <div class="risk-value">6mo</div>
+              <div class="risk-label">Cash Runway</div>
+            </div>
+            <div class="risk-item">
+              <div class="risk-value">86%</div>
+              <div class="risk-label">Largest Asset %</div>
+            </div>
+            <div class="risk-item">
+              <div class="risk-value">&lt;1%</div>
+              <div class="risk-label">P(Ruin)</div>
+            </div>
+            <div class="risk-item">
+              <div class="risk-value">1.5x</div>
+              <div class="risk-label">Max Leverage</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Module 4: Founder Evolution -->
+      <div class="module">
+        <div class="module-header">
+          <span>🎯 Founder Evolution</span>
+          <span style="font-weight: 400; text-transform: none;">→ Allocator</span>
+        </div>
+        <div class="module-body">
+          <div class="evolution-bars">
+            <div class="evo-row">
+              <div class="evo-label">Operator</div>
+              <div class="evo-bar-container">
+                <div class="evo-bar operator" style="width: 45%;">45%</div>
+                <div class="evo-target" style="left: 20%;"></div>
+              </div>
+            </div>
+            <div class="evo-row">
+              <div class="evo-label">Allocator</div>
+              <div class="evo-bar-container">
+                <div class="evo-bar allocator" style="width: 40%;">40%</div>
+                <div class="evo-target" style="left: 60%;"></div>
+              </div>
+            </div>
+            <div class="evo-row">
+              <div class="evo-label">Architect</div>
+              <div class="evo-bar-container">
+                <div class="evo-bar architect" style="width: 15%;">15%</div>
+                <div class="evo-target" style="left: 20%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="evo-metrics">
+            <div class="evo-metric">
+              <span class="evo-metric-label">Strategic hrs/wk</span>
+              <span class="evo-metric-value">—</span>
+            </div>
+            <div class="evo-metric">
+              <span class="evo-metric-label">Cap decisions/qtr</span>
+              <span class="evo-metric-value">—</span>
+            </div>
+            <div class="evo-metric">
+              <span class="evo-metric-label">Delegation ratio</span>
+              <span class="evo-metric-value">—</span>
+            </div>
+            <div class="evo-metric">
+              <span class="evo-metric-label">Decision quality</span>
+              <span class="evo-metric-value">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Module 5: Phase & Gate System -->
+      <div class="module full-width">
+        <div class="module-header">
+          <span>🚀 Phase & Gate System</span>
+          <span style="font-weight: 400; text-transform: none;">Current: Phase 2 — Allocator</span>
+        </div>
+        <div class="module-body">
+          <div class="phases">
+            <div class="phase">
+              <div class="phase-num">Phase 1</div>
+              <div class="phase-name">Operator</div>
+              <div class="phase-gate">Gate: $1M EBITDA</div>
+              <div class="phase-progress"><div class="phase-progress-bar" style="width: 100%;"></div></div>
+            </div>
+            <div class="phase current">
+              <div class="phase-num">Phase 2</div>
+              <div class="phase-name">Allocator</div>
+              <div class="phase-gate">Gate: $100M AUM</div>
+              <div class="phase-progress"><div class="phase-progress-bar" style="width: 8.4%;"></div></div>
+            </div>
+            <div class="phase locked">
+              <div class="phase-num">Phase 3</div>
+              <div class="phase-name">Builder</div>
+              <div class="phase-gate">Gate: $1B AUM</div>
+              <div class="phase-progress"><div class="phase-progress-bar" style="width: 0%;"></div></div>
+            </div>
+            <div class="phase locked">
+              <div class="phase-num">Phase 4</div>
+              <div class="phase-name">Architect</div>
+              <div class="phase-gate">Gate: $10B AUM</div>
+              <div class="phase-progress"><div class="phase-progress-bar" style="width: 0%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Module 2: Capital Deployment Log -->
+      <div class="module full-width">
+        <div class="module-header">
+          <span>💰 Capital Deployment Log</span>
+          <span style="font-weight: 400; text-transform: none;">Q1 2026</span>
+        </div>
+        <div class="module-body">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Deployment</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Expected IRR</th>
+                <th>Risk Class</th>
+                <th>Owner</th>
+                <th>Realized</th>
+              </tr>
+            </thead>
+            <tbody id="capitalLog">
+              <tr>
+                <td>2026-02</td>
+                <td>Meta Ad Spend (Monthly)</td>
+                <td class="log-amount">$466k</td>
+                <td>Organic Growth</td>
+                <td class="log-irr positive">40-60%</td>
+                <td>Medium</td>
+                <td>Manoop</td>
+                <td class="log-irr pending">Tracking</td>
+              </tr>
+              <tr>
+                <td>2026-02</td>
+                <td>Axon/AppLovin (Monthly)</td>
+                <td class="log-amount">$142k</td>
+                <td>Organic Growth</td>
+                <td class="log-irr positive">30-50%</td>
+                <td>Medium</td>
+                <td>Agency</td>
+                <td class="log-irr pending">Tracking</td>
+              </tr>
+              <tr>
+                <td>2026-02</td>
+                <td>Google Ads (Monthly)</td>
+                <td class="log-amount">$256k</td>
+                <td>Organic Growth</td>
+                <td class="log-irr positive">20-40%</td>
+                <td>Low</td>
+                <td>Agency</td>
+                <td class="log-irr pending">Tracking</td>
+              </tr>
+              <tr>
+                <td>TBD</td>
+                <td>LuminDose Launch Capital</td>
+                <td class="log-amount">TBD</td>
+                <td>New Venture</td>
+                <td class="log-irr pending">TBD</td>
+                <td>High</td>
+                <td>Michael/Manoop</td>
+                <td class="log-irr pending">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
     </div>
     
-    <div class="board">
-      <div class="column">
-        <div class="column-header">
-          <span class="column-title">📋 BACKLOG</span>
-          <span class="column-count" data-count="backlog">0</span>
-        </div>
-        <div class="tasks" data-status="backlog"><div class="tasks-empty">Drop tasks here</div></div>
+    <div class="footer">
+      <div>
+        <a href="agents.html">Agent HQ</a> •
+        <a href="scorecard.html">Scorecard</a>
       </div>
-      <div class="column">
-        <div class="column-header">
-          <span class="column-title">⚡ IN PROGRESS</span>
-          <span class="column-count" data-count="in-progress">0</span>
-        </div>
-        <div class="tasks" data-status="in-progress"><div class="tasks-empty">Drop tasks here</div></div>
-      </div>
-      <div class="column">
-        <div class="column-header">
-          <span class="column-title">👀 REVIEW</span>
-          <span class="column-count" data-count="review">0</span>
-        </div>
-        <div class="tasks" data-status="review"><div class="tasks-empty">Drop tasks here</div></div>
-      </div>
-      <div class="column">
-        <div class="column-header">
-          <span class="column-title">✅ DONE</span>
-          <span class="column-count" data-count="done">0</span>
-        </div>
-        <div class="tasks" data-status="done"><div class="tasks-empty">Drop tasks here</div></div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <h3 id="modalTitle">Add New Task</h3>
-      <div class="form-group">
-        <label>Title</label>
-        <input type="text" id="taskTitle" placeholder="What needs to be done?">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea id="taskDesc" placeholder="Add details, notes, or context..."></textarea>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Category</label>
-          <select id="taskCategory">
-            <option value="ops">⚙️ Ops</option>
-            <option value="growth">📈 Growth</option>
-            <option value="creative">🎨 Creative</option>
-            <option value="product">🚀 Product</option>
-            <option value="team">👥 Team</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select id="taskStatus">
-            <option value="backlog">Backlog</option>
-            <option value="in-progress">In Progress</option>
-            <option value="review">Review</option>
-            <option value="done">Done</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Time Estimate (min)</label>
-          <input type="number" id="taskEstimate" placeholder="30" min="0">
-        </div>
-        <div class="form-group">
-          <label>Actual Time (min)</label>
-          <input type="number" id="taskActual" placeholder="0" min="0">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Started At</label>
-          <input type="datetime-local" id="taskStartedAt">
-        </div>
-        <div class="form-group">
-          <label>Completed At</label>
-          <input type="datetime-local" id="taskCompletedAt">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Attachment / Deliverable</label>
-        <input type="text" id="taskAttachment" placeholder="Link or file path">
-      </div>
-      <div class="form-group">
-        <label>Attachment Label</label>
-        <input type="text" id="taskAttachmentLabel" placeholder="e.g., Org Chart, Report">
-      </div>
-      <div class="form-group form-group-check">
-        <input type="checkbox" id="taskFocus">
-        <label for="taskFocus">🎯 Add to This Week's Focus</label>
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" id="modalSubmit" onclick="saveTask()">Add Task</button>
+      <div>
+        AUM Formula: Σ(Entity EBITDA × Multiple × Ownership%) + Cash − Debt
       </div>
     </div>
   </div>
   
   <script>
-    let tasks = [];
-    let currentCategory = 'all';
-    let editingId = null;
-    let weeklyNotes = {};
-    let currentWeekOffset = 0;
+    // Update timestamp
+    document.getElementById('lastUpdate').textContent = new Date().toISOString().split('T')[0];
     
-    // All historical tasks with timestamps - UPDATED 2026-02-09
-    const EMBEDDED_TASKS = [
-      // ===== 2026-02-09 TODAY =====
-      {
-        id: 1739145600001,
-        title: "Books Project - Phase 1: Clean & Organize",
-        desc: "Cleaned ~150 raw book entries to 110 unique books, categorized into 12 themes",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 60,
-        actual: 45,
-        attachment: "/books/MASTER_BOOK_LIST.md",
-        attachmentLabel: "Master Book List",
-        createdAt: "2026-02-09T17:00:00",
-        completedAt: "2026-02-09T17:45:00"
+    // Capital data structure for future API integration
+    const CAPITAL_STATE = {
+      aum: {
+        trailing: 8.4,  // $M
+        runRate: 17.4,  // $M
+        target: 100,    // $M
+        requiredCAGR: 28, // % (10yr to $100M)
+        currentCAGR: 100, // % (proxy)
       },
-      {
-        id: 1739145600002,
-        title: "Books Project - Zero to One Summary",
-        desc: "CEO-focused summary of Peter Thiel's Zero to One - contrarian thinking, monopolies, power law",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 30,
-        actual: 25,
-        attachment: "https://drive.google.com/file/d/1Kns9M014S6WptcS8YJkFE95fp6-gtdAD/view",
-        attachmentLabel: "Zero to One Summary",
-        createdAt: "2026-02-09T19:10:00",
-        completedAt: "2026-02-09T19:25:00"
+      entities: [
+        { name: 'APE BORN', ebitda: 2.0, multiple: 4, ownership: 0.90 },
+        { name: 'ArnoldAI', valuation: 0.2, ownership: 1.0 },
+        { name: 'Cash', value: 1.0 },
+      ],
+      risk: {
+        leverage: 0,
+        maxLeverage: 1.5,
+        concentration: 0.95,
+        cashRunway: 6, // months
+        largestAssetPct: 0.86,
+        probRuin: 0.01,
+        mode: 'growth'
       },
-      {
-        id: 1739145600003,
-        title: "Books Project - Breakthrough Advertising Summary",
-        desc: "CEO-focused summary of Eugene Schwartz classic - mass desire, awareness stages, market sophistication",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 30,
-        actual: 20,
-        attachment: "https://drive.google.com/file/d/1ZryZFkUdJMIYibs7ympufLY_SbbKxatX/view",
-        attachmentLabel: "Breakthrough Advertising Summary",
-        createdAt: "2026-02-09T19:25:00",
-        completedAt: "2026-02-09T19:35:00"
-      },
-      {
-        id: 1739145600006,
-        title: "Books Project - Choose Your Enemies Wisely Summary",
-        desc: "PBD's framework: 12 building blocks, emotion + logic integration, choosing enemies as fuel",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 25,
-        actual: 20,
-        attachment: "https://drive.google.com/file/d/1ltxpwEchQmf3vePst3tLHFrLjUdsQj34/view",
-        attachmentLabel: "Choose Your Enemies Wisely Summary",
-        createdAt: "2026-02-09T19:40:00",
-        completedAt: "2026-02-09T19:55:00"
-      },
-      {
-        id: 1739145600007,
-        title: "Books Project - Success Principles Summary",
-        desc: "Canfield's 64 principles distilled - 100% responsibility, goal-setting, comfort zones, Rule of 5",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 30,
-        actual: 25,
-        attachment: "https://drive.google.com/file/d/10_q7ghfQiE00uT-hVCHPQvASZYoj3P30/view",
-        attachmentLabel: "Success Principles Summary",
-        createdAt: "2026-02-09T19:55:00",
-        completedAt: "2026-02-09T20:15:00"
-      },
-      {
-        id: 1739145600008,
-        title: "Books Project - Hormozi GOATed Ads Summary",
-        desc: "Ad assembly process: 50 hooks, awareness levels, 5 meat formats, CTAs, scaling creative",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 20,
-        actual: 15,
-        attachment: "https://drive.google.com/file/d/1vDDiEstQjIZWJk70g8BJpSzSJfb6siL5/view",
-        attachmentLabel: "Hormozi GOATed Ads Summary",
-        createdAt: "2026-02-09T20:15:00",
-        completedAt: "2026-02-09T20:30:00"
-      },
-      {
-        id: 1739145600009,
-        title: "Books Project - Hormozi Closing Summary",
-        desc: "Complete closing playbook: onion of blame, all-purpose closes, objection handling frameworks",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 25,
-        actual: 20,
-        attachment: "https://drive.google.com/file/d/1u73-EVWJD1T17J74YazewvhPD_yoKx_K/view",
-        attachmentLabel: "Hormozi Closing Summary",
-        createdAt: "2026-02-09T20:30:00",
-        completedAt: "2026-02-09T20:50:00"
-      },
-      {
-        id: 1739145600010,
-        title: "Books Project - Hormozi Hooks Summary",
-        desc: "121 best-performing hooks across ads/content/email/Twitter, 70-20-10 innovation rule",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 20,
-        actual: 15,
-        attachment: "https://drive.google.com/file/d/1BDtyEoAGCzeGg7DXQShNP4RE0s_d54oR/view",
-        attachmentLabel: "Hormozi Hooks Summary",
-        createdAt: "2026-02-09T20:50:00",
-        completedAt: "2026-02-09T21:05:00"
-      },
-      {
-        id: 1739145600004,
-        title: "APE BORN TSR Call Analysis",
-        desc: "Processed Feb 9 TSR call - digital offer, EMS device issues, email/SMS metrics, action items extracted",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 20,
-        actual: 15,
-        attachment: "/action-tracker.md",
-        attachmentLabel: "Action Tracker",
-        createdAt: "2026-02-09T14:00:00",
-        completedAt: "2026-02-09T14:15:00"
-      },
-      {
-        id: 1739145600005,
-        title: "Mission Control - Deploy to GitHub Pages",
-        desc: "Set up permanent URL at apeborn.github.io/mission-control, no more trycloudflare breaks",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 15,
-        actual: 10,
-        attachment: "https://apeborn.github.io/mission-control/",
-        attachmentLabel: "Mission Control Live",
-        createdAt: "2026-02-09T16:00:00",
-        completedAt: "2026-02-09T16:10:00"
-      },
-      // DONE - Books Project Complete
-      {
-        id: 1739145600010,
-        title: "Books Project - 125 CEO Playbooks",
-        desc: "125 CEO playbooks complete. All categories: Leadership, Operations, Sales/Marketing, Psychology, Philosophy, Wealth, Biographies, Team/Culture, Negotiations, Productivity.",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 500,
-        actual: 360,
-        attachment: "/books/MASTER_BOOK_LIST.md",
-        attachmentLabel: "Master Book List (125 complete)",
-        createdAt: "2026-02-09T19:00:00",
-        completedAt: "2026-02-10T22:25:00"
-      },
-      // ===== 2026-02-06 =====
-      {
-        id: 1738857600001,
-        title: "APE BORN Valuation Call Analysis",
-        desc: "Processed call with Josh + Amin Shams - cost/asset approach, sweat equity, action items",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 15,
-        actual: 10,
-        attachment: "/action-tracker.md",
-        attachmentLabel: "Action Tracker",
-        createdAt: "2026-02-06T15:00:00",
-        completedAt: "2026-02-06T15:10:00"
-      },
-      {
-        id: 1738857600002,
-        title: "Hiring Interview Analysis - Azzam Sabbah",
-        desc: "CS role interview - culture fit assessment, trial task notes",
-        category: "team",
-        status: "done",
-        focus: false,
-        estimate: 10,
-        actual: 5,
-        attachment: null,
-        attachmentLabel: null,
-        createdAt: "2026-02-06T16:00:00",
-        completedAt: "2026-02-06T16:05:00"
-      },
-      // ===== 2026-02-05 =====
-      {
-        id: 1738771200001,
-        title: "Josh Sync Call Analysis",
-        desc: "Record month $285k USD profit, COGS improvements, trust structure, UGC tracking",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 15,
-        actual: 10,
-        attachment: "/action-tracker.md",
-        attachmentLabel: "Action Tracker",
-        createdAt: "2026-02-05T14:00:00",
-        completedAt: "2026-02-05T14:10:00"
-      },
-      {
-        id: 1738771200010,
-        title: "Set up Slack integration",
-        desc: "Read-only Slack app, connected to 18 channels",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 30,
-        actual: 14,
-        attachment: null,
-        attachmentLabel: null,
-        createdAt: "2026-02-05T12:07:00",
-        completedAt: "2026-02-05T12:21:00"
-      },
-      {
-        id: 1738771200012,
-        title: "Build Org Chart",
-        desc: "Pulled Slack roster, documented reporting lines, created visual",
-        category: "team",
-        status: "done",
-        focus: false,
-        estimate: 45,
-        actual: 17,
-        attachment: "/ORG_CHART.md",
-        attachmentLabel: "Org Chart",
-        createdAt: "2026-02-05T12:26:00",
-        completedAt: "2026-02-05T12:50:00"
-      },
-      {
-        id: 1738771200004,
-        title: "Set up Google OAuth",
-        desc: "Gmail, Calendar, Drive, Contacts, Docs, Sheets access for jarvis@apebornfitness.com",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 15,
-        actual: 1,
-        attachment: null,
-        attachmentLabel: null,
-        createdAt: "2026-02-05T10:56:00",
-        completedAt: "2026-02-05T10:57:00"
-      },
-      // ===== 2026-02-04 =====
-      {
-        id: 1738627200001,
-        title: "Capture business context",
-        desc: "Documented org structure, financials, team, KPIs",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 45,
-        actual: 36,
-        attachment: null,
-        attachmentLabel: null,
-        createdAt: "2026-02-04T14:00:00",
-        completedAt: "2026-02-04T14:36:00"
-      },
-      // ===== DONE - Triple Whale =====
-      {
-        id: 1739145600020,
-        title: "Get Triple Whale access",
-        desc: "API connected - Summary, Attribution, Moby AI, SQL endpoints working. Daily scripts built.",
-        category: "ops",
-        status: "done",
-        focus: false,
-        estimate: 5,
-        actual: 10,
-        attachment: "/tools/triple-whale.sh",
-        attachmentLabel: "TW Helper Script",
-        createdAt: "2026-02-05T10:50:00",
-        completedAt: "2026-02-10T11:15:00"
+      phases: {
+        current: 2,
+        gates: [
+          { phase: 1, name: 'Operator', gate: 1, metric: 'EBITDA $M', unlocked: true },
+          { phase: 2, name: 'Allocator', gate: 100, metric: 'AUM $M', unlocked: false },
+          { phase: 3, name: 'Builder', gate: 1000, metric: 'AUM $M', unlocked: false },
+          { phase: 4, name: 'Architect', gate: 10000, metric: 'AUM $M', unlocked: false },
+        ]
       }
-    ];
-    
-    async function init() {
-      // v8: Single source of truth - always load from tasks.json
-      try {
-        const response = await fetch('tasks.json?v=' + Date.now());
-        if (response.ok) {
-          tasks = await response.json();
-        } else {
-          console.warn('Failed to load tasks.json, using embedded fallback');
-          tasks = EMBEDDED_TASKS;
-        }
-      } catch (e) {
-        console.warn('Error loading tasks.json:', e);
-        tasks = EMBEDDED_TASKS;
-      }
-      renderTasks();
-    }
-    
-    function formatDateTime(isoString) {
-      if (!isoString) return '—';
-      const d = new Date(isoString);
-      const month = (d.getMonth() + 1).toString().padStart(2, '0');
-      const day = d.getDate().toString().padStart(2, '0');
-      const hours = d.getHours().toString().padStart(2, '0');
-      const mins = d.getMinutes().toString().padStart(2, '0');
-      return `${month}/${day} ${hours}:${mins}`;
-    }
-    
-    function toLocalInput(isoString) {
-      if (!isoString) return '';
-      const d = new Date(isoString);
-      const offset = d.getTimezoneOffset();
-      const local = new Date(d.getTime() - offset * 60000);
-      return local.toISOString().slice(0, 16);
-    }
-    
-    function fromLocalInput(localString) {
-      if (!localString) return null;
-      return new Date(localString).toISOString();
-    }
-    
-    function openModal(id = null) {
-      editingId = id;
-      const modal = document.getElementById('modal');
-      if (id) {
-        const task = tasks.find(t => t.id === id);
-        if (task) {
-          document.getElementById('modalTitle').textContent = 'Edit Task';
-          document.getElementById('modalSubmit').textContent = 'Save Changes';
-          document.getElementById('taskTitle').value = task.title;
-          document.getElementById('taskDesc').value = task.desc || '';
-          document.getElementById('taskCategory').value = task.category;
-          document.getElementById('taskStatus').value = task.status;
-          document.getElementById('taskEstimate').value = task.estimate || '';
-          document.getElementById('taskActual').value = task.actual || '';
-          document.getElementById('taskStartedAt').value = toLocalInput(task.createdAt);
-          document.getElementById('taskCompletedAt').value = toLocalInput(task.completedAt);
-          document.getElementById('taskAttachment').value = task.attachment || '';
-          document.getElementById('taskAttachmentLabel').value = task.attachmentLabel || '';
-          document.getElementById('taskFocus').checked = task.focus;
-        }
-      } else {
-        document.getElementById('modalTitle').textContent = 'Add New Task';
-        document.getElementById('modalSubmit').textContent = 'Add Task';
-        document.getElementById('taskTitle').value = '';
-        document.getElementById('taskDesc').value = '';
-        document.getElementById('taskEstimate').value = '';
-        document.getElementById('taskActual').value = '';
-        document.getElementById('taskStartedAt').value = toLocalInput(new Date().toISOString());
-        document.getElementById('taskCompletedAt').value = '';
-        document.getElementById('taskAttachment').value = '';
-        document.getElementById('taskAttachmentLabel').value = '';
-        document.getElementById('taskFocus').checked = false;
-      }
-      modal.classList.add('active');
-      document.getElementById('taskTitle').focus();
-    }
-    
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-      editingId = null;
-    }
-    
-    function saveTask() {
-      const title = document.getElementById('taskTitle').value.trim();
-      if (!title) return;
-      
-      const status = document.getElementById('taskStatus').value;
-      const taskData = {
-        title,
-        desc: document.getElementById('taskDesc').value.trim(),
-        category: document.getElementById('taskCategory').value,
-        status,
-        focus: document.getElementById('taskFocus').checked,
-        estimate: parseInt(document.getElementById('taskEstimate').value) || 0,
-        actual: parseInt(document.getElementById('taskActual').value) || 0,
-        createdAt: fromLocalInput(document.getElementById('taskStartedAt').value) || new Date().toISOString(),
-        completedAt: fromLocalInput(document.getElementById('taskCompletedAt').value),
-        attachment: document.getElementById('taskAttachment').value.trim() || null,
-        attachmentLabel: document.getElementById('taskAttachmentLabel').value.trim() || null
-      };
-      
-      // Auto-set completedAt if moving to done
-      if (status === 'done' && !taskData.completedAt) {
-        taskData.completedAt = new Date().toISOString();
-      }
-      
-      if (editingId) {
-        const idx = tasks.findIndex(t => t.id === editingId);
-        if (idx !== -1) {
-          tasks[idx] = { ...tasks[idx], ...taskData };
-        }
-      } else {
-        tasks.push({ id: Date.now(), ...taskData });
-      }
-      
-      saveTasks();
-      renderTasks();
-      closeModal();
-    }
-    
-    function deleteTask(id) {
-      if (confirm('Delete this task?')) {
-        tasks = tasks.filter(t => t.id !== id);
-        saveTasks();
-        renderTasks();
-      }
-    }
-    
-    function moveTask(id, newStatus) {
-      const task = tasks.find(t => t.id === id);
-      if (task) {
-        task.status = newStatus;
-        if (newStatus === 'done' && !task.completedAt) {
-          task.completedAt = new Date().toISOString();
-        }
-        saveTasks();
-        renderTasks();
-      }
-    }
-    
-    function toggleFocus(id) {
-      const task = tasks.find(t => t.id === id);
-      if (task) {
-        task.focus = !task.focus;
-        saveTasks();
-        renderTasks();
-      }
-    }
-    
-    function saveTasks() {
-      localStorage.setItem('mission-control-tasks-v2', JSON.stringify(tasks));
-    }
-    
-    function exportJSON() {
-      const data = JSON.stringify(tasks, null, 2);
-      const blob = new Blob([data], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'mission-control-tasks.json';
-      a.click();
-    }
-    
-    function importJSON(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const imported = JSON.parse(e.target.result);
-          if (Array.isArray(imported)) {
-            tasks = imported;
-            saveTasks();
-            renderTasks();
-          }
-        } catch (err) {
-          alert('Invalid JSON file');
-        }
-      };
-      reader.readAsText(file);
-    }
-    
-    function formatTime(minutes) {
-      if (!minutes) return '—';
-      if (minutes < 60) return minutes + 'm';
-      const h = Math.floor(minutes / 60);
-      const m = minutes % 60;
-      return m > 0 ? `${h}h ${m}m` : `${h}h`;
-    }
-    
-    function renderTasks() {
-      const statuses = ['backlog', 'in-progress', 'review', 'done'];
-      
-      // Update stats
-      const completed = tasks.filter(t => t.status === 'done');
-      const totalActual = tasks.reduce((sum, t) => sum + (t.actual || 0), 0);
-      const totalEstimate = completed.reduce((sum, t) => sum + (t.estimate || 0), 0);
-      const totalActualCompleted = completed.reduce((sum, t) => sum + (t.actual || 0), 0);
-      const timeSaved = totalEstimate - totalActualCompleted;
-      
-      document.getElementById('totalTasks').textContent = tasks.length;
-      document.getElementById('completedTasks').textContent = completed.length;
-      document.getElementById('totalTime').textContent = formatTime(totalActual);
-      document.getElementById('timeSaved').textContent = timeSaved > 0 ? formatTime(timeSaved) : '—';
-      
-      // Render focus tasks
-      const focusTasks = tasks.filter(t => t.focus && t.status !== 'done');
-      const focusContainer = document.getElementById('focusTasks');
-      if (focusTasks.length === 0) {
-        focusContainer.innerHTML = '<div class="weekly-focus-empty">No focus tasks this week.</div>';
-      } else {
-        focusContainer.innerHTML = focusTasks.map(task => `
-          <div class="focus-task">
-            <span class="focus-task-title">${task.title}</span>
-            <button class="focus-task-remove" onclick="toggleFocus(${task.id})">×</button>
-          </div>
-        `).join('');
-      }
-      
-      // Render columns
-      statuses.forEach(status => {
-        const container = document.querySelector(`.tasks[data-status="${status}"]`);
-        const filteredTasks = tasks.filter(t => 
-          t.status === status && 
-          (currentCategory === 'all' || t.category === currentCategory)
-        ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        
-        if (filteredTasks.length === 0) {
-          container.innerHTML = '<div class="tasks-empty">Drop tasks here</div>';
-        } else {
-          container.innerHTML = filteredTasks.map(task => {
-            const timeClass = task.actual > task.estimate ? 'over' : (task.actual < task.estimate ? 'under' : '');
-            return `
-            <div class="task ${task.category}" draggable="true" data-id="${task.id}">
-              <div class="task-title">${task.title}</div>
-              ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
-              <div class="task-timestamps">
-                <div class="ts-row"><span class="ts-label">Started:</span><span class="ts-value">${formatDateTime(task.createdAt)}</span></div>
-                <div class="ts-row"><span class="ts-label">Completed:</span><span class="ts-value ${task.completedAt ? 'completed' : ''}">${formatDateTime(task.completedAt)}</span></div>
-              </div>
-              <div class="task-time">
-                ${task.estimate ? `<span class="task-time-item">⏱ Est: ${formatTime(task.estimate)}</span>` : ''}
-                ${task.actual ? `<span class="task-time-item ${timeClass}">✓ Actual: ${formatTime(task.actual)}</span>` : ''}
-              </div>
-              ${task.attachment ? `<a href="${task.attachment}" class="task-attachment" target="_blank">📎 ${task.attachmentLabel || task.attachment}</a>` : ''}
-              <div class="task-footer">
-                <div class="task-tags">
-                  <span class="task-tag ${task.category}">${task.category}</span>
-                  ${task.focus ? '<span class="task-tag focus">focus</span>' : ''}
-                </div>
-                <div class="task-actions">
-                  <button class="task-action" onclick="openModal(${task.id})" title="Edit">✏️</button>
-                  <button class="task-action" onclick="toggleFocus(${task.id})" title="Toggle focus">🎯</button>
-                  <button class="task-action delete" onclick="deleteTask(${task.id})" title="Delete">×</button>
-                </div>
-              </div>
-            </div>
-          `}).join('');
-        }
-        
-        document.querySelector(`[data-count="${status}"]`).textContent = filteredTasks.length;
-      });
-      
-      setupDragAndDrop();
-    }
-    
-    function setupDragAndDrop() {
-      document.querySelectorAll('.task').forEach(task => {
-        task.addEventListener('dragstart', () => task.classList.add('dragging'));
-        task.addEventListener('dragend', () => task.classList.remove('dragging'));
-      });
-      
-      document.querySelectorAll('.tasks').forEach(container => {
-        container.addEventListener('dragover', (e) => { e.preventDefault(); container.classList.add('drag-over'); });
-        container.addEventListener('dragleave', () => container.classList.remove('drag-over'));
-        container.addEventListener('drop', (e) => {
-          e.preventDefault();
-          container.classList.remove('drag-over');
-          const dragging = document.querySelector('.dragging');
-          if (dragging) moveTask(parseInt(dragging.dataset.id), container.dataset.status);
-        });
-      });
-    }
-    
-    document.querySelectorAll('.category-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentCategory = tab.dataset.category;
-        renderTasks();
-      });
-    });
-    
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
-    
-    // Weekly Notes Functions
-    function getWeekKey(offset = 0) {
-      const now = new Date();
-      now.setDate(now.getDate() + (offset * 7));
-      const day = now.getDay();
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Monday
-      const monday = new Date(now.setDate(diff));
-      return monday.toISOString().split('T')[0];
-    }
-    
-    function getWeekLabel(offset = 0) {
-      const now = new Date();
-      now.setDate(now.getDate() + (offset * 7));
-      const day = now.getDay();
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(now.setDate(diff));
-      const options = { month: 'short', day: 'numeric', year: 'numeric' };
-      return 'Week of ' + monday.toLocaleDateString('en-US', options);
-    }
-    
-    function loadWeeklyNotes() {
-      const stored = localStorage.getItem('mission-control-weekly-notes');
-      if (stored) {
-        weeklyNotes = JSON.parse(stored);
-      }
-      renderWeeklyNotes();
-    }
-    
-    function renderWeeklyNotes() {
-      const weekKey = getWeekKey(currentWeekOffset);
-      const notes = weeklyNotes[weekKey] || {};
-      document.getElementById('currentWeekLabel').textContent = getWeekLabel(currentWeekOffset);
-      document.getElementById('noteWins').value = notes.wins || '';
-      document.getElementById('noteChallenges').value = notes.challenges || '';
-      document.getElementById('noteLearnings').value = notes.learnings || '';
-      document.getElementById('noteNextWeek').value = notes.nextWeek || '';
-    }
-    
-    function saveWeeklyNotes() {
-      const weekKey = getWeekKey(currentWeekOffset);
-      weeklyNotes[weekKey] = {
-        wins: document.getElementById('noteWins').value,
-        challenges: document.getElementById('noteChallenges').value,
-        learnings: document.getElementById('noteLearnings').value,
-        nextWeek: document.getElementById('noteNextWeek').value
-      };
-      localStorage.setItem('mission-control-weekly-notes', JSON.stringify(weeklyNotes));
-    }
-    
-    function changeWeek(direction) {
-      currentWeekOffset += direction;
-      renderWeeklyNotes();
-    }
-    
-    function toggleWeeklyNotes() {
-      const content = document.getElementById('weeklyNotesContent');
-      const toggle = document.getElementById('notesToggle');
-      content.classList.toggle('hidden');
-      toggle.classList.toggle('collapsed');
-    }
-    
-    init();
-    loadWeeklyNotes();
+    };
   </script>
 </body>
 </html>
-
-<!-- cache bust Fri Feb 13 12:46:39 EST 2026 -->
