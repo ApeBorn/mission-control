@@ -3,357 +3,482 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mission Control | Capital Operating System</title>
+  <title>Mission Control | Capital Allocator Cockpit</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; 
-      background: #0a0a0a; 
+      background: #050505; 
       color: #e5e5e5; 
       min-height: 100vh;
+      font-size: 13px;
     }
-    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
     
-    /* Header */
     .header { 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #222;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1a1a1a;
     }
-    .header h1 { 
-      font-size: 18px; 
-      font-weight: 600; 
-      color: #fff;
-      letter-spacing: -0.3px;
-    }
-    .header-meta { 
-      font-size: 11px; 
-      color: #666; 
-    }
+    .header h1 { font-size: 16px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
+    .header-meta { font-size: 10px; color: #555; }
     
-    /* Milestone Ladder - Always Visible */
+    /* Milestone Ladder */
     .ladder {
-      background: linear-gradient(90deg, #0a0a0a, #111, #0a0a0a);
-      border: 1px solid #222;
-      border-radius: 8px;
-      padding: 16px 24px;
-      margin-bottom: 24px;
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      border-radius: 6px;
+      padding: 12px 20px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       flex-wrap: wrap;
     }
     .ladder-step {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      color: #444;
-      padding: 6px 12px;
-      border-radius: 4px;
-      transition: all 0.2s;
+      color: #333;
+      padding: 4px 10px;
+      border-radius: 3px;
     }
-    .ladder-step.current {
-      background: #1a3a1a;
-      color: #4ade80;
-      border: 1px solid #22c55e;
-    }
-    .ladder-step.next {
-      background: #3a2a1a;
-      color: #fbbf24;
-      border: 1px solid #f59e0b;
-    }
-    .ladder-arrow { color: #333; font-size: 14px; }
+    .ladder-step.current { background: #0f2d0f; color: #4ade80; border: 1px solid #166534; }
+    .ladder-step.next { background: #2d1f0f; color: #fbbf24; border: 1px solid #a16207; }
+    .ladder-arrow { color: #222; font-size: 12px; }
     
-    /* Module Grid */
-    .modules {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    @media (max-width: 900px) { .modules { grid-template-columns: 1fr; } }
+    /* Grid */
+    .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+    .grid-full { grid-column: span 2; }
+    @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } .grid-full { grid-column: span 1; } }
     
+    /* Modules */
     .module {
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 8px;
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      border-radius: 6px;
       overflow: hidden;
     }
-    .module.full-width { grid-column: span 2; }
-    @media (max-width: 900px) { .module.full-width { grid-column: span 1; } }
-    
     .module-header {
-      padding: 12px 16px;
-      border-bottom: 1px solid #222;
-      font-size: 11px;
+      padding: 10px 14px;
+      border-bottom: 1px solid #1a1a1a;
+      font-size: 10px;
       font-weight: 700;
-      color: #666;
+      color: #555;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .module-body { padding: 16px; }
+    .module-body { padding: 14px; }
     
-    /* AUM Engine - Primary Module */
-    .aum-engine { border-color: #22c55e33; }
-    .aum-engine .module-header { background: #0a150a; color: #4ade80; }
+    /* AUM Engine */
+    .aum-primary { display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px; }
+    .aum-value { font-size: 42px; font-weight: 700; color: #fff; letter-spacing: -2px; }
+    .aum-label { font-size: 10px; color: #555; text-transform: uppercase; }
+    .aum-secondary { font-size: 12px; color: #555; }
+    .aum-secondary span { color: #777; }
     
-    .aum-primary {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-    .aum-value {
-      font-size: 48px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -2px;
-    }
-    .aum-label {
-      font-size: 12px;
-      color: #666;
-      text-transform: uppercase;
-    }
-    .aum-secondary {
-      font-size: 14px;
-      color: #666;
-    }
-    .aum-secondary span { color: #888; }
-    
-    .aum-metrics {
+    .aum-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid #222;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid #1a1a1a;
     }
-    .aum-metric {
-      text-align: center;
-    }
-    .aum-metric-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .aum-metric-value.green { color: #4ade80; }
-    .aum-metric-value.yellow { color: #fbbf24; }
-    .aum-metric-value.red { color: #ef4444; }
-    .aum-metric-label {
-      font-size: 10px;
-      color: #666;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
+    .aum-cell { text-align: center; }
+    .aum-cell-value { font-size: 18px; font-weight: 700; color: #fff; }
+    .aum-cell-value.green { color: #4ade80; }
+    .aum-cell-value.yellow { color: #fbbf24; }
+    .aum-cell-value.red { color: #ef4444; }
+    .aum-cell-label { font-size: 9px; color: #555; text-transform: uppercase; margin-top: 2px; }
     
-    /* Risk Module */
-    .risk-module { border-color: #ef444433; }
-    .risk-module .module-header { background: #150a0a; color: #f87171; }
-    .risk-module.safe .module-header { background: #0a150a; color: #4ade80; }
+    .trajectory-note {
+      margin-top: 12px;
+      padding: 10px;
+      background: #0f0f0f;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #888;
+      line-height: 1.5;
+    }
+    .trajectory-note strong { color: #4ade80; }
+    .trajectory-note.warning strong { color: #fbbf24; }
+    .trajectory-note.danger strong { color: #ef4444; }
     
-    .risk-grid {
+    /* Return on Retained */
+    .ror-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
     }
-    .risk-item {
-      background: #0a0a0a;
-      border-radius: 6px;
+    .ror-item {
+      background: #0f0f0f;
+      border-radius: 4px;
       padding: 12px;
       text-align: center;
     }
-    .risk-value {
-      font-size: 18px;
-      font-weight: 700;
-      color: #4ade80;
-    }
-    .risk-value.warning { color: #fbbf24; }
-    .risk-value.danger { color: #ef4444; }
-    .risk-label {
-      font-size: 9px;
-      color: #666;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-    .mode-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .mode-badge.growth { background: #14532d; color: #4ade80; }
-    .mode-badge.defense { background: #713f12; color: #fbbf24; }
-    .mode-badge.protection { background: #7f1d1d; color: #fca5a5; }
+    .ror-value { font-size: 20px; font-weight: 700; color: #4ade80; }
+    .ror-label { font-size: 9px; color: #555; text-transform: uppercase; margin-top: 4px; }
+    .ror-sub { font-size: 10px; color: #444; margin-top: 2px; }
     
-    /* Founder Evolution */
-    .evolution-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .evo-row {
+    /* Deployment Velocity */
+    .velocity-bar {
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-bottom: 12px;
     }
-    .evo-label {
-      width: 80px;
-      font-size: 11px;
-      color: #888;
-      text-transform: uppercase;
-    }
-    .evo-bar-container {
+    .velocity-label { font-size: 10px; color: #555; width: 100px; text-transform: uppercase; }
+    .velocity-track {
       flex: 1;
-      height: 24px;
+      height: 8px;
       background: #1a1a1a;
       border-radius: 4px;
       overflow: hidden;
       position: relative;
     }
-    .evo-bar {
-      height: 100%;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #fff;
-    }
-    .evo-bar.operator { background: linear-gradient(90deg, #7f1d1d, #dc2626); }
-    .evo-bar.allocator { background: linear-gradient(90deg, #14532d, #22c55e); }
-    .evo-bar.architect { background: linear-gradient(90deg, #1e3a5f, #3b82f6); }
-    .evo-target {
+    .velocity-fill { height: 100%; border-radius: 4px; }
+    .velocity-fill.green { background: linear-gradient(90deg, #166534, #4ade80); }
+    .velocity-fill.yellow { background: linear-gradient(90deg, #a16207, #fbbf24); }
+    .velocity-fill.red { background: linear-gradient(90deg, #991b1b, #ef4444); }
+    .velocity-target {
       position: absolute;
-      top: 0;
-      bottom: 0;
+      top: -2px;
+      bottom: -2px;
       width: 2px;
       background: #fff;
-      opacity: 0.5;
     }
+    .velocity-value { font-size: 12px; font-weight: 600; color: #fff; width: 60px; text-align: right; }
+    
+    .velocity-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #1a1a1a;
+    }
+    .velocity-stat { text-align: center; }
+    .velocity-stat-value { font-size: 14px; font-weight: 600; color: #fff; }
+    .velocity-stat-label { font-size: 9px; color: #555; text-transform: uppercase; }
+    
+    /* Concentration Bands */
+    .concentration-visual {
+      display: flex;
+      height: 24px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .conc-band { display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; }
+    .conc-band.green { background: #166534; color: #4ade80; }
+    .conc-band.yellow { background: #a16207; color: #fbbf24; }
+    .conc-band.orange { background: #c2410c; color: #fb923c; }
+    .conc-band.red { background: #991b1b; color: #fca5a5; }
+    .conc-marker {
+      position: relative;
+      height: 32px;
+      margin-bottom: 8px;
+    }
+    .conc-pointer {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    .conc-pointer-arrow { font-size: 14px; }
+    .conc-pointer-value { font-size: 11px; font-weight: 700; color: #fff; }
+    .conc-annotation {
+      background: #1a0a0a;
+      border: 1px solid #991b1b;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 10px;
+      color: #fca5a5;
+      margin-top: 8px;
+    }
+    .conc-glidepath {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #1a1a1a;
+    }
+    .glidepath-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      padding: 4px 0;
+    }
+    .glidepath-phase { color: #555; }
+    .glidepath-target { color: #888; }
+    .glidepath-row.current { color: #fff; font-weight: 600; }
+    
+    /* Risk Guardrails */
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .risk-item {
+      background: #0f0f0f;
+      border-radius: 4px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .risk-label { font-size: 10px; color: #555; text-transform: uppercase; }
+    .risk-value { font-size: 14px; font-weight: 600; }
+    .risk-value.safe { color: #4ade80; }
+    .risk-value.warning { color: #fbbf24; }
+    .risk-value.danger { color: #ef4444; }
+    
+    .mode-display {
+      margin-top: 12px;
+      padding: 10px;
+      background: #0f1f0f;
+      border: 1px solid #166534;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .mode-display.defense { background: #1f1a0f; border-color: #a16207; }
+    .mode-display.protection { background: #1f0f0f; border-color: #991b1b; }
+    .mode-label { font-size: 9px; color: #555; text-transform: uppercase; }
+    .mode-value { font-size: 14px; font-weight: 700; color: #4ade80; margin-top: 2px; }
+    .mode-display.defense .mode-value { color: #fbbf24; }
+    .mode-display.protection .mode-value { color: #ef4444; }
+    
+    .doctrine-breach {
+      margin-top: 12px;
+      padding: 10px;
+      background: #1f0f0f;
+      border: 1px solid #991b1b;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #fca5a5;
+      display: none;
+    }
+    .doctrine-breach.active { display: block; }
+    .doctrine-breach-title { font-weight: 700; margin-bottom: 4px; }
+    
+    /* Opportunity Cost Engine */
+    .opp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .opp-table th {
+      text-align: left;
+      padding: 6px 8px;
+      color: #555;
+      font-size: 9px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .opp-table th:not(:first-child) { text-align: right; }
+    .opp-table td {
+      padding: 8px;
+      border-bottom: 1px solid #111;
+      color: #999;
+    }
+    .opp-table td:not(:first-child) { text-align: right; }
+    .opp-table tr:last-child td { border-bottom: none; }
+    .opp-rank { font-weight: 700; color: #fff; }
+    .opp-name { color: #ccc; }
+    .opp-irr { color: #4ade80; font-weight: 600; }
+    .opp-irr.low { color: #fbbf24; }
+    
+    /* Founder Evolution */
+    .evo-week {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .evo-day {
+      flex: 1;
+      height: 40px;
+      border-radius: 3px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .evo-segment { flex: 1; }
+    .evo-segment.operator { background: #991b1b; }
+    .evo-segment.allocator { background: #166534; }
+    .evo-segment.architect { background: #1e3a5f; }
+    .evo-day-label {
+      text-align: center;
+      font-size: 9px;
+      color: #555;
+      margin-top: 4px;
+    }
+    
+    .evo-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .evo-sum-item {
+      background: #0f0f0f;
+      border-radius: 4px;
+      padding: 10px;
+      text-align: center;
+    }
+    .evo-sum-value { font-size: 18px; font-weight: 700; }
+    .evo-sum-value.operator { color: #ef4444; }
+    .evo-sum-value.allocator { color: #4ade80; }
+    .evo-sum-value.architect { color: #60a5fa; }
+    .evo-sum-label { font-size: 9px; color: #555; text-transform: uppercase; margin-top: 2px; }
+    .evo-sum-target { font-size: 9px; color: #333; }
+    
     .evo-metrics {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      margin-top: 16px;
       padding-top: 12px;
-      border-top: 1px solid #222;
+      border-top: 1px solid #1a1a1a;
     }
     .evo-metric {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 11px;
+      padding: 4px 0;
     }
-    .evo-metric-label { color: #666; }
+    .evo-metric-label { color: #555; }
     .evo-metric-value { color: #fff; font-weight: 600; }
+    
+    .drift-alert {
+      margin-top: 12px;
+      padding: 10px;
+      background: #1f1a0f;
+      border: 1px solid #a16207;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #fbbf24;
+      display: none;
+    }
+    .drift-alert.active { display: block; }
     
     /* Phase Gates */
     .phases {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
     .phase {
-      flex: 1;
-      background: #0a0a0a;
-      border: 1px solid #222;
-      border-radius: 6px;
-      padding: 12px;
+      background: #0f0f0f;
+      border: 1px solid #1a1a1a;
+      border-radius: 4px;
+      padding: 10px;
       text-align: center;
-      position: relative;
     }
-    .phase.current {
-      border-color: #22c55e;
-      background: #0a150a;
-    }
-    .phase.locked { opacity: 0.5; }
-    .phase-num {
-      font-size: 10px;
-      color: #666;
-      text-transform: uppercase;
-    }
-    .phase-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      margin: 4px 0;
-    }
+    .phase.current { border-color: #166534; background: #0a150a; }
+    .phase.complete { opacity: 0.5; }
+    .phase.locked { opacity: 0.3; }
+    .phase-num { font-size: 9px; color: #555; text-transform: uppercase; }
+    .phase-name { font-size: 12px; font-weight: 700; color: #fff; margin: 4px 0; }
     .phase.current .phase-name { color: #4ade80; }
-    .phase-gate {
-      font-size: 9px;
-      color: #666;
-    }
+    .phase-gate { font-size: 9px; color: #555; }
     .phase-progress {
       margin-top: 8px;
       height: 3px;
-      background: #222;
+      background: #1a1a1a;
       border-radius: 2px;
       overflow: hidden;
     }
-    .phase-progress-bar {
-      height: 100%;
-      background: #22c55e;
-      border-radius: 2px;
-    }
+    .phase-progress-fill { height: 100%; background: #4ade80; border-radius: 2px; }
     
     /* Capital Log */
     .log-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 11px;
     }
     .log-table th {
       text-align: left;
-      padding: 8px;
-      color: #666;
-      font-size: 10px;
+      padding: 6px 8px;
+      color: #555;
+      font-size: 9px;
       text-transform: uppercase;
-      border-bottom: 1px solid #222;
+      border-bottom: 1px solid #1a1a1a;
     }
     .log-table td {
-      padding: 10px 8px;
-      border-bottom: 1px solid #1a1a1a;
-      color: #ccc;
+      padding: 8px;
+      border-bottom: 1px solid #111;
+      color: #888;
     }
     .log-table tr:last-child td { border-bottom: none; }
     .log-amount { font-weight: 600; color: #fff; }
     .log-irr { font-weight: 600; }
     .log-irr.positive { color: #4ade80; }
-    .log-irr.negative { color: #ef4444; }
-    .log-irr.pending { color: #666; }
-    .log-empty {
-      text-align: center;
-      padding: 24px;
-      color: #444;
-      font-size: 12px;
-    }
+    .log-irr.pending { color: #555; }
+    .log-variance { font-size: 10px; }
+    .log-variance.over { color: #4ade80; }
+    .log-variance.under { color: #ef4444; }
     
-    /* Footer */
-    .footer {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid #222;
+    /* Quarterly Scorecard */
+    .quarterly-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .quarterly-item {
+      background: #0f0f0f;
+      border-radius: 4px;
+      padding: 12px;
+    }
+    .quarterly-metric { font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 8px; }
+    .quarterly-row {
       display: flex;
       justify-content: space-between;
       font-size: 11px;
-      color: #444;
+      padding: 2px 0;
     }
-    .footer a { color: #666; text-decoration: none; }
-    .footer a:hover { color: #888; }
+    .quarterly-label { color: #666; }
+    .quarterly-value { color: #fff; font-weight: 600; }
+    .quarterly-variance { margin-top: 8px; padding-top: 8px; border-top: 1px solid #1a1a1a; }
+    .quarterly-variance-value { font-size: 14px; font-weight: 700; }
+    .quarterly-variance-value.good { color: #4ade80; }
+    .quarterly-variance-value.bad { color: #ef4444; }
+    .quarterly-variance-value.neutral { color: #888; }
+    
+    .diagnostic {
+      margin-top: 12px;
+      padding: 10px;
+      background: #0f0f0f;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #888;
+      line-height: 1.5;
+      display: none;
+    }
+    .diagnostic.active { display: block; }
+    .diagnostic-title { font-weight: 700; color: #fbbf24; margin-bottom: 4px; }
+    
+    /* Footer */
+    .footer {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #1a1a1a;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #333;
+    }
+    .footer a { color: #555; text-decoration: none; }
+    .footer a:hover { color: #777; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <h1>MISSION CONTROL</h1>
-      <div class="header-meta">Capital Operating System • Updated <span id="lastUpdate">2026-02-16</span></div>
+      <div class="header-meta">Capital Allocator Cockpit • <span id="lastUpdate"></span></div>
     </div>
     
     <!-- Milestone Ladder -->
@@ -371,14 +496,13 @@
       <div class="ladder-step">$1T</div>
     </div>
     
-    <!-- Module Grid -->
-    <div class="modules">
+    <div class="grid">
       
-      <!-- Module 1: AUM Engine -->
-      <div class="module aum-engine full-width">
+      <!-- AUM ENGINE -->
+      <div class="module">
         <div class="module-header">
-          <span>📊 AUM Engine</span>
-          <span style="font-weight: 400; text-transform: none;">Primary Scoreboard</span>
+          <span>AUM ENGINE</span>
+          <span style="font-weight: 400; text-transform: none; color: #4ade80;">10x Target: $100M</span>
         </div>
         <div class="module-body">
           <div class="aum-primary">
@@ -386,98 +510,295 @@
               <div class="aum-value">$8.4M</div>
               <div class="aum-label">Trailing AUM (Canonical)</div>
             </div>
-            <div class="aum-secondary">
-              Run Rate: <span>$17.4M</span>
+            <div class="aum-secondary">Run Rate: <span>$17.4M</span></div>
+          </div>
+          
+          <div class="aum-grid">
+            <div class="aum-cell">
+              <div class="aum-cell-value">11.9x</div>
+              <div class="aum-cell-label">To $100M</div>
+            </div>
+            <div class="aum-cell">
+              <div class="aum-cell-value">28%</div>
+              <div class="aum-cell-label">Required CAGR (10yr)</div>
+            </div>
+            <div class="aum-cell">
+              <div class="aum-cell-value green">~100%</div>
+              <div class="aum-cell-label">Trailing CAGR</div>
+            </div>
+            <div class="aum-cell">
+              <div class="aum-cell-value green">+72 pts</div>
+              <div class="aum-cell-label">CAGR Gap</div>
+            </div>
+            <div class="aum-cell">
+              <div class="aum-cell-value green">YES</div>
+              <div class="aum-cell-label">10x Cadence</div>
             </div>
           </div>
           
-          <div class="aum-metrics">
-            <div class="aum-metric">
-              <div class="aum-metric-value">11.9x</div>
-              <div class="aum-metric-label">To $100M</div>
-            </div>
-            <div class="aum-metric">
-              <div class="aum-metric-value">28%</div>
-              <div class="aum-metric-label">Required CAGR (10yr)</div>
-            </div>
-            <div class="aum-metric">
-              <div class="aum-metric-value green">~100%+</div>
-              <div class="aum-metric-label">Current CAGR Proxy</div>
-            </div>
-            <div class="aum-metric">
-              <div class="aum-metric-value green">+72 pts</div>
-              <div class="aum-metric-label">Gap (Ahead)</div>
-            </div>
+          <div class="trajectory-note">
+            <strong>Trajectory Supports 10x Cadence.</strong> At current ~100% CAGR, $100M achievable by 2029-2030. Required 28% CAGR exceeded by 72 pts. Maintain velocity; no acceleration required unless targeting <4yr timeline.
           </div>
         </div>
       </div>
       
-      <!-- Module 3: Risk & Guardrails -->
-      <div class="module risk-module safe">
+      <!-- RISK & GUARDRAILS -->
+      <div class="module">
         <div class="module-header">
-          <span>🛡️ Risk & Guardrails</span>
-          <span class="mode-badge growth">GROWTH MODE</span>
+          <span>RISK & GUARDRAILS</span>
         </div>
         <div class="module-body">
           <div class="risk-grid">
             <div class="risk-item">
-              <div class="risk-value">0x</div>
-              <div class="risk-label">Leverage</div>
+              <span class="risk-label">Leverage</span>
+              <span class="risk-value safe">0x / 1.5x</span>
             </div>
             <div class="risk-item">
-              <div class="risk-value">95%</div>
-              <div class="risk-label">Concentration</div>
+              <span class="risk-label">Cash Runway</span>
+              <span class="risk-value safe">6mo</span>
             </div>
             <div class="risk-item">
-              <div class="risk-value">6mo</div>
-              <div class="risk-label">Cash Runway</div>
+              <span class="risk-label">P(Ruin) @ 30%</span>
+              <span class="risk-value safe">&lt;1%</span>
             </div>
             <div class="risk-item">
-              <div class="risk-value">86%</div>
-              <div class="risk-label">Largest Asset %</div>
+              <span class="risk-label">Largest Asset</span>
+              <span class="risk-value warning">86%</span>
             </div>
-            <div class="risk-item">
-              <div class="risk-value">&lt;1%</div>
-              <div class="risk-label">P(Ruin)</div>
+          </div>
+          
+          <div class="mode-display">
+            <div class="mode-label">Operating Mode</div>
+            <div class="mode-value">GROWTH MODE</div>
+          </div>
+          
+          <div class="doctrine-breach" id="doctrineBreach">
+            <div class="doctrine-breach-title">⚠️ DOCTRINE BREACH</div>
+            <div class="doctrine-breach-body">No active breaches.</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- CONCENTRATION BANDS -->
+      <div class="module">
+        <div class="module-header">
+          <span>CONCENTRATION</span>
+          <span style="font-weight: 400; text-transform: none; color: #ef4444;">95% — RED</span>
+        </div>
+        <div class="module-body">
+          <div class="concentration-visual">
+            <div class="conc-band green" style="width: 50%;">&lt;50%</div>
+            <div class="conc-band yellow" style="width: 25%;">50-75%</div>
+            <div class="conc-band orange" style="width: 15%;">75-90%</div>
+            <div class="conc-band red" style="width: 10%;">&gt;90%</div>
+          </div>
+          <div class="conc-marker">
+            <div class="conc-pointer" style="left: 95%;">
+              <div class="conc-pointer-arrow">▼</div>
+              <div class="conc-pointer-value">95%</div>
             </div>
-            <div class="risk-item">
-              <div class="risk-value">1.5x</div>
-              <div class="risk-label">Max Leverage</div>
+          </div>
+          
+          <div class="conc-annotation">
+            <strong>Phase 1 Intentional Concentration.</strong> Single-asset dominance acceptable during Operator→Allocator transition. Diversification glidepath active.
+          </div>
+          
+          <div class="conc-glidepath">
+            <div class="glidepath-row current">
+              <span class="glidepath-phase">Phase 2 (Allocator)</span>
+              <span class="glidepath-target">Target: &lt;75% by $100M</span>
+            </div>
+            <div class="glidepath-row">
+              <span class="glidepath-phase">Phase 3 (Builder)</span>
+              <span class="glidepath-target">Target: &lt;50% by $1B</span>
+            </div>
+            <div class="glidepath-row">
+              <span class="glidepath-phase">Phase 4 (Architect)</span>
+              <span class="glidepath-target">Target: &lt;30% by $10B</span>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- Module 4: Founder Evolution -->
+      <!-- DEPLOYMENT VELOCITY -->
       <div class="module">
         <div class="module-header">
-          <span>🎯 Founder Evolution</span>
-          <span style="font-weight: 400; text-transform: none;">→ Allocator</span>
+          <span>DEPLOYMENT VELOCITY</span>
+          <span style="font-weight: 400; text-transform: none;">Growth Mode: 30d threshold</span>
         </div>
         <div class="module-body">
-          <div class="evolution-bars">
-            <div class="evo-row">
-              <div class="evo-label">Operator</div>
-              <div class="evo-bar-container">
-                <div class="evo-bar operator" style="width: 45%;">45%</div>
-                <div class="evo-target" style="left: 20%;"></div>
-              </div>
+          <div class="velocity-bar">
+            <div class="velocity-label">Velocity Score</div>
+            <div class="velocity-track">
+              <div class="velocity-fill green" style="width: 85%;"></div>
+              <div class="velocity-target" style="left: 70%;"></div>
             </div>
-            <div class="evo-row">
-              <div class="evo-label">Allocator</div>
-              <div class="evo-bar-container">
-                <div class="evo-bar allocator" style="width: 40%;">40%</div>
-                <div class="evo-target" style="left: 60%;"></div>
-              </div>
+            <div class="velocity-value">85%</div>
+          </div>
+          
+          <div class="velocity-stats">
+            <div class="velocity-stat">
+              <div class="velocity-stat-value" style="color: #4ade80;">$0</div>
+              <div class="velocity-stat-label">Idle Capital</div>
             </div>
-            <div class="evo-row">
-              <div class="evo-label">Architect</div>
-              <div class="evo-bar-container">
-                <div class="evo-bar architect" style="width: 15%;">15%</div>
-                <div class="evo-target" style="left: 20%;"></div>
-              </div>
+            <div class="velocity-stat">
+              <div class="velocity-stat-value">12d</div>
+              <div class="velocity-stat-label">Avg Deploy Lag</div>
+            </div>
+            <div class="velocity-stat">
+              <div class="velocity-stat-value" style="color: #4ade80;">ON TARGET</div>
+              <div class="velocity-stat-label">Mode Status</div>
             </div>
           </div>
+        </div>
+      </div>
+      
+      <!-- RETURN ON RETAINED CAPITAL -->
+      <div class="module grid-full">
+        <div class="module-header">
+          <span>RETURN ON RETAINED CAPITAL</span>
+          <span style="font-weight: 400; text-transform: none;">Trailing 12mo</span>
+        </div>
+        <div class="module-body">
+          <div class="ror-grid">
+            <div class="ror-item">
+              <div class="ror-value">$1.85</div>
+              <div class="ror-label">ΔAUM per $1 Retained</div>
+              <div class="ror-sub">Target: &gt;$1.00</div>
+            </div>
+            <div class="ror-item">
+              <div class="ror-value">$0.28</div>
+              <div class="ror-label">ΔEBITDA per $1 Retained</div>
+              <div class="ror-sub">Target: &gt;$0.15</div>
+            </div>
+            <div class="ror-item">
+              <div class="ror-value">42%</div>
+              <div class="ror-label">Blended IRR (All Buckets)</div>
+              <div class="ror-sub">Target: &gt;25%</div>
+            </div>
+          </div>
+          
+          <table class="log-table" style="margin-top: 16px;">
+            <thead>
+              <tr>
+                <th>Deployment Bucket</th>
+                <th>Capital Deployed</th>
+                <th>Expected IRR</th>
+                <th>Realized IRR</th>
+                <th>Attribution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Paid Acquisition (Meta)</td>
+                <td class="log-amount">$466k/mo</td>
+                <td>40-60%</td>
+                <td class="log-irr positive">~55%</td>
+                <td style="color: #4ade80;">✓ Attributed</td>
+              </tr>
+              <tr>
+                <td>Paid Acquisition (Axon)</td>
+                <td class="log-amount">$142k/mo</td>
+                <td>30-50%</td>
+                <td class="log-irr positive">~38%</td>
+                <td style="color: #4ade80;">✓ Attributed</td>
+              </tr>
+              <tr>
+                <td>Paid Acquisition (Google)</td>
+                <td class="log-amount">$256k/mo</td>
+                <td>20-40%</td>
+                <td class="log-irr positive">~32%</td>
+                <td style="color: #4ade80;">✓ Attributed</td>
+              </tr>
+              <tr>
+                <td>Product Development</td>
+                <td class="log-amount">~$50k/mo</td>
+                <td>50-100%</td>
+                <td class="log-irr pending">Pending</td>
+                <td style="color: #fbbf24;">⚠ Est.</td>
+              </tr>
+              <tr>
+                <td>Reserves</td>
+                <td class="log-amount">$1M</td>
+                <td>3-5%</td>
+                <td class="log-irr pending">~4%</td>
+                <td style="color: #4ade80;">✓ Attributed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- OPPORTUNITY COST ENGINE -->
+      <div class="module grid-full">
+        <div class="module-header">
+          <span>OPPORTUNITY COST ENGINE</span>
+          <span style="font-weight: 400; text-transform: none;">Ranked by Risk-Adjusted IRR</span>
+        </div>
+        <div class="module-body">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+              <div style="font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 8px;">Internal Opportunities</div>
+              <table class="opp-table">
+                <thead>
+                  <tr><th>#</th><th>Opportunity</th><th>IRR</th><th>Risk-Adj</th><th>Capital</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="opp-rank">1</td><td class="opp-name">Meta Scale (Proven)</td><td class="opp-irr">55%</td><td>48%</td><td>$100k+</td></tr>
+                  <tr><td class="opp-rank">2</td><td class="opp-name">Digital/Sub Launch</td><td class="opp-irr">80%</td><td>45%</td><td>$200k</td></tr>
+                  <tr><td class="opp-rank">3</td><td class="opp-name">LuminDose (50%)</td><td class="opp-irr">60%</td><td>35%</td><td>$150k</td></tr>
+                  <tr><td class="opp-rank">4</td><td class="opp-name">Axon Scale</td><td class="opp-irr low">38%</td><td>32%</td><td>$50k+</td></tr>
+                  <tr><td class="opp-rank">5</td><td class="opp-name">Geo Expansion</td><td class="opp-irr low">35%</td><td>25%</td><td>$100k</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div style="font-size: 10px; color: #555; text-transform: uppercase; margin-bottom: 8px;">External Opportunities</div>
+              <table class="opp-table">
+                <thead>
+                  <tr><th>#</th><th>Opportunity</th><th>IRR</th><th>Risk-Adj</th><th>Capital</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="opp-rank">1</td><td class="opp-name">Tuck-in M&A</td><td class="opp-irr">40%</td><td>28%</td><td>$500k-2M</td></tr>
+                  <tr><td class="opp-rank">2</td><td class="opp-name">Angel (Early SaaS)</td><td class="opp-irr">30%</td><td>18%</td><td>$25-50k</td></tr>
+                  <tr><td class="opp-rank">3</td><td class="opp-name">Index Funds</td><td class="opp-irr low">12%</td><td>10%</td><td>Any</td></tr>
+                  <tr><td class="opp-rank">4</td><td class="opp-name">RE (Cash Flow)</td><td class="opp-irr low">15%</td><td>12%</td><td>$200k+</td></tr>
+                  <tr><td class="opp-rank">5</td><td class="opp-name">Treasuries</td><td class="opp-irr low">5%</td><td>5%</td><td>Any</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style="margin-top: 12px; padding: 10px; background: #0f0f0f; border-radius: 4px; font-size: 11px; color: #666;">
+            <strong style="color: #888;">Deployment Rule:</strong> If capital deployed outside Top 3 internal opportunities, log opportunity cost delta and rationale.
+          </div>
+        </div>
+      </div>
+      
+      <!-- FOUNDER EVOLUTION -->
+      <div class="module">
+        <div class="module-header">
+          <span>FOUNDER EVOLUTION</span>
+          <span style="font-weight: 400; text-transform: none;">Target: Allocator</span>
+        </div>
+        <div class="module-body">
+          <div class="evo-summary">
+            <div class="evo-sum-item">
+              <div class="evo-sum-value operator">45%</div>
+              <div class="evo-sum-label">Operator</div>
+              <div class="evo-sum-target">Target: &lt;20%</div>
+            </div>
+            <div class="evo-sum-item">
+              <div class="evo-sum-value allocator">40%</div>
+              <div class="evo-sum-label">Allocator</div>
+              <div class="evo-sum-target">Target: &gt;60%</div>
+            </div>
+            <div class="evo-sum-item">
+              <div class="evo-sum-value architect">15%</div>
+              <div class="evo-sum-label">Architect</div>
+              <div class="evo-sum-target">Target: &gt;20%</div>
+            </div>
+          </div>
+          
           <div class="evo-metrics">
             <div class="evo-metric">
               <span class="evo-metric-label">Strategic hrs/wk</span>
@@ -496,108 +817,105 @@
               <span class="evo-metric-value">—</span>
             </div>
           </div>
+          
+          <div class="drift-alert" id="driftAlert">
+            <strong>⚠️ DRIFT DETECTED:</strong> Operator time exceeds Allocator target. Phase identity mismatch.
+          </div>
         </div>
       </div>
       
-      <!-- Module 5: Phase & Gate System -->
-      <div class="module full-width">
+      <!-- PHASE & GATES -->
+      <div class="module">
         <div class="module-header">
-          <span>🚀 Phase & Gate System</span>
-          <span style="font-weight: 400; text-transform: none;">Current: Phase 2 — Allocator</span>
+          <span>PHASE & GATES</span>
+          <span style="font-weight: 400; text-transform: none;">Current: Phase 2</span>
         </div>
         <div class="module-body">
           <div class="phases">
-            <div class="phase">
+            <div class="phase complete">
               <div class="phase-num">Phase 1</div>
               <div class="phase-name">Operator</div>
-              <div class="phase-gate">Gate: $1M EBITDA</div>
-              <div class="phase-progress"><div class="phase-progress-bar" style="width: 100%;"></div></div>
+              <div class="phase-gate">$1M EBITDA ✓</div>
+              <div class="phase-progress"><div class="phase-progress-fill" style="width: 100%;"></div></div>
             </div>
             <div class="phase current">
               <div class="phase-num">Phase 2</div>
               <div class="phase-name">Allocator</div>
-              <div class="phase-gate">Gate: $100M AUM</div>
-              <div class="phase-progress"><div class="phase-progress-bar" style="width: 8.4%;"></div></div>
+              <div class="phase-gate">$100M AUM</div>
+              <div class="phase-progress"><div class="phase-progress-fill" style="width: 8.4%;"></div></div>
             </div>
             <div class="phase locked">
               <div class="phase-num">Phase 3</div>
               <div class="phase-name">Builder</div>
-              <div class="phase-gate">Gate: $1B AUM</div>
-              <div class="phase-progress"><div class="phase-progress-bar" style="width: 0%;"></div></div>
+              <div class="phase-gate">$1B AUM</div>
+              <div class="phase-progress"><div class="phase-progress-fill" style="width: 0%;"></div></div>
             </div>
             <div class="phase locked">
               <div class="phase-num">Phase 4</div>
               <div class="phase-name">Architect</div>
-              <div class="phase-gate">Gate: $10B AUM</div>
-              <div class="phase-progress"><div class="phase-progress-bar" style="width: 0%;"></div></div>
+              <div class="phase-gate">$10B AUM</div>
+              <div class="phase-progress"><div class="phase-progress-fill" style="width: 0%;"></div></div>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- Module 2: Capital Deployment Log -->
-      <div class="module full-width">
+      <!-- QUARTERLY SCORECARD -->
+      <div class="module grid-full">
         <div class="module-header">
-          <span>💰 Capital Deployment Log</span>
-          <span style="font-weight: 400; text-transform: none;">Q1 2026</span>
+          <span>QUARTERLY CAPITAL SCORECARD</span>
+          <span style="font-weight: 400; text-transform: none;">Q1 2026 (Review: Apr 1)</span>
         </div>
         <div class="module-body">
-          <table class="log-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Deployment</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Expected IRR</th>
-                <th>Risk Class</th>
-                <th>Owner</th>
-                <th>Realized</th>
-              </tr>
-            </thead>
-            <tbody id="capitalLog">
-              <tr>
-                <td>2026-02</td>
-                <td>Meta Ad Spend (Monthly)</td>
-                <td class="log-amount">$466k</td>
-                <td>Organic Growth</td>
-                <td class="log-irr positive">40-60%</td>
-                <td>Medium</td>
-                <td>Manoop</td>
-                <td class="log-irr pending">Tracking</td>
-              </tr>
-              <tr>
-                <td>2026-02</td>
-                <td>Axon/AppLovin (Monthly)</td>
-                <td class="log-amount">$142k</td>
-                <td>Organic Growth</td>
-                <td class="log-irr positive">30-50%</td>
-                <td>Medium</td>
-                <td>Agency</td>
-                <td class="log-irr pending">Tracking</td>
-              </tr>
-              <tr>
-                <td>2026-02</td>
-                <td>Google Ads (Monthly)</td>
-                <td class="log-amount">$256k</td>
-                <td>Organic Growth</td>
-                <td class="log-irr positive">20-40%</td>
-                <td>Low</td>
-                <td>Agency</td>
-                <td class="log-irr pending">Tracking</td>
-              </tr>
-              <tr>
-                <td>TBD</td>
-                <td>LuminDose Launch Capital</td>
-                <td class="log-amount">TBD</td>
-                <td>New Venture</td>
-                <td class="log-irr pending">TBD</td>
-                <td>High</td>
-                <td>Michael/Manoop</td>
-                <td class="log-irr pending">—</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="quarterly-grid">
+            <div class="quarterly-item">
+              <div class="quarterly-metric">IRR Performance</div>
+              <div class="quarterly-row">
+                <span class="quarterly-label">Projected</span>
+                <span class="quarterly-value">40%</span>
+              </div>
+              <div class="quarterly-row">
+                <span class="quarterly-label">Actual (MTD)</span>
+                <span class="quarterly-value">~42%</span>
+              </div>
+              <div class="quarterly-variance">
+                <div class="quarterly-variance-value good">+5% variance</div>
+              </div>
+            </div>
+            <div class="quarterly-item">
+              <div class="quarterly-metric">Payback Period</div>
+              <div class="quarterly-row">
+                <span class="quarterly-label">Projected</span>
+                <span class="quarterly-value">45 days</span>
+              </div>
+              <div class="quarterly-row">
+                <span class="quarterly-label">Actual (MTD)</span>
+                <span class="quarterly-value">~42 days</span>
+              </div>
+              <div class="quarterly-variance">
+                <div class="quarterly-variance-value good">-7% variance</div>
+              </div>
+            </div>
+            <div class="quarterly-item">
+              <div class="quarterly-metric">Multiple Expansion</div>
+              <div class="quarterly-row">
+                <span class="quarterly-label">Start</span>
+                <span class="quarterly-value">4.0x</span>
+              </div>
+              <div class="quarterly-row">
+                <span class="quarterly-label">Current</span>
+                <span class="quarterly-value">4.0x</span>
+              </div>
+              <div class="quarterly-variance">
+                <div class="quarterly-variance-value neutral">No change</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="diagnostic" id="quarterlyDiagnostic">
+            <div class="diagnostic-title">DIAGNOSTIC: Variance &gt;25% Detected</div>
+            <div class="diagnostic-body">No significant variances detected this quarter.</div>
+          </div>
         </div>
       </div>
       
@@ -608,49 +926,31 @@
         <a href="agents.html">Agent HQ</a> •
         <a href="scorecard.html">Scorecard</a>
       </div>
-      <div>
-        AUM Formula: Σ(Entity EBITDA × Multiple × Ownership%) + Cash − Debt
-      </div>
+      <div>AUM = Σ(EBITDA × Multiple × Ownership%) + Cash − Debt</div>
     </div>
   </div>
   
   <script>
-    // Update timestamp
-    document.getElementById('lastUpdate').textContent = new Date().toISOString().split('T')[0];
+    document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     
-    // Capital data structure for future API integration
-    const CAPITAL_STATE = {
-      aum: {
-        trailing: 8.4,  // $M
-        runRate: 17.4,  // $M
-        target: 100,    // $M
-        requiredCAGR: 28, // % (10yr to $100M)
-        currentCAGR: 100, // % (proxy)
-      },
-      entities: [
-        { name: 'APE BORN', ebitda: 2.0, multiple: 4, ownership: 0.90 },
-        { name: 'ArnoldAI', valuation: 0.2, ownership: 1.0 },
-        { name: 'Cash', value: 1.0 },
-      ],
-      risk: {
-        leverage: 0,
-        maxLeverage: 1.5,
-        concentration: 0.95,
-        cashRunway: 6, // months
-        largestAssetPct: 0.86,
-        probRuin: 0.01,
-        mode: 'growth'
-      },
-      phases: {
-        current: 2,
-        gates: [
-          { phase: 1, name: 'Operator', gate: 1, metric: 'EBITDA $M', unlocked: true },
-          { phase: 2, name: 'Allocator', gate: 100, metric: 'AUM $M', unlocked: false },
-          { phase: 3, name: 'Builder', gate: 1000, metric: 'AUM $M', unlocked: false },
-          { phase: 4, name: 'Architect', gate: 10000, metric: 'AUM $M', unlocked: false },
-        ]
-      }
+    // Capital state for future API integration
+    const STATE = {
+      aum: { trailing: 8.4, runRate: 17.4, target: 100 },
+      cagr: { required: 28, actual: 100, gap: 72 },
+      concentration: { current: 95, band: 'red', phase1Target: 75, phase2Target: 50, phase3Target: 30 },
+      risk: { leverage: 0, maxLeverage: 1.5, cashRunway: 6, probRuin: 0.01, mode: 'growth' },
+      velocity: { score: 85, idleCapital: 0, avgLag: 12, threshold: 30 },
+      founder: { operator: 45, allocator: 40, architect: 15 },
+      phase: { current: 2, progress: 8.4 }
     };
+    
+    // Mode-based velocity thresholds
+    const VELOCITY_THRESHOLDS = { growth: 30, defense: 90, protection: 180 };
+    
+    // Check for drift
+    if (STATE.founder.operator > STATE.founder.allocator && STATE.phase.current >= 2) {
+      document.getElementById('driftAlert').classList.add('active');
+    }
   </script>
 </body>
 </html>
