@@ -144,40 +144,92 @@
     </div>
     
     <!-- Capital Intelligence Block -->
-    <div class="weekly-focus" style="background: linear-gradient(135deg, #161b22, #1a1f2e); border-color: #58a6ff;">
-      <h2 style="display: flex; align-items: center; gap: 10px;">💰 Capital Intelligence <span style="font-size: 11px; font-weight: 400; color: #8b949e; margin-left: auto;">Updated: 2026-02-16</span></h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 16px;">
-        <div style="background: #21262d; border-radius: 8px; padding: 14px; border-left: 3px solid #58a6ff;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px;">Capital Efficiency</div>
-          <div style="font-size: 20px; font-weight: 700; color: #58a6ff;" id="capEfficiency">—</div>
+    <div class="weekly-focus" style="background: linear-gradient(135deg, #0d1117, #161b22); border: 2px solid #58a6ff; box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);">
+      <h2 style="display: flex; align-items: center; gap: 10px; font-size: 18px;">
+        💰 Capital Intelligence
+        <span style="font-size: 11px; font-weight: 400; color: #8b949e; margin-left: auto;">Updated: 2026-02-16</span>
+      </h2>
+      
+      <!-- Main AUM Display -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 40px; margin: 24px 0; padding: 20px; background: #21262d; border-radius: 12px;">
+        <div style="text-align: center;">
+          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px;">Current AUM</div>
+          <div style="font-size: 42px; font-weight: 800; color: #58a6ff; line-height: 1.1;">$17.4M</div>
+          <div style="font-size: 12px; color: #6e7681;">Run Rate Basis</div>
         </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 14px; border-left: 3px solid #3fb950;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px;">Return on Retained</div>
-          <div style="font-size: 20px; font-weight: 700; color: #3fb950;" id="capRORE">—</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 14px; border-left: 3px solid #a371f7;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px;">Deployment Velocity</div>
-          <div style="font-size: 20px; font-weight: 700; color: #a371f7;" id="capVelocity">—</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 14px; border-left: 3px solid #d29922;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px;">Leverage vs Guardrail</div>
-          <div style="font-size: 20px; font-weight: 700; color: #d29922;" id="capLeverage">—</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 14px; border-left: 3px solid #f85149;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px;">Probability of Ruin</div>
-          <div style="font-size: 20px; font-weight: 700; color: #3fb950;" id="capRuin">&lt;1%</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 14px; border-left: 3px solid #8b949e;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px;">Concentration Index</div>
-          <div style="font-size: 20px; font-weight: 700; color: #8b949e;" id="capConcentration">—</div>
-        </div>
-        <div style="background: #21262d; border-radius: 8px; padding: 14px; border-left: 3px solid #58a6ff; grid-column: span 2;">
-          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px;">AUM Growth vs Required CAGR</div>
-          <div style="font-size: 20px; font-weight: 700; color: #58a6ff;" id="capAUMDelta">Baseline pending</div>
+        <div style="font-size: 32px; color: #30363d;">→</div>
+        <div style="text-align: center;">
+          <div style="font-size: 11px; color: #d29922; text-transform: uppercase; letter-spacing: 1px;">Next Target</div>
+          <div style="font-size: 42px; font-weight: 800; color: #d29922; line-height: 1.1;">$100M</div>
+          <div style="font-size: 12px; color: #6e7681;">5.7x to go</div>
         </div>
       </div>
-      <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #30363d; font-size: 12px; color: #6e7681;">
-        <strong style="color: #8b949e;">Phase:</strong> Foundation → Growth | <strong style="color: #8b949e;">Target:</strong> $1T AUM | <strong style="color: #8b949e;">Next Milestone:</strong> $20B
+      
+      <!-- CAGR Tracker -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+        <div style="background: #21262d; border-radius: 8px; padding: 16px; text-align: center; border-left: 4px solid #3fb950;">
+          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px;">Current CAGR</div>
+          <div style="font-size: 28px; font-weight: 700; color: #3fb950;">~100%+</div>
+          <div style="font-size: 11px; color: #6e7681;">Revenue YoY: 3,500%</div>
+        </div>
+        <div style="background: #21262d; border-radius: 8px; padding: 16px; text-align: center; border-left: 4px solid #d29922;">
+          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px;">Required CAGR</div>
+          <div style="font-size: 28px; font-weight: 700; color: #d29922;">79%</div>
+          <div style="font-size: 11px; color: #6e7681;">To $100M in 3 years</div>
+        </div>
+        <div style="background: #21262d; border-radius: 8px; padding: 16px; text-align: center; border-left: 4px solid #3fb950;">
+          <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px;">Status</div>
+          <div style="font-size: 28px; font-weight: 700; color: #3fb950;">🟢 AHEAD</div>
+          <div style="font-size: 11px; color: #6e7681;">ETA: Q1 2028</div>
+        </div>
+      </div>
+      
+      <!-- Key Metrics Row -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px;">
+        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #58a6ff;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">EBITDA Margin</div>
+          <div style="font-size: 18px; font-weight: 700; color: #58a6ff;">15%</div>
+        </div>
+        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #a371f7;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">Multiple</div>
+          <div style="font-size: 18px; font-weight: 700; color: #a371f7;">4.0x</div>
+        </div>
+        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #3fb950;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">Net Debt</div>
+          <div style="font-size: 18px; font-weight: 700; color: #3fb950;">$0</div>
+        </div>
+        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #3fb950;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">Ruin Prob</div>
+          <div style="font-size: 18px; font-weight: 700; color: #3fb950;">&lt;1%</div>
+        </div>
+        <div style="background: #21262d; border-radius: 8px; padding: 12px; border-left: 3px solid #f78166;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase;">5yr RORE</div>
+          <div style="font-size: 18px; font-weight: 700; color: #f78166;">$6.14/$1</div>
+        </div>
+      </div>
+      
+      <!-- Milestone Ladder -->
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #30363d;">
+        <div style="font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Milestone Ladder</div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; flex-wrap: wrap;">
+          <span style="color: #3fb950; font-weight: 700;">$17.4M</span>
+          <span style="color: #484f58;">→</span>
+          <span style="background: #d29922; color: #000; padding: 4px 10px; border-radius: 4px; font-weight: 700;">$100M</span>
+          <span style="color: #484f58;">→</span>
+          <span style="color: #6e7681;">$1B</span>
+          <span style="color: #484f58;">→</span>
+          <span style="color: #6e7681;">$10B</span>
+          <span style="color: #484f58;">→</span>
+          <span style="color: #6e7681;">$100B</span>
+          <span style="color: #484f58;">→</span>
+          <span style="color: #6e7681;">$1T</span>
+        </div>
+      </div>
+      
+      <!-- Ownership -->
+      <div style="margin-top: 12px; font-size: 11px; color: #6e7681;">
+        <strong style="color: #8b949e;">Ownership:</strong> APE BORN 90% + ArnoldAI 100% |
+        <strong style="color: #8b949e;">Entities:</strong> APE BORN ($16.2M) • ArnoldAI ($200k) • Cash ($1M)
       </div>
     </div>
     
