@@ -210,7 +210,8 @@
             <div class="metric-card">
               <div class="metric-value" id="currentRevenue">$2.0M</div>
               <div class="metric-label">Current Month</div>
-              <div class="metric-sub">Feb 2026</div>
+              <div class="metric-sub">30-day rolling</div>
+              <div id="wowTrend" style="font-size: 10px; margin-top: 4px; font-weight: 600;"></div>
             </div>
             <div class="metric-card">
               <div class="metric-value" style="color: #fbbf24;">$10.0M</div>
@@ -917,6 +918,15 @@
           const monthsRemaining = Math.max(1, (targetDate.getFullYear() - now.getFullYear()) * 12 + targetDate.getMonth() - now.getMonth());
           const requiredGrowth = Math.pow(STATE.targetRevenue / revM, 1 / monthsRemaining) - 1;
           document.getElementById('requiredGrowth').textContent = '+' + Math.round(requiredGrowth * 100) + '%';
+          
+          // Update WoW trend indicator
+          if (data.wowChange !== undefined) {
+            const wowEl = document.getElementById('wowTrend');
+            const wow = data.wowChange;
+            const arrow = wow >= 0 ? '↑' : '↓';
+            const color = wow >= 0 ? '#4ade80' : '#fca5a5';
+            wowEl.innerHTML = '<span style="color:' + color + '">' + arrow + ' ' + Math.abs(wow).toFixed(1) + '% WoW</span>';
+          }
           
           // Update last sync from data
           const syncDate = new Date(data.lastUpdated);
