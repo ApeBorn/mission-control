@@ -187,11 +187,11 @@
         <div class="clarity-block">
           <div class="clarity-label">Kill Switches</div>
           <div class="clarity-content">
-            Leverage &gt;2.5x → No new debt<br>
+            Debt/EBITDA 4.0-4.7x (alert &gt;4.8x)<br>
+            Interest Coverage ≥2.5x (red &lt;2.0x)<br>
+            DSCR ≥1.3x (red &lt;1.2x)<br>
             Single asset &gt;50% → Diversify 90d<br>
-            ROAS &lt;1.5x 30d → Capital Protection<br>
-            EBITDA margin &lt;12% → Cost review<br>
-            Founder &gt;50% Operator → Delegate
+            ROAS &lt;1.5x 30d → Capital Protection
           </div>
         </div>
       </div>
@@ -386,17 +386,43 @@
           <span class="status green">CLEAR</span>
         </div>
         <div class="m-body">
+          <!-- Capital Structure (3-Metric Framework per CFO Josh 2026-02-17) -->
+          <div style="font-size: 9px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Capital Structure (CFO Framework)</div>
+          <table style="margin-bottom: 12px;">
+            <thead>
+              <tr><th>Metric</th><th>Target</th><th>Alert</th><th>Red Flag</th><th>Current</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Debt/EBITDA</td>
+                <td class="val">4.0x-4.7x</td>
+                <td class="val yellow">>4.8x</td>
+                <td class="val red"><4.0x under</td>
+                <td class="val green">0x</td>
+              </tr>
+              <tr>
+                <td>Interest Coverage</td>
+                <td class="val">≥2.5x</td>
+                <td class="val yellow"><2.5x</td>
+                <td class="val red"><2.0x</td>
+                <td class="val green">N/A</td>
+              </tr>
+              <tr>
+                <td>DSCR</td>
+                <td class="val">≥1.3x</td>
+                <td class="val yellow"><1.3x</td>
+                <td class="val red"><1.2x</td>
+                <td class="val green">N/A</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Operational Guardrails -->
+          <div style="font-size: 9px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Operational Guardrails</div>
           <table>
             <thead>
               <tr><th>Trigger</th><th>Threshold</th><th>Current</th><th>Action</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Leverage</td>
-                <td class="val">>2.5x</td>
-                <td class="val green">0x</td>
-                <td>No new debt</td>
-              </tr>
               <tr>
                 <td>Single Asset Concentration</td>
                 <td class="val">>50%</td>
@@ -423,8 +449,8 @@
               </tr>
             </tbody>
           </table>
-          <div style="margin-top: 8px; font-size: 9px; color: #fca5a5;">
-            ⚠️ Leverage threshold pending CFO (Josh) confirmation
+          <div style="margin-top: 8px; font-size: 9px; color: #4ade80;">
+            ✓ Capital Structure framework confirmed by CFO (2026-02-17)
           </div>
         </div>
       </div>
