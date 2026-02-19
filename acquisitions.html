@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First Acquisition 2026 | Command Center</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; background: #050505; color: #e0e0e0; min-height: 100vh; font-size: 12px; line-height: 1.4; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 16px; }
+    
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .header h1 { font-size: 14px; font-weight: 600; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+    .back-link { padding: 6px 12px; font-size: 10px; font-weight: 600; border: 1px solid #333; background: transparent; color: #666; border-radius: 4px; text-decoration: none; }
+    .back-link:hover { border-color: #555; color: #888; }
+    
+    .status-strip { background: linear-gradient(180deg, #0a0a0a, #080808); border: 1px solid #1a1a1a; border-radius: 6px; padding: 16px 20px; margin-bottom: 16px; }
+    .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    @media (max-width: 900px) { .status-grid { grid-template-columns: repeat(2, 1fr); } }
+    .status-block { }
+    .status-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .status-value { font-size: 24px; font-weight: 700; color: #fff; }
+    .status-value.green { color: #4ade80; }
+    .status-sub { font-size: 10px; color: #666; margin-top: 4px; }
+    
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .grid-full { grid-column: span 2; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .grid-full { grid-column: span 1; } }
+    
+    .module { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 6px; overflow: hidden; }
+    .m-header { padding: 10px 14px; border-bottom: 1px solid #1a1a1a; font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+    .m-body { padding: 14px; }
+    
+    table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    th { text-align: left; padding: 8px 10px; color: #444; font-size: 9px; text-transform: uppercase; border-bottom: 1px solid #1a1a1a; font-weight: 600; }
+    td { padding: 10px; border-bottom: 1px solid #0f0f0f; color: #888; }
+    th:not(:first-child), td:not(:first-child) { text-align: right; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #0f0f0f; }
+    
+    .val { font-weight: 600; color: #fff; }
+    .val.green { color: #4ade80; }
+    .val.yellow { color: #fbbf24; }
+    .val.red { color: #ef4444; }
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+    .tag.top { background: #14532d; color: #4ade80; }
+    .tag.review { background: #1a1a1a; color: #888; }
+    .tag.legacy { background: #713f12; color: #fbbf24; }
+    .tag.sub { background: #1e3a5f; color: #60a5fa; }
+    
+    .thesis-box { background: #0f0f0f; border-radius: 4px; padding: 12px; margin-bottom: 10px; }
+    .thesis-box:last-child { margin-bottom: 0; }
+    .thesis-title { font-weight: 600; color: #fff; margin-bottom: 6px; font-size: 11px; }
+    .thesis-content { color: #888; font-size: 11px; line-height: 1.5; }
+    .thesis-content strong { color: #ccc; }
+    
+    .metric-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .metric-card { flex: 1; background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center; }
+    .metric-value { font-size: 20px; font-weight: 700; color: #fff; }
+    .metric-label { font-size: 9px; color: #555; text-transform: uppercase; margin-top: 4px; }
+    
+    .checklist { list-style: none; }
+    .checklist li { padding: 8px 0; border-bottom: 1px solid #0f0f0f; color: #888; font-size: 11px; }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { content: "○"; margin-right: 8px; color: #333; }
+    .checklist li.done::before { content: "●"; color: #4ade80; }
+    
+    .stage-flow { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+    .stage { text-align: center; flex: 1; }
+    .stage-icon { font-size: 18px; margin-bottom: 4px; }
+    .stage-name { font-size: 9px; color: #555; text-transform: uppercase; }
+    .stage-count { font-size: 16px; font-weight: 700; color: #fff; margin-top: 4px; }
+    .stage-arrow { color: #333; font-size: 16px; }
+    
+    .footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid #1a1a1a; font-size: 9px; color: #333; display: flex; justify-content: space-between; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <div class="header">
+      <h1>🎯 First Acquisition 2026</h1>
+      <a href="index.html" class="back-link">← Mission Control</a>
+    </div>
+    
+    <!-- STATUS STRIP -->
+    <div class="status-strip">
+      <div class="status-grid">
+        <div class="status-block">
+          <div class="status-label">Pipeline Status</div>
+          <div class="status-value green">ACTIVE</div>
+          <div class="status-sub">8 deals sourced, 4 top picks</div>
+        </div>
+        <div class="status-block">
+          <div class="status-label">Target Close</div>
+          <div class="status-value">2026</div>
+          <div class="status-sub">First acquisition this year</div>
+        </div>
+        <div class="status-block">
+          <div class="status-label">Buy Box</div>
+          <div class="status-value">$1-5M</div>
+          <div class="status-sub">Revenue range | SDE $200K-$2M</div>
+        </div>
+        <div class="status-block">
+          <div class="status-label">Financing</div>
+          <div class="status-value yellow">PENDING</div>
+          <div class="status-sub">US entity target: March 6</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- PIPELINE FLOW -->
+    <div class="module" style="margin-bottom: 12px;">
+      <div class="m-header">Pipeline Flow</div>
+      <div class="m-body">
+        <div class="stage-flow">
+          <div class="stage">
+            <div class="stage-icon">🔍</div>
+            <div class="stage-name">Sourced</div>
+            <div class="stage-count">8</div>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage">
+            <div class="stage-icon">📋</div>
+            <div class="stage-name">Qualified</div>
+            <div class="stage-count">0</div>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage">
+            <div class="stage-icon">📞</div>
+            <div class="stage-name">Conversation</div>
+            <div class="stage-count">0</div>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage">
+            <div class="stage-icon">📊</div>
+            <div class="stage-name">Diligence</div>
+            <div class="stage-count">0</div>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage">
+            <div class="stage-icon">📝</div>
+            <div class="stage-name">LOI</div>
+            <div class="stage-count">0</div>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage">
+            <div class="stage-icon">✅</div>
+            <div class="stage-name">Closed</div>
+            <div class="stage-count">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="grid">
+      
+      <!-- TOP PICKS -->
+      <div class="module grid-full">
+        <div class="m-header">
+          <span>⭐ Top Picks — Best Thesis Fit</span>
+          <span style="color: #4ade80;">4 deals</span>
+        </div>
+        <div class="m-body" style="padding: 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Business</th>
+                <th>Tags</th>
+                <th>Revenue</th>
+                <th>SDE</th>
+                <th>Asking</th>
+                <th>Multiple</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="val">Pickleball Brand</span><br><span style="color:#555;font-size:10px;">Quiet Light • eCommerce</span></td>
+                <td><span class="tag top">TOP</span></td>
+                <td class="val">$4.4M</td>
+                <td class="val green">$2.04M</td>
+                <td>Accepting Offers</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><span class="val">Supplement & Matcha</span><br><span style="color:#555;font-size:10px;">Quiet Light • eCommerce</span></td>
+                <td><span class="tag legacy">14YR</span></td>
+                <td class="val">$2.64M</td>
+                <td class="val green">$906K</td>
+                <td>$4.2M</td>
+                <td>4.6x</td>
+              </tr>
+              <tr>
+                <td><span class="val">Automotive Electronics</span><br><span style="color:#555;font-size:10px;">Quiet Light • eComm + Subscription</span></td>
+                <td><span class="tag sub">SUB</span></td>
+                <td class="val">$8.15M</td>
+                <td class="val green">$1.11M</td>
+                <td>$4.2M</td>
+                <td>3.8x</td>
+              </tr>
+              <tr>
+                <td><span class="val">B2B Lighting</span><br><span style="color:#555;font-size:10px;">Quiet Light • eCommerce • SBA Pre-Qual</span></td>
+                <td><span class="tag legacy">16YR</span></td>
+                <td class="val">$2.37M</td>
+                <td class="val green">$1.04M</td>
+                <td>$3.75M</td>
+                <td>3.6x</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- OTHER PIPELINE -->
+      <div class="module grid-full">
+        <div class="m-header">
+          <span>Pipeline — Other Candidates</span>
+          <span style="color: #888;">4 deals</span>
+        </div>
+        <div class="m-body" style="padding: 0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Business</th>
+                <th>Tags</th>
+                <th>Revenue</th>
+                <th>SDE</th>
+                <th>Asking</th>
+                <th>Multiple</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="val">Brewing eCommerce</span><br><span style="color:#555;font-size:10px;">Quiet Light • 14yr legacy • $50M lifetime</span></td>
+                <td><span class="tag legacy">14YR</span></td>
+                <td class="val">$2.71M</td>
+                <td>$604K</td>
+                <td>$2M</td>
+                <td>3.3x</td>
+              </tr>
+              <tr>
+                <td><span class="val">Superfood Coffee</span><br><span style="color:#555;font-size:10px;">Quiet Light • Shopify • 60%+ recurring</span></td>
+                <td><span class="tag sub">SUB</span></td>
+                <td>$661K</td>
+                <td>$212K</td>
+                <td>$580K</td>
+                <td>2.7x</td>
+              </tr>
+              <tr>
+                <td><span class="val">Supplements/Health</span><br><span style="color:#555;font-size:10px;">Empire Flippers • Multi-channel</span></td>
+                <td><span class="tag sub">SUB</span></td>
+                <td class="val">$3.4M</td>
+                <td class="val">$1.35M</td>
+                <td>$5.17M</td>
+                <td>46x mo</td>
+              </tr>
+              <tr>
+                <td><span class="val">Nautical Gifts</span><br><span style="color:#555;font-size:10px;">Empire Flippers • Amazon FBA</span></td>
+                <td><span class="tag legacy">8YR</span></td>
+                <td>$805K</td>
+                <td>$213K</td>
+                <td>$675K</td>
+                <td>38x mo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- BUY BOX / THESIS -->
+      <div class="module">
+        <div class="m-header">Buy Box & Thesis</div>
+        <div class="m-body">
+          <div class="thesis-box">
+            <div class="thesis-title">Target Criteria</div>
+            <div class="thesis-content">
+              <strong>Revenue:</strong> $1M - $5M/year<br>
+              <strong>SDE:</strong> $200K - $2M/year (high margin)<br>
+              <strong>Model:</strong> Subscription preferred<br>
+              <strong>Seller:</strong> 50-65+, legacy sale
+            </div>
+          </div>
+          <div class="thesis-box">
+            <div class="thesis-title">Opportunity Focus</div>
+            <div class="thesis-content">
+              <strong>Type 1:</strong> eCommerce businesses<br>
+              <strong>Type 2:</strong> Traditional → Online (plug in APE BORN marketing machine)
+            </div>
+          </div>
+          <div class="thesis-box">
+            <div class="thesis-title">Acquisition Type</div>
+            <div class="thesis-content">
+              <strong>Concentric:</strong> Related to APE BORN<br>
+              <strong>Horizontal:</strong> Same level, different market
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- VALUE CREATION -->
+      <div class="module">
+        <div class="m-header">Value Creation Thesis</div>
+        <div class="m-body">
+          <div class="thesis-box">
+            <div class="thesis-content" style="text-align: center; padding: 10px 0;">
+              <div style="color: #fff; font-weight: 600; margin-bottom: 8px;">Traditional Business + APE BORN Marketing</div>
+              <div style="color: #333; font-size: 18px;">↓</div>
+              <div style="color: #4ade80; font-weight: 600; margin: 8px 0;">2-3x Revenue Growth</div>
+              <div style="color: #333; font-size: 18px;">↓</div>
+              <div style="color: #fff; font-weight: 600;">Hold for Cash Flow OR Exit at Higher Multiple</div>
+            </div>
+          </div>
+          <div class="thesis-box">
+            <div class="thesis-title">The Moat</div>
+            <div class="thesis-content">
+              Acquire business with product-market fit but weak marketing → Apply APE BORN's marketing excellence → Unlock unrealized potential only we can access
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- FINANCING -->
+      <div class="module">
+        <div class="m-header">Capital Stack</div>
+        <div class="m-body">
+          <div class="thesis-box">
+            <div class="thesis-title">Shopify Capital (Primary)</div>
+            <div class="thesis-content">
+              <strong>Status:</strong> Requires US entity<br>
+              <strong>Target:</strong> March 6, 2026<br>
+              <strong>Terms:</strong> 0.9-1%/mo, 4% remittance floor<br>
+              <strong>Contact:</strong> Anthony Kotlovski, Chloe Miller
+            </div>
+          </div>
+          <div class="thesis-box">
+            <div class="thesis-title">Josh's Prep (CFO)</div>
+            <div class="thesis-content">
+              • Prepare financial statements<br>
+              • Compare Shopify vs Amex rewards<br>
+              • Evaluate alternative lenders
+            </div>
+          </div>
+          <div class="thesis-box">
+            <div class="thesis-title">Deal Structure Options</div>
+            <div class="thesis-content">
+              • All Cash (cleanest)<br>
+              • Cash + Seller Note (30-50%)<br>
+              • SBA 7(a) Loan (up to $5M)
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- DUE DILIGENCE -->
+      <div class="module">
+        <div class="m-header">Due Diligence Phases</div>
+        <div class="m-body">
+          <ul class="checklist">
+            <li><strong>Phase 1:</strong> Initial Screening — Buy box fit, red flag scan</li>
+            <li><strong>Phase 2:</strong> Owner Conversation — Why selling, timeline, expectations</li>
+            <li><strong>Phase 3:</strong> Financial Diligence — P&L, SDE reconstruction, revenue analysis</li>
+            <li><strong>Phase 4:</strong> Operational Diligence — Team, customers, suppliers, tech</li>
+            <li><strong>Phase 5:</strong> Legal Diligence — Corporate, contracts, IP, liabilities</li>
+            <li><strong>Phase 6:</strong> Integration Planning — Day 1 readiness, 90-day plan</li>
+          </ul>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- SOURCING CHANNELS -->
+    <div class="module">
+      <div class="m-header">Sourcing Channels</div>
+      <div class="m-body">
+        <div class="metric-row">
+          <div class="metric-card">
+            <div class="metric-value green">✓</div>
+            <div class="metric-label">Empire Flippers</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value green">✓</div>
+            <div class="metric-label">Quiet Light</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value yellow">○</div>
+            <div class="metric-label">BizBuySell</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value yellow">○</div>
+            <div class="metric-label">FE International</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value yellow">○</div>
+            <div class="metric-label">Off-Market</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <span>Last Updated: Feb 19, 2026 13:44 EST</span>
+      <span>Files: <a href="https://drive.google.com/drive/folders/1B5d_jx85bSYcl07HYlffgqrJAJCcBnAy" target="_blank" style="color: #555;">Google Drive</a></span>
+    </div>
+    
+  </div>
+</body>
+</html>
