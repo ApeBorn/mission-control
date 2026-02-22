@@ -432,6 +432,54 @@
         </div>
       </div>
       
+      <!-- UPCOMING MILESTONES -->
+      <div class="module executive-only">
+        <div class="m-header">
+          <span>🎯 UPCOMING MILESTONES</span>
+          <span id="nextMilestoneCountdown" class="status yellow">13 DAYS</span>
+        </div>
+        <div class="m-body">
+          <table>
+            <thead>
+              <tr><th>Milestone</th><th>Date</th><th>Days</th><th>Owner</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr style="background: #0f150f;">
+                <td class="val green">🚀 Amazon FBA Launch</td>
+                <td>Mar 6, 2026</td>
+                <td class="val green" id="amazonDays">13</td>
+                <td>Manoop</td>
+                <td><span class="status green">ON TRACK</span></td>
+              </tr>
+              <tr>
+                <td>Q1 Close (Revenue Target)</td>
+                <td>Mar 31, 2026</td>
+                <td class="val">38</td>
+                <td>Michael</td>
+                <td><span class="status yellow">IN PROGRESS</span></td>
+              </tr>
+              <tr>
+                <td>3 SOPs Documented</td>
+                <td>Mar 15, 2026</td>
+                <td class="val">22</td>
+                <td>Michael</td>
+                <td><span class="status yellow">PENDING</span></td>
+              </tr>
+              <tr>
+                <td>LuminDose Entity Formation</td>
+                <td>Q2 2026</td>
+                <td class="val muted">~60</td>
+                <td>Michael</td>
+                <td><span class="status gray">PLANNED</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 8px; font-size: 10px; color: #888;">
+            <strong style="color: #4ade80;">Priority Focus:</strong> Amazon launch is the next major revenue expansion event. All supporting work should ladder to this.
+          </div>
+        </div>
+      </div>
+      
       <!-- KILL SWITCHES -->
       <div class="module executive-only">
         <div class="m-header">
@@ -1024,6 +1072,42 @@
     
     // Load live data on page load
     loadLiveData();
+    
+    // Calculate milestone countdowns
+    function updateMilestoneCountdowns() {
+      const milestones = [
+        { id: 'amazonDays', date: '2026-03-06' },
+      ];
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      milestones.forEach(m => {
+        const targetDate = new Date(m.date + 'T00:00:00');
+        const diffTime = targetDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        const el = document.getElementById(m.id);
+        if (el) {
+          el.textContent = diffDays;
+          if (diffDays <= 7) {
+            el.className = 'val red';
+          } else if (diffDays <= 14) {
+            el.className = 'val yellow';
+          } else {
+            el.className = 'val green';
+          }
+        }
+      });
+      
+      // Update header countdown
+      const amazonCountdown = document.getElementById('nextMilestoneCountdown');
+      const amazonDays = document.getElementById('amazonDays');
+      if (amazonCountdown && amazonDays) {
+        amazonCountdown.textContent = amazonDays.textContent + ' DAYS';
+      }
+    }
+    updateMilestoneCountdowns();
   </script>
 </body>
 </html>
