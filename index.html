@@ -105,6 +105,66 @@
     .actionable-impact { font-size: 9px; color: #4ade80; }
     .actionable-meta { display: flex; gap: 16px; font-size: 10px; color: #666; }
     
+    /* FOCUS CARD - New Component */
+    .focus-card { background: linear-gradient(135deg, #14532d 0%, #0f3d1c 100%); border: 2px solid #22c55e; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
+    .focus-card .focus-label { font-size: 10px; color: #86efac; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+    .focus-card .focus-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .focus-card .focus-why { font-size: 12px; color: #86efac; margin-bottom: 12px; }
+    .focus-card .focus-metrics { display: flex; gap: 24px; }
+    .focus-card .focus-metric { }
+    .focus-card .focus-metric-value { font-size: 20px; font-weight: 700; color: #fff; }
+    .focus-card .focus-metric-label { font-size: 9px; color: #6ee7b7; text-transform: uppercase; }
+    
+    /* VELOCITY INDICATOR - New Component */
+    .velocity-strip { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #0f0f0f; border-radius: 4px; margin-bottom: 12px; font-size: 10px; }
+    .velocity-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
+    .velocity-dot.accel { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+    .velocity-dot.stable { background: #eab308; box-shadow: 0 0 8px #eab308; }
+    .velocity-dot.decel { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .velocity-text { color: #888; }
+    .velocity-value { font-weight: 600; color: #fff; }
+    .velocity-value.green { color: #4ade80; }
+    .velocity-value.yellow { color: #fbbf24; }
+    .velocity-value.red { color: #ef4444; }
+    
+    /* COUNTDOWN URGENCY - Enhanced */
+    .countdown-urgent { background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); border: 2px solid #ef4444; animation: urgentPulse 2s infinite; }
+    .countdown-warning { background: linear-gradient(135deg, #713f12 0%, #422006 100%); border: 2px solid #eab308; }
+    @keyframes urgentPulse { 0%, 100% { border-color: #ef4444; } 50% { border-color: #fca5a5; } }
+    
+    /* IMPROVED MOBILE */
+    @media (max-width: 768px) {
+      .container { padding: 8px; }
+      .header { flex-direction: column; gap: 8px; align-items: flex-start; }
+      .header h1 { font-size: 12px; }
+      .mode-toggle { width: 100%; justify-content: flex-end; }
+      .clarity-grid { grid-template-columns: 1fr !important; gap: 12px; }
+      .clarity-strip { padding: 12px; }
+      .aum-display { flex-direction: column; gap: 4px; }
+      .aum-value { font-size: 22px; }
+      .aum-value.secondary { font-size: 18px; }
+      .grid { grid-template-columns: 1fr !important; }
+      .grid-full { grid-column: span 1 !important; }
+      .focus-card .focus-metrics { flex-direction: column; gap: 12px; }
+      table { font-size: 10px; }
+      th, td { padding: 5px 6px; }
+      .causal-chain { flex-wrap: wrap; font-size: 9px; }
+      .m-body { padding: 10px; }
+      .metric-card { padding: 10px; }
+      .metric-value { font-size: 18px; }
+      .module.grid-third { display: block; }
+      .module .m-body > div[style*="grid-template-columns: repeat(3"] { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; }
+      .module .m-body > div[style*="grid-template-columns: repeat(4"] { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    
+    @media (max-width: 480px) {
+      .aum-value { font-size: 18px; }
+      .metric-value { font-size: 16px; }
+      .focus-card .focus-title { font-size: 14px; }
+      .focus-card .focus-metric-value { font-size: 16px; }
+    }
+    
     /* Metric Card */
     .metric-card { background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center; }
     .metric-value { font-size: 22px; font-weight: 700; color: #fff; }
@@ -141,6 +201,40 @@
       <span class="causal-step">AUM</span>
       <span class="causal-arrow">→</span>
       <span class="causal-step">Optionality</span>
+    </div>
+    
+    <!-- VELOCITY INDICATOR - New -->
+    <div class="velocity-strip">
+      <div class="velocity-dot" id="velocityDot"></div>
+      <span class="velocity-text">Growth Velocity:</span>
+      <span class="velocity-value" id="velocityStatus">Loading...</span>
+      <span class="velocity-text" style="margin-left: 8px;">|</span>
+      <span class="velocity-text" style="margin-left: 8px;">WoW:</span>
+      <span class="velocity-value" id="velocityWoW">Loading...</span>
+      <span class="velocity-text" style="margin-left: 8px;">|</span>
+      <span class="velocity-text" style="margin-left: 8px;">Daily Avg:</span>
+      <span class="velocity-value" id="velocityDaily">Loading...</span>
+    </div>
+    
+    <!-- FOCUS CARD - This Week's #1 Priority -->
+    <div class="focus-card executive-only">
+      <div class="focus-label">🎯 THIS WEEK'S #1 FOCUS</div>
+      <div class="focus-title" id="focusTitle">Amazon FBA Launch Preparation</div>
+      <div class="focus-why" id="focusWhy">Launch in <span id="focusDays">13</span> days — all supporting work must ladder to this milestone.</div>
+      <div class="focus-metrics">
+        <div class="focus-metric">
+          <div class="focus-metric-value" id="focusMetric1">Mar 6</div>
+          <div class="focus-metric-label">Launch Date</div>
+        </div>
+        <div class="focus-metric">
+          <div class="focus-metric-value" id="focusMetric2">$200K+</div>
+          <div class="focus-metric-label">Expected Year 1</div>
+        </div>
+        <div class="focus-metric">
+          <div class="focus-metric-value" id="focusMetric3">Diversification</div>
+          <div class="focus-metric-label">Strategic Value</div>
+        </div>
+      </div>
     </div>
     
     <!-- LAYER 0: CLARITY STRIP -->
@@ -973,8 +1067,278 @@
       
     </div>
     
+    <!-- NEW MODULES - Added 2026-02-22 Overnight -->
+    
+    <!-- LEARNING & DEVELOPMENT PROGRESS -->
+    <div class="module executive-only" style="margin-top: 12px;">
+      <div class="m-header">
+        <span>📚 LEARNING & DEVELOPMENT PROGRESS</span>
+        <span class="status green">ACTIVE</span>
+      </div>
+      <div class="m-body">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
+          <div class="metric-card" style="border-left: 3px solid #22c55e;">
+            <div class="metric-value green">100%</div>
+            <div class="metric-label">Sharran Deep Dive</div>
+            <div class="metric-sub">50/50 videos complete</div>
+          </div>
+          <div class="metric-card" style="border-left: 3px solid #22c55e;">
+            <div class="metric-value green">125</div>
+            <div class="metric-label">Book Playbooks</div>
+            <div class="metric-sub">CEO-focused summaries</div>
+          </div>
+          <div class="metric-card" style="border-left: 3px solid #3b82f6;">
+            <div class="metric-value">3</div>
+            <div class="metric-label">CEO Shadow Briefs</div>
+            <div class="metric-sub">Strategic frameworks</div>
+          </div>
+        </div>
+        <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">Active Learning Tracks</div>
+        <table>
+          <tbody>
+            <tr>
+              <td>Sharran Srivatsaa (YouTube Deep Dive)</td>
+              <td style="width: 100px;"><div class="progress"><div class="progress-fill green" style="width: 100%;"></div></div></td>
+              <td class="val green" style="width: 50px;">100%</td>
+              <td style="width: 80px;"><span class="status green">DONE</span></td>
+            </tr>
+            <tr>
+              <td>CEO Shadow Brief Series</td>
+              <td><div class="progress"><div class="progress-fill green" style="width: 60%;"></div></div></td>
+              <td class="val green">3/5</td>
+              <td><span class="status yellow">ACTIVE</span></td>
+            </tr>
+            <tr>
+              <td>Book Synthesis (Priority 10)</td>
+              <td><div class="progress"><div class="progress-fill yellow" style="width: 30%;"></div></div></td>
+              <td class="val yellow">3/10</td>
+              <td><span class="status yellow">ACTIVE</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 8px; font-size: 10px; color: #86efac; background: #0f1f0f; padding: 8px; border-radius: 4px;">
+          <strong>Key Insight Applied:</strong> "You can't earn your way to a billion. You have to own your way there." — Sharran (via Hormozi)
+        </div>
+      </div>
+    </div>
+    
+    <!-- CHANNEL PERFORMANCE HEALTH -->
+    <div class="module executive-only" style="margin-top: 12px;">
+      <div class="m-header">
+        <span>📊 CHANNEL PERFORMANCE HEALTH</span>
+        <span id="channelStatus" class="status green">HEALTHY</span>
+      </div>
+      <div class="m-body">
+        <table>
+          <thead>
+            <tr><th>Channel</th><th>Daily Spend</th><th>7-Day ROAS</th><th>Trend</th><th>Action</th><th>Health</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="val">Meta</td>
+              <td>$14,656</td>
+              <td class="val green">2.42x</td>
+              <td style="color: #4ade80;">↑ +5%</td>
+              <td>Scale candidate</td>
+              <td><span class="status green">STRONG</span></td>
+            </tr>
+            <tr>
+              <td class="val">Axon</td>
+              <td>$7,385</td>
+              <td class="val green">2.44x</td>
+              <td style="color: #4ade80;">↑ +3%</td>
+              <td>Maintain</td>
+              <td><span class="status green">STRONG</span></td>
+            </tr>
+            <tr>
+              <td class="val">Google</td>
+              <td>$6,867</td>
+              <td class="val yellow">1.96x</td>
+              <td style="color: #888;">→ 0%</td>
+              <td>Agency managed</td>
+              <td><span class="status yellow">MONITOR</span></td>
+            </tr>
+            <tr>
+              <td class="val">Snapchat</td>
+              <td>$1,277</td>
+              <td class="val yellow">1.36x</td>
+              <td style="color: #fca5a5;">↓ -8%</td>
+              <td>Reduce if <1.2x</td>
+              <td><span class="status yellow">WATCH</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
+            <div style="font-size: 16px; font-weight: 700; color: #fff;">$30.2k</div>
+            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Daily Spend</div>
+          </div>
+          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
+            <div style="font-size: 16px; font-weight: 700; color: #4ade80;">2.19x</div>
+            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Blended ROAS</div>
+          </div>
+          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
+            <div style="font-size: 16px; font-weight: 700; color: #fff;">48%</div>
+            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Meta Share</div>
+          </div>
+          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
+            <div style="font-size: 16px; font-weight: 700; color: #4ade80;">4/4</div>
+            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Channels Live</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- WEEKLY VELOCITY TRENDS -->
+    <div class="module executive-only" style="margin-top: 12px;">
+      <div class="m-header">
+        <span>📈 4-WEEK VELOCITY TRENDS</span>
+        <span class="status green">ACCELERATING</span>
+      </div>
+      <div class="m-body">
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <div style="flex: 1; background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center;">
+            <div style="font-size: 9px; color: #555; margin-bottom: 4px;">Week -4</div>
+            <div style="font-size: 18px; font-weight: 700; color: #888;">$1.7M</div>
+            <div style="font-size: 10px; color: #666;">Base</div>
+          </div>
+          <div style="flex: 1; background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center;">
+            <div style="font-size: 9px; color: #555; margin-bottom: 4px;">Week -3</div>
+            <div style="font-size: 18px; font-weight: 700; color: #4ade80;">$1.85M</div>
+            <div style="font-size: 10px; color: #4ade80;">+9%</div>
+          </div>
+          <div style="flex: 1; background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center;">
+            <div style="font-size: 9px; color: #555; margin-bottom: 4px;">Week -2</div>
+            <div style="font-size: 18px; font-weight: 700; color: #4ade80;">$1.95M</div>
+            <div style="font-size: 10px; color: #4ade80;">+5%</div>
+          </div>
+          <div style="flex: 1; background: #0f150f; border: 1px solid #22c55e; border-radius: 4px; padding: 12px; text-align: center;">
+            <div style="font-size: 9px; color: #86efac; margin-bottom: 4px;">This Week</div>
+            <div style="font-size: 18px; font-weight: 700; color: #4ade80;">$2.1M</div>
+            <div style="font-size: 10px; color: #4ade80;">+8%</div>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+          <div style="background: #0f0f0f; border-radius: 4px; padding: 10px; text-align: center;">
+            <div style="font-size: 14px; font-weight: 700; color: #4ade80;">+24%</div>
+            <div style="font-size: 9px; color: #555; text-transform: uppercase;">4-Week Growth</div>
+          </div>
+          <div style="background: #0f0f0f; border-radius: 4px; padding: 10px; text-align: center;">
+            <div style="font-size: 14px; font-weight: 700; color: #4ade80;">+6%</div>
+            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Avg Weekly</div>
+          </div>
+          <div style="background: #0f0f0f; border-radius: 4px; padding: 10px; text-align: center;">
+            <div style="font-size: 14px; font-weight: 700; color: #4ade80;">ACCEL</div>
+            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Trajectory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- DECISION LOG -->
+    <div class="module executive-only" style="margin-top: 12px;">
+      <div class="m-header">
+        <span>📋 RECENT DECISIONS & CAPITAL DEPLOYMENT</span>
+      </div>
+      <div class="m-body">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Decision</th><th>Capital</th><th>Expected Impact</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Feb 22</td>
+              <td class="val">Amazon FBA Launch Prep</td>
+              <td>$15K</td>
+              <td>+$200K Y1 revenue</td>
+              <td><span class="status green">EXECUTING</span></td>
+            </tr>
+            <tr>
+              <td>Feb 20</td>
+              <td class="val">Scale Meta Spend +20%</td>
+              <td>$3K/day</td>
+              <td>+$30K/mo revenue</td>
+              <td><span class="status green">LIVE</span></td>
+            </tr>
+            <tr>
+              <td>Feb 17</td>
+              <td class="val">CFO Framework Approved</td>
+              <td>—</td>
+              <td>Debt capacity clarity</td>
+              <td><span class="status green">DONE</span></td>
+            </tr>
+            <tr>
+              <td>Feb 15</td>
+              <td class="val">Axon Test Expanded</td>
+              <td>$7K/day</td>
+              <td>Channel diversification</td>
+              <td><span class="status green">LIVE</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 8px; font-size: 10px; color: #666;">
+          Total Capital Deployed (30d): <strong style="color: #fff;">$45K</strong> | Expected Incremental Rev: <strong style="color: #4ade80;">$250K+</strong>
+        </div>
+      </div>
+    </div>
+    
+    <!-- TEAM READINESS INDEX -->
+    <div class="module executive-only" style="margin-top: 12px;">
+      <div class="m-header">
+        <span>👥 TEAM READINESS INDEX</span>
+        <span class="status yellow">75%</span>
+      </div>
+      <div class="m-body">
+        <table>
+          <thead>
+            <tr><th>Role</th><th>Owner</th><th>SOP Coverage</th><th>Backup</th><th>Risk Level</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="val">Media Buying</td>
+              <td>Manoop</td>
+              <td><div class="progress" style="width: 80px;"><div class="progress-fill yellow" style="width: 40%;"></div></div></td>
+              <td class="val yellow">None</td>
+              <td><span class="status yellow">MEDIUM</span></td>
+            </tr>
+            <tr>
+              <td class="val">Finance/CFO</td>
+              <td>Josh</td>
+              <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 70%;"></div></div></td>
+              <td class="val green">Docs</td>
+              <td><span class="status green">LOW</span></td>
+            </tr>
+            <tr>
+              <td class="val">Creative</td>
+              <td>Team</td>
+              <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 60%;"></div></div></td>
+              <td class="val green">Multiple</td>
+              <td><span class="status green">LOW</span></td>
+            </tr>
+            <tr>
+              <td class="val">Ops/Fulfillment</td>
+              <td>3PL</td>
+              <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 85%;"></div></div></td>
+              <td class="val green">Automated</td>
+              <td><span class="status green">LOW</span></td>
+            </tr>
+            <tr>
+              <td class="val">Strategic/CEO</td>
+              <td>Michael</td>
+              <td><div class="progress" style="width: 80px;"><div class="progress-fill red" style="width: 20%;"></div></div></td>
+              <td class="val red">None</td>
+              <td><span class="status red">HIGH</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert yellow" style="margin-top: 10px;">
+          <span class="alert-title">⚠️ KEY-PERSON RISK:</span> Manoop (Media) and Michael (Strategy) have limited backup coverage. Priority: Document 3 critical SOPs by Mar 15.
+        </div>
+      </div>
+    </div>
+    
     <div class="footer">
-      <div>Capital Command System v2.1 | Revenue → EBITDA → EV → AUM → Optionality</div>
+      <div>Capital Command System v2.2 | Revenue → EBITDA → EV → AUM → Optionality</div>
       <div>Mode: <span id="currentMode">Executive</span> | Dynamic ETA enabled</div>
     </div>
   </div>
