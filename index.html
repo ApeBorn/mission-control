@@ -448,82 +448,86 @@
       <!-- ROAS TRENDS -->
       <div class="module">
         <div class="m-header">
-          <span>📊 ROAS TRENDS (TW Linear Paid)</span>
-          <span class="status yellow" id="roasStatus">MONITOR</span>
+          <span>📊 ROAS — TW ATTRIBUTED (Source of Truth)</span>
+          <span class="status green" id="roasStatus">HEALTHY</span>
         </div>
         <div class="m-body">
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px;">
-            <div class="metric-card">
-              <div class="metric-value yellow" id="roas1day">2.11x</div>
-              <div class="metric-label">Blended ROAS</div>
-              <div class="metric-sub">Platform-reported</div>
-            </div>
-            <div class="metric-card" style="border: 1px solid #333;">
-              <div class="metric-value green" id="roas3plus1">2.58x</div>
-              <div class="metric-label">TW Attributed</div>
-              <div class="metric-sub">Linear paid model</div>
-            </div>
-            <div class="metric-card" style="border: 2px solid #3b82f6;">
-              <div class="metric-value green" id="roas7plus1">2.58x</div>
-              <div class="metric-label">7+1 Blended</div>
-              <div class="metric-sub">Primary trend</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
+            <div class="metric-card" style="border: 2px solid #22c55e; background: #0a150a;">
+              <div class="metric-value green" style="font-size: 28px;">2.58x</div>
+              <div class="metric-label">TW Attributed ROAS</div>
+              <div class="metric-sub">Linear Paid — 7 Day</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ Above 2.5x target</div>
             </div>
             <div class="metric-card">
-              <div class="metric-value green" id="roas30day">2.5x+</div>
-              <div class="metric-label">Target</div>
+              <div class="metric-value">2.11x</div>
+              <div class="metric-label">Platform Blended</div>
+              <div class="metric-sub">For reference only</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #666;">Platforms over-report</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value green">2.5x</div>
+              <div class="metric-label">Target Floor</div>
               <div class="metric-sub">Constraint threshold</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ GREEN = Scale permission</div>
             </div>
           </div>
-          <div style="font-size: 10px; color: #666;">
-            <strong>Alert Thresholds:</strong> 7+1 < 2.5x = Yellow | 7+1 < 2.0x = Red | Single day > ±15% = Anomaly flag
+          <div style="font-size: 10px; color: #666; background: #0f0f0f; padding: 8px; border-radius: 4px;">
+            <strong style="color: #4ade80;">RULE:</strong> Always use TW Attributed ROAS, never platform-reported. |
+            <strong>Alert:</strong> &lt;2.5x = Yellow | &lt;2.0x = Red
           </div>
         </div>
       </div>
       
-      <!-- CHANNEL PERFORMANCE -->
+      <!-- CHANNEL SPEND BREAKDOWN -->
       <div class="module">
         <div class="m-header">
-          <span>CHANNEL PERFORMANCE HEALTH</span>
-          <span class="status green">HEALTHY</span>
+          <span>CHANNEL SPEND BREAKDOWN (7-Day)</span>
+          <span class="status yellow">47% META</span>
         </div>
         <div class="m-body">
           <table>
             <thead>
-              <tr><th>Channel</th><th>7-Day Spend</th><th>Platform ROAS</th><th>% of Spend</th><th>Health</th></tr>
+              <tr><th>Channel</th><th>7-Day Spend</th><th>% of Total</th><th>Notes</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td class="val">Meta</td>
                 <td>$127.6K</td>
-                <td class="val green">3.06x</td>
                 <td class="val yellow">46.6%</td>
-                <td><span class="status green">STRONG</span></td>
+                <td style="font-size: 10px; color: #fbbf24;">Target: &lt;40%</td>
               </tr>
               <tr>
                 <td class="val">Axon</td>
                 <td>$74.7K</td>
-                <td class="val yellow">1.67x</td>
                 <td>27.3%</td>
-                <td><span class="status yellow">WATCH</span></td>
+                <td style="font-size: 10px; color: #666;">Good diversification</td>
               </tr>
               <tr>
                 <td class="val">Google</td>
                 <td>$60.2K</td>
-                <td class="val yellow">2.06x</td>
                 <td>22.0%</td>
-                <td><span class="status yellow">MONITOR</span></td>
+                <td style="font-size: 10px; color: #666;">Agency managed</td>
               </tr>
               <tr>
                 <td class="val">Snapchat</td>
                 <td>$9.0K</td>
-                <td class="val green">5.00x</td>
                 <td>3.3%</td>
-                <td><span class="status green">SCALE?</span></td>
+                <td style="font-size: 10px; color: #666;">Small test</td>
+              </tr>
+              <tr style="background: #0f0f0f;">
+                <td class="val">Total</td>
+                <td class="val">$273.7K</td>
+                <td>100%</td>
+                <td style="font-size: 10px; color: #4ade80;">~$39K/day avg</td>
               </tr>
             </tbody>
           </table>
           <div class="alert yellow" style="margin-top: 10px;">
-            <span class="alert-title">DIVERSIFICATION:</span> Meta at 47% of spend. Target: &lt;40%. Snapchat showing strong ROAS — potential scale opportunity.
+            <span class="alert-title">PLATFORM DEPENDENCY:</span> Meta at 47% of spend. A policy change could impact half of ad performance. Target: diversify to &lt;40%.
+          </div>
+          <div style="margin-top: 8px; font-size: 10px; color: #666;">
+            Note: Channel-level ROAS should be checked in TW dashboard (Linear Paid attribution). API shows spend only.
           </div>
         </div>
       </div>
