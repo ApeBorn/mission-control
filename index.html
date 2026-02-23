@@ -416,15 +416,15 @@
             </div>
             
             <!-- Platform Dependency -->
-            <div class="metric-card" style="border-left: 3px solid #ef4444;">
-              <div class="metric-value red" id="platformDependency">—%</div>
+            <div class="metric-card" style="border-left: 3px solid #fbbf24;">
+              <div class="metric-value yellow" id="platformDependency">47%</div>
               <div class="metric-label">Platform Dependency</div>
-              <div class="metric-sub">% Revenue from Top Platform</div>
-              <div style="margin-top: 8px; font-size: 9px; color: #ef4444;">
-                ⚠️ Policy change = business risk
+              <div class="metric-sub">Meta % of Total Ad Spend</div>
+              <div style="margin-top: 8px; font-size: 9px; color: #fbbf24;">
+                ⚠️ Target: &lt;40% for safety
               </div>
               <div style="margin-top: 4px; font-size: 9px; color: #666;">
-                Pulling from TW...
+                $127.6K of $273.7K (7-day)
               </div>
             </div>
             
@@ -454,24 +454,24 @@
         <div class="m-body">
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px;">
             <div class="metric-card">
-              <div class="metric-value" id="roas1day">—</div>
-              <div class="metric-label">Yesterday</div>
-              <div class="metric-sub">Single day</div>
+              <div class="metric-value yellow" id="roas1day">2.11x</div>
+              <div class="metric-label">Blended ROAS</div>
+              <div class="metric-sub">Platform-reported</div>
             </div>
             <div class="metric-card" style="border: 1px solid #333;">
-              <div class="metric-value yellow" id="roas3plus1">—</div>
-              <div class="metric-label">3+1 Blended</div>
-              <div class="metric-sub">Short-term momentum</div>
+              <div class="metric-value green" id="roas3plus1">2.58x</div>
+              <div class="metric-label">TW Attributed</div>
+              <div class="metric-sub">Linear paid model</div>
             </div>
             <div class="metric-card" style="border: 2px solid #3b82f6;">
-              <div class="metric-value green" id="roas7plus1">—</div>
+              <div class="metric-value green" id="roas7plus1">2.58x</div>
               <div class="metric-label">7+1 Blended</div>
               <div class="metric-sub">Primary trend</div>
             </div>
             <div class="metric-card">
-              <div class="metric-value" id="roas30day">—</div>
-              <div class="metric-label">30-Day</div>
-              <div class="metric-sub">Long-term baseline</div>
+              <div class="metric-value green" id="roas30day">2.5x+</div>
+              <div class="metric-label">Target</div>
+              <div class="metric-sub">Constraint threshold</div>
             </div>
           </div>
           <div style="font-size: 10px; color: #666;">
@@ -489,45 +489,41 @@
         <div class="m-body">
           <table>
             <thead>
-              <tr><th>Channel</th><th>Daily Spend</th><th>7-Day ROAS</th><th>% of Spend</th><th>Trend</th><th>Health</th></tr>
+              <tr><th>Channel</th><th>7-Day Spend</th><th>Platform ROAS</th><th>% of Spend</th><th>Health</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td class="val">Meta</td>
-                <td>$14,656</td>
-                <td class="val green">2.42x</td>
-                <td class="val yellow">48%</td>
-                <td style="color: #4ade80;">↑ +5%</td>
+                <td>$127.6K</td>
+                <td class="val green">3.06x</td>
+                <td class="val yellow">46.6%</td>
                 <td><span class="status green">STRONG</span></td>
               </tr>
               <tr>
                 <td class="val">Axon</td>
-                <td>$7,385</td>
-                <td class="val green">2.44x</td>
-                <td>24%</td>
-                <td style="color: #4ade80;">↑ +3%</td>
-                <td><span class="status green">STRONG</span></td>
+                <td>$74.7K</td>
+                <td class="val yellow">1.67x</td>
+                <td>27.3%</td>
+                <td><span class="status yellow">WATCH</span></td>
               </tr>
               <tr>
                 <td class="val">Google</td>
-                <td>$6,867</td>
-                <td class="val yellow">1.96x</td>
-                <td>23%</td>
-                <td style="color: #888;">→ 0%</td>
+                <td>$60.2K</td>
+                <td class="val yellow">2.06x</td>
+                <td>22.0%</td>
                 <td><span class="status yellow">MONITOR</span></td>
               </tr>
               <tr>
                 <td class="val">Snapchat</td>
-                <td>$1,277</td>
-                <td class="val yellow">1.36x</td>
-                <td>4%</td>
-                <td style="color: #fca5a5;">↓ -8%</td>
-                <td><span class="status yellow">WATCH</span></td>
+                <td>$9.0K</td>
+                <td class="val green">5.00x</td>
+                <td>3.3%</td>
+                <td><span class="status green">SCALE?</span></td>
               </tr>
             </tbody>
           </table>
           <div class="alert yellow" style="margin-top: 10px;">
-            <span class="alert-title">DIVERSIFICATION:</span> Meta at 48% of spend. Target: <40% to reduce platform dependency.
+            <span class="alert-title">DIVERSIFICATION:</span> Meta at 47% of spend. Target: &lt;40%. Snapchat showing strong ROAS — potential scale opportunity.
           </div>
         </div>
       </div>
