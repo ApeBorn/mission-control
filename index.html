@@ -12,6 +12,19 @@
     /* Header */
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .header h1 { font-size: 14px; font-weight: 600; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+    
+    /* Tab Navigation */
+    .tab-nav { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid #1a1a1a; padding-bottom: 8px; }
+    .tab-btn { padding: 8px 16px; font-size: 11px; font-weight: 600; border: 1px solid #333; background: transparent; color: #666; border-radius: 4px 4px 0 0; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+    .tab-btn:hover { color: #888; border-color: #444; }
+    .tab-btn.active { background: #1a1a1a; color: #fff; border-color: #444; border-bottom-color: #1a1a1a; }
+    .tab-btn .tab-icon { margin-right: 6px; }
+    
+    /* Tab Content */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Mode Toggle */
     .mode-toggle { display: flex; gap: 4px; }
     .mode-btn { padding: 6px 12px; font-size: 10px; font-weight: 600; border: 1px solid #333; background: transparent; color: #666; border-radius: 4px; cursor: pointer; text-transform: uppercase; }
     .mode-btn.active { background: #1a1a1a; color: #fff; border-color: #444; }
@@ -30,15 +43,12 @@
     
     /* AUM Display */
     .aum-display { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
-    .aum-realized { }
-    .aum-runrate { }
     .aum-value { font-size: 28px; font-weight: 700; color: #fff; }
     .aum-value.secondary { font-size: 22px; color: #888; }
     .aum-type { font-size: 9px; color: #555; text-transform: uppercase; }
     .aum-delta { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 8px; }
     .aum-delta.accel { background: #14532d; color: #4ade80; }
     .aum-delta.decel { background: #7f1d1d; color: #fca5a5; }
-    .data-source { font-size: 9px; color: #444; margin-top: 4px; }
     
     /* Grid */
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -47,13 +57,18 @@
     @media (max-width: 1000px) { .grid, .grid-third { grid-template-columns: 1fr; } .grid-full { grid-column: span 1; } }
     
     /* Module */
-    .module { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 6px; overflow: hidden; }
-    .module.executive-only { }
-    .module.institutional-only { display: none; }
-    body.mode-institutional .module.institutional-only { display: block; }
-    body.mode-institutional .module.executive-only { }
+    .module { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
     .m-header { padding: 8px 12px; border-bottom: 1px solid #1a1a1a; font-size: 9px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
     .m-body { padding: 12px; }
+    
+    /* Metric Cards */
+    .metric-card { background: #0f0f0f; border-radius: 4px; padding: 10px; text-align: center; }
+    .metric-value { font-size: 20px; font-weight: 700; color: #fff; }
+    .metric-value.green { color: #4ade80; }
+    .metric-value.yellow { color: #fbbf24; }
+    .metric-value.red { color: #ef4444; }
+    .metric-label { font-size: 9px; color: #555; text-transform: uppercase; margin-top: 4px; }
+    .metric-sub { font-size: 9px; color: #444; margin-top: 2px; }
     
     /* Tables */
     table { width: 100%; border-collapse: collapse; font-size: 11px; }
@@ -73,10 +88,6 @@
     .status.yellow { background: #713f12; color: #fbbf24; }
     .status.red { background: #7f1d1d; color: #fca5a5; }
     .status.gray { background: #1a1a1a; color: #666; }
-    .conf { font-size: 8px; padding: 2px 5px; border-radius: 2px; font-weight: 600; }
-    .conf.high { background: #14532d; color: #4ade80; }
-    .conf.medium { background: #713f12; color: #fbbf24; }
-    .conf.low { background: #7f1d1d; color: #fca5a5; }
     
     /* Progress */
     .progress { height: 4px; background: #1a1a1a; border-radius: 2px; overflow: hidden; }
@@ -85,354 +96,220 @@
     .progress-fill.yellow { background: #eab308; }
     .progress-fill.red { background: #ef4444; }
     
-    /* Causal Chain */
-    .causal-chain { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; background: #0f0f0f; border-radius: 4px; font-size: 10px; margin-bottom: 12px; }
-    .causal-step { color: #888; }
-    .causal-arrow { color: #333; }
-    .causal-step.highlight { color: #4ade80; font-weight: 600; }
-    
     /* Alert */
     .alert { padding: 8px 10px; border-radius: 4px; font-size: 10px; margin-top: 8px; }
     .alert.yellow { background: #1f1a0f; border: 1px solid #a16207; color: #fbbf24; }
     .alert.red { background: #1f0f0f; border: 1px solid #991b1b; color: #fca5a5; }
     .alert-title { font-weight: 700; }
     
-    /* Actionable */
-    .actionable { background: #0f0f0f; border-radius: 4px; padding: 10px; margin-bottom: 8px; border-left: 3px solid #3b82f6; }
-    .actionable:last-child { margin-bottom: 0; }
-    .actionable-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .actionable-title { font-weight: 600; color: #fff; font-size: 11px; }
-    .actionable-impact { font-size: 9px; color: #4ade80; }
-    .actionable-meta { display: flex; gap: 16px; font-size: 10px; color: #666; }
+    /* Next Move Card - NEW */
+    .next-move-card { background: linear-gradient(135deg, #1e3a5f 0%, #0f1f2f 100%); border: 2px solid #3b82f6; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
+    .next-move-label { font-size: 10px; color: #93c5fd; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+    .next-move-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 12px; }
+    .next-move-value { font-size: 32px; font-weight: 700; color: #4ade80; }
+    .next-move-formula { font-size: 10px; color: #666; font-family: monospace; margin-top: 8px; }
     
-    /* FOCUS CARD - New Component */
-    .focus-card { background: linear-gradient(135deg, #14532d 0%, #0f3d1c 100%); border: 2px solid #22c55e; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; }
-    .focus-card .focus-label { font-size: 10px; color: #86efac; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
-    .focus-card .focus-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .focus-card .focus-why { font-size: 12px; color: #86efac; margin-bottom: 12px; }
-    .focus-card .focus-metrics { display: flex; gap: 24px; }
-    .focus-card .focus-metric { }
-    .focus-card .focus-metric-value { font-size: 20px; font-weight: 700; color: #fff; }
-    .focus-card .focus-metric-label { font-size: 9px; color: #6ee7b7; text-transform: uppercase; }
+    /* Footer */
+    .footer { margin-top: 20px; padding-top: 12px; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-between; font-size: 10px; color: #444; }
     
-    /* VELOCITY INDICATOR - New Component */
-    .velocity-strip { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #0f0f0f; border-radius: 4px; margin-bottom: 12px; font-size: 10px; }
-    .velocity-dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
-    .velocity-dot.accel { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
-    .velocity-dot.stable { background: #eab308; box-shadow: 0 0 8px #eab308; }
-    .velocity-dot.decel { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    .velocity-text { color: #888; }
-    .velocity-value { font-weight: 600; color: #fff; }
-    .velocity-value.green { color: #4ade80; }
-    .velocity-value.yellow { color: #fbbf24; }
-    .velocity-value.red { color: #ef4444; }
-    
-    /* COUNTDOWN URGENCY - Enhanced */
-    .countdown-urgent { background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%); border: 2px solid #ef4444; animation: urgentPulse 2s infinite; }
-    .countdown-warning { background: linear-gradient(135deg, #713f12 0%, #422006 100%); border: 2px solid #eab308; }
-    @keyframes urgentPulse { 0%, 100% { border-color: #ef4444; } 50% { border-color: #fca5a5; } }
-    
-    /* IMPROVED MOBILE */
+    /* Mobile */
     @media (max-width: 768px) {
       .container { padding: 8px; }
       .header { flex-direction: column; gap: 8px; align-items: flex-start; }
-      .header h1 { font-size: 12px; }
-      .mode-toggle { width: 100%; justify-content: flex-end; }
+      .tab-nav { flex-wrap: wrap; }
+      .tab-btn { font-size: 10px; padding: 6px 10px; }
       .clarity-grid { grid-template-columns: 1fr !important; gap: 12px; }
-      .clarity-strip { padding: 12px; }
-      .aum-display { flex-direction: column; gap: 4px; }
       .aum-value { font-size: 22px; }
-      .aum-value.secondary { font-size: 18px; }
       .grid { grid-template-columns: 1fr !important; }
-      .grid-full { grid-column: span 1 !important; }
-      .focus-card .focus-metrics { flex-direction: column; gap: 12px; }
-      table { font-size: 10px; }
-      th, td { padding: 5px 6px; }
-      .causal-chain { flex-wrap: wrap; font-size: 9px; }
-      .m-body { padding: 10px; }
-      .metric-card { padding: 10px; }
-      .metric-value { font-size: 18px; }
-      .module.grid-third { display: block; }
-      .module .m-body > div[style*="grid-template-columns: repeat(3"] { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; }
-      .module .m-body > div[style*="grid-template-columns: repeat(4"] { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; }
     }
-    
-    @media (max-width: 480px) {
-      .aum-value { font-size: 18px; }
-      .metric-value { font-size: 16px; }
-      .focus-card .focus-title { font-size: 14px; }
-      .focus-card .focus-metric-value { font-size: 16px; }
-    }
-    
-    /* Metric Card */
-    .metric-card { background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center; }
-    .metric-value { font-size: 22px; font-weight: 700; color: #fff; }
-    .metric-label { font-size: 9px; color: #555; text-transform: uppercase; margin-top: 4px; }
-    .metric-sub { font-size: 10px; color: #444; margin-top: 2px; }
-    
-    /* Footer */
-    .footer { margin-top: 12px; padding-top: 10px; border-top: 1px solid #1a1a1a; font-size: 9px; color: #333; display: flex; justify-content: space-between; }
   </style>
 </head>
-<body class="mode-executive">
+<body>
   <div class="container">
-    
     <div class="header">
       <h1>Mission Control</h1>
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <a href="acquisitions.html" style="padding: 6px 12px; font-size: 10px; font-weight: 600; border: 1px solid #333; background: #14532d; color: #4ade80; border-radius: 4px; text-decoration: none; text-transform: uppercase;">🎯 Acquisition</a>
-        <a href="https://miro.com/app/board/uXjVGA02x2w=/" target="_blank" style="padding: 6px 12px; font-size: 10px; font-weight: 600; border: 1px solid #333; background: transparent; color: #666; border-radius: 4px; text-decoration: none; text-transform: uppercase;">📋 Phases</a>
-        <div class="mode-toggle">
-          <button class="mode-btn active" onclick="setMode('executive')" id="btn-executive">Executive</button>
-          <button class="mode-btn" onclick="setMode('institutional')" id="btn-institutional">Institutional</button>
-        </div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btn-executive" onclick="setMode('executive')">Executive</button>
+        <button class="mode-btn" id="btn-institutional" onclick="setMode('institutional')">Institutional</button>
       </div>
     </div>
     
-    <!-- CAUSAL CHAIN -->
-    <div class="causal-chain">
-      <span class="causal-step highlight">Revenue</span>
-      <span class="causal-arrow">→</span>
-      <span class="causal-step">EBITDA</span>
-      <span class="causal-arrow">→</span>
-      <span class="causal-step">EV</span>
-      <span class="causal-arrow">→</span>
-      <span class="causal-step">AUM</span>
-      <span class="causal-arrow">→</span>
-      <span class="causal-step">Optionality</span>
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('command')"><span class="tab-icon">⚡</span>Main Command</button>
+      <button class="tab-btn" onclick="switchTab('risk')"><span class="tab-icon">🎯</span>Risk Radar</button>
+      <button class="tab-btn" onclick="switchTab('infra')"><span class="tab-icon">🏗️</span>Infrastructure</button>
+      <button class="tab-btn" onclick="switchTab('vault')"><span class="tab-icon">📚</span>Vault</button>
     </div>
     
-    <!-- VELOCITY INDICATOR - New -->
-    <div class="velocity-strip">
-      <div class="velocity-dot" id="velocityDot"></div>
-      <span class="velocity-text">Growth Velocity:</span>
-      <span class="velocity-value" id="velocityStatus">Loading...</span>
-      <span class="velocity-text" style="margin-left: 8px;">|</span>
-      <span class="velocity-text" style="margin-left: 8px;">WoW:</span>
-      <span class="velocity-value" id="velocityWoW">Loading...</span>
-      <span class="velocity-text" style="margin-left: 8px;">|</span>
-      <span class="velocity-text" style="margin-left: 8px;">Daily Avg:</span>
-      <span class="velocity-value" id="velocityDaily">Loading...</span>
-    </div>
-    
-    <!-- FOCUS CARD - This Week's #1 Priority -->
-    <div class="focus-card executive-only">
-      <div class="focus-label">🎯 THIS WEEK'S #1 FOCUS</div>
-      <div class="focus-title" id="focusTitle">Amazon FBA Launch Preparation</div>
-      <div class="focus-why" id="focusWhy">Launch in <span id="focusDays">13</span> days — all supporting work must ladder to this milestone.</div>
-      <div class="focus-metrics">
-        <div class="focus-metric">
-          <div class="focus-metric-value" id="focusMetric1">Mar 6</div>
-          <div class="focus-metric-label">Launch Date</div>
-        </div>
-        <div class="focus-metric">
-          <div class="focus-metric-value" id="focusMetric2">$200K+</div>
-          <div class="focus-metric-label">Expected Year 1</div>
-        </div>
-        <div class="focus-metric">
-          <div class="focus-metric-value" id="focusMetric3">Diversification</div>
-          <div class="focus-metric-label">Strategic Value</div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- LAYER 0: CLARITY STRIP -->
-    <div class="clarity-strip">
-      <div class="clarity-grid">
-        <div class="clarity-block">
-          <div class="clarity-label">Where We Are</div>
-          <div class="aum-display">
-            <div class="aum-realized">
-              <div class="aum-value" id="realizedAUM">$8.4M</div>
-              <div class="aum-type">Realized (TTM)</div>
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 1: MAIN COMMAND -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="tab-command" class="tab-content active">
+      
+      <!-- AUM CLARITY STRIP -->
+      <div class="clarity-strip">
+        <div class="clarity-grid">
+          <div class="clarity-block">
+            <div class="clarity-label">Realized AUM (TTM)</div>
+            <div class="aum-display">
+              <div class="aum-realized">
+                <div class="aum-value" id="realizedAUM">$8.4M</div>
+              </div>
             </div>
-            <div style="color: #333; font-size: 18px;">/</div>
-            <div class="aum-runrate">
-              <div class="aum-value secondary" id="runrateAUM">$17.4M</div>
-              <div class="aum-type">Run-Rate</div>
-            </div>
+            <div class="clarity-content">ETA $100M: <strong id="etaTTM">Q2 2030</strong></div>
           </div>
+          <div class="clarity-block">
+            <div class="clarity-label">Run-Rate AUM</div>
+            <div class="aum-display">
+              <div class="aum-runrate">
+                <div class="aum-value secondary" id="runrateAUM">$17.4M</div>
+              </div>
+              <span class="aum-delta accel">+107%</span>
+            </div>
+            <div class="clarity-content">ETA $100M: <strong id="etaRunRate">Q4 2027</strong></div>
+          </div>
+          <div class="clarity-block">
+            <div class="clarity-label">30-Day Revenue</div>
+            <div class="aum-display">
+              <div class="aum-value" id="monthlyRevenue">$2.48M</div>
+            </div>
+            <div class="clarity-content" id="wowTrend">WoW: <span class="yellow">-5.2%</span></div>
+          </div>
+          <div class="clarity-block">
+            <div class="clarity-label">Current Phase</div>
+            <div class="aum-display">
+              <div class="aum-value" style="color: #fbbf24;">1</div>
+            </div>
+            <div class="clarity-content">Founder-Operator → <strong>Capital Allocator</strong></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- NEXT MOVE CHECK SIZE (Josh Formula #1) -->
+      <div class="next-move-card">
+        <div class="next-move-label">🎯 Next Move Check Size (Acquisition Capacity)</div>
+        <div class="next-move-title">How much you can spend on your next deal right now</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
           <div>
-            <span class="aum-delta accel" id="aumDelta">+107% Acceleration</span>
+            <div class="next-move-value" id="nextMoveValue">$9.4M</div>
+            <div style="font-size: 10px; color: #86efac; margin-top: 4px;">Available Capacity</div>
           </div>
-          <div class="data-source">Source: TW API (30-day rolling) | Last sync: <span id="lastSync">Loading...</span></div>
-        </div>
-        
-        <div class="clarity-block">
-          <div class="clarity-label">Where We're Going</div>
-          <div class="clarity-content">
-            <strong>$100M AUM</strong><br>
-            ETA (TTM basis): <strong class="green" id="etaTTM">Aug 2029</strong><br>
-            ETA (Run-Rate): <strong class="green" id="etaRunRate">Mar 2028</strong><br>
-            2026 Target: APE BORN <strong>$10M/mo</strong> revenue
+          <div style="background: rgba(0,0,0,0.3); border-radius: 6px; padding: 12px;">
+            <div style="font-size: 10px; color: #888; margin-bottom: 8px;">COMPONENTS</div>
+            <div style="font-size: 11px; color: #ccc;">TTM EBITDA: <span class="val green" id="ttmEBITDA">$2.0M</span></div>
+            <div style="font-size: 11px; color: #ccc;">Max Leverage: <span class="val">4.7x</span></div>
+            <div style="font-size: 11px; color: #ccc;">Current Debt: <span class="val" id="currentDebt">$0</span></div>
           </div>
-        </div>
-        
-        <div class="clarity-block">
-          <div class="clarity-label">Are We On Track</div>
-          <div class="clarity-content">
-            <span class="green"><strong>YES — ACCELERATING</strong></span><br>
-            TTM CAGR: <strong id="ttmCAGR">~100%</strong> vs Required: 28%<br>
-            Run-Rate implies: <strong id="runrateCAGR">~200%+</strong> trajectory<br>
-            $10M/mo progress: <strong id="revenueProgress">$2.0M</strong> (20%)
+          <div style="background: rgba(0,0,0,0.3); border-radius: 6px; padding: 12px;">
+            <div style="font-size: 10px; color: #888; margin-bottom: 8px;">SIGNAL</div>
+            <div style="font-size: 11px; color: #4ade80;">✓ Debt capacity available</div>
+            <div style="font-size: 11px; color: #4ade80;">✓ Permission to acquire</div>
           </div>
         </div>
-        
-        <div class="clarity-block">
-          <div class="clarity-label">Kill Switches</div>
-          <div class="clarity-content">
-            Debt/EBITDA 4.0-4.7x (alert &gt;4.8x)<br>
-            Interest Coverage ≥2.5x (red &lt;2.0x)<br>
-            DSCR ≥1.3x (red &lt;1.2x)<br>
-            Single asset &gt;50% → Diversify 90d<br>
-            ROAS &lt;1.5x 30d → Capital Protection
-          </div>
-        </div>
+        <div class="next-move-formula">(EBITDA × 4.7) - Current Total Debt = Acquisition Capacity</div>
       </div>
-    </div>
-    
-    <div class="grid">
       
-      <!-- $10M/MO REVENUE ENGINE -->
-      <div class="module executive-only">
+      <!-- WEIGHTED AUM (Josh Formula #2) -->
+      <div class="module">
         <div class="m-header">
-          <span>$10M/MO REVENUE ENGINE — APE BORN</span>
-          <span id="revenueStatus" class="status yellow">20% TO TARGET</span>
+          <span>WEIGHTED AUM — The "Truth" Metric</span>
+          <span class="status green">VALIDATED</span>
         </div>
         <div class="m-body">
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px;">
-            <div class="metric-card">
-              <div class="metric-value" id="currentRevenue">$2.0M</div>
-              <div class="metric-label">Current Month</div>
-              <div class="metric-sub">30-day rolling</div>
-              <div id="wowTrend" style="font-size: 10px; margin-top: 4px; font-weight: 600;"></div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value" style="color: #fbbf24;">$10.0M</div>
-              <div class="metric-label">Target</div>
-              <div class="metric-sub">Dec 2026</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value" id="t3mGrowth">+25%</div>
-              <div class="metric-label">T3M Growth</div>
-              <div class="metric-sub">MoM avg</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value" id="requiredGrowth">+17%</div>
-              <div class="metric-label">Required</div>
-              <div class="metric-sub">MoM to hit target</div>
-            </div>
+          <div style="font-family: monospace; font-size: 10px; color: #888; background: #0f0f0f; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
+            Σ(Entity EBITDA × Entity Specific Multiple) + Cash − Total Debt
           </div>
-          
-          <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">Implied AUM at $10M/mo (by Multiple)</div>
           <table>
             <thead>
-              <tr><th>Scenario</th><th>Revenue</th><th>EBITDA (15%)</th><th>Multiple</th><th>EV (90%)</th><th>Total AUM</th></tr>
+              <tr><th>Entity</th><th>EBITDA</th><th>Multiple</th><th>Own%</th><th>EV Contrib</th><th>Note</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>Base Case</td>
-                <td>$120M/yr</td>
-                <td>$18M</td>
-                <td>4x</td>
-                <td class="val">$64.8M</td>
-                <td class="val">$67M</td>
+                <td class="val">APE BORN (E-com)</td>
+                <td>$2.0M</td>
+                <td class="val yellow">4.0x</td>
+                <td>90%</td>
+                <td class="val">$7.2M</td>
+                <td style="font-size: 9px; color: #666;">E-com: 3.5-4x cap</td>
               </tr>
               <tr>
-                <td>Upside (Sub launch)</td>
-                <td>$120M/yr</td>
-                <td>$18M</td>
-                <td>5x</td>
-                <td class="val green">$81M</td>
-                <td class="val green">$84M</td>
+                <td class="val">ArnoldAI (SaaS)</td>
+                <td class="val muted">Pre-rev</td>
+                <td class="val muted">5-7x</td>
+                <td>100%</td>
+                <td class="val">$0.2M</td>
+                <td style="font-size: 9px; color: #666;">SaaS: Higher multiple</td>
               </tr>
               <tr>
-                <td>Bull Case</td>
-                <td>$120M/yr</td>
-                <td>$18M</td>
-                <td>6x</td>
-                <td class="val green">$97.2M</td>
-                <td class="val green">$100M</td>
+                <td class="val">Cash (Dry Powder)</td>
+                <td class="val muted">—</td>
+                <td class="val muted">1x</td>
+                <td>100%</td>
+                <td class="val">$1.0M</td>
+                <td style="font-size: 9px; color: #666;">Liquid</td>
+              </tr>
+              <tr>
+                <td class="val red">Less: Total Debt</td>
+                <td class="val muted">—</td>
+                <td class="val muted">—</td>
+                <td>—</td>
+                <td class="val red">-$0</td>
+                <td style="font-size: 9px; color: #666;">Currently debt-free</td>
+              </tr>
+              <tr style="background: #0a150a;">
+                <td class="val green">WEIGHTED AUM</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="val green" style="font-size: 16px;">$8.4M</td>
+                <td></td>
               </tr>
             </tbody>
           </table>
-          <div style="margin-top: 8px; font-size: 10px; color: #4ade80;">
-            → At 6x multiple, $10M/mo = $100M AUM target achieved in 2026
+          <div style="margin-top: 8px; font-size: 10px; color: #86efac;">
+            ✓ FBA assets capped at 3.5-4x | SaaS assets at 5-7x | Prevents overvaluation from "junk" multiples
           </div>
         </div>
       </div>
       
-      <!-- 100% CAGR CONTROL PANEL -->
-      <div class="module executive-only">
+      <!-- KILL SWITCHES (Traffic Light Logic) -->
+      <div class="module">
         <div class="m-header">
-          <span>100% CAGR CONTROL</span>
-          <span id="cagrStatus" class="status green">ON TRACK</span>
+          <span>KILL SWITCHES — Permission Slip Logic</span>
+          <span class="status green">ALL GREEN</span>
         </div>
         <div class="m-body">
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px;">
-            <div class="metric-card">
-              <div class="metric-value green" id="ttmCAGRValue">~100%</div>
-              <div class="metric-label">TTM CAGR</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
+            <div class="metric-card" style="border-left: 3px solid #22c55e;">
+              <div class="metric-value green" id="debtEbitda">0.0x</div>
+              <div class="metric-label">Debt/EBITDA</div>
+              <div class="metric-sub">Target: 4.0x-4.7x</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ Permission to acquire</div>
             </div>
-            <div class="metric-card">
-              <div class="metric-value green" id="fwdCAGRValue">~200%</div>
-              <div class="metric-label">Fwd Projected</div>
+            <div class="metric-card" style="border-left: 3px solid #22c55e;">
+              <div class="metric-value green" id="interestCoverage">N/A</div>
+              <div class="metric-label">Interest Coverage</div>
+              <div class="metric-sub">Target: >2.5x</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ No debt = no risk</div>
             </div>
-            <div class="metric-card">
-              <div class="metric-value">28%</div>
-              <div class="metric-label">Required (10yr)</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value green">+72pts</div>
-              <div class="metric-label">Delta</div>
+            <div class="metric-card" style="border-left: 3px solid #22c55e;">
+              <div class="metric-value green" id="dscr">N/A</div>
+              <div class="metric-label">DSCR</div>
+              <div class="metric-sub">Target: >1.3x</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ Surplus for reinvest</div>
             </div>
           </div>
-          
-          <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">Quarterly Checkpoints (100% CAGR Min)</div>
-          <table>
-            <thead>
-              <tr><th>Quarter</th><th>Required</th><th>Projected</th><th>Variance</th><th>Status</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Q1 2026</td>
-                <td>$9.2M</td>
-                <td class="val">$10.4M</td>
-                <td class="val green">+13%</td>
-                <td><span class="status yellow">IN PROGRESS</span></td>
-              </tr>
-              <tr>
-                <td>Q2 2026</td>
-                <td>$10.9M</td>
-                <td class="val">$14.8M</td>
-                <td class="val green">+36%</td>
-                <td><span class="status gray">PENDING</span></td>
-              </tr>
-              <tr>
-                <td>Q3 2026</td>
-                <td>$12.9M</td>
-                <td class="val">$22.0M</td>
-                <td class="val green">+70%</td>
-                <td><span class="status gray">PENDING</span></td>
-              </tr>
-              <tr>
-                <td>Q4 2026</td>
-                <td>$15.4M</td>
-                <td class="val">$32.5M</td>
-                <td class="val green">+111%</td>
-                <td><span class="status gray">PENDING</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-top: 8px; font-size: 10px; color: #666;">
-            Alert: Yellow if TTM CAGR &lt;60% | Red if &lt;40%
+          <div style="font-size: 10px; color: #666; background: #0f0f0f; padding: 10px; border-radius: 4px;">
+            <strong style="color: #4ade80;">GREEN = Permission to grow</strong> | 
+            <strong style="color: #fbbf24;">YELLOW = Caution</strong> | 
+            <strong style="color: #ef4444;">RED = Pause & fix</strong>
           </div>
         </div>
       </div>
       
       <!-- PHASE EVOLUTION -->
-      <div class="module executive-only">
+      <div class="module">
         <div class="m-header">
           <span>PHASE EVOLUTION</span>
           <span class="status yellow">PHASE 1</span>
@@ -442,556 +319,324 @@
             <div style="background: #14532d; border-radius: 4px; padding: 10px; border: 2px solid #22c55e;">
               <div style="font-size: 11px; font-weight: 700; color: #4ade80; margin-bottom: 6px;">PHASE 1 — NOW</div>
               <div style="font-size: 10px; color: #fff; font-weight: 600; margin-bottom: 4px;">Founder-Operator</div>
-              <div style="font-size: 9px; color: #86efac; margin-bottom: 4px;"><strong>Job:</strong> Make cash engine undeniable</div>
-              <div style="font-size: 9px; color: #fca5a5;"><strong>Stop:</strong> Being the bottleneck</div>
-              <div style="font-size: 9px; color: #93c5fd;"><strong>Start:</strong> Delegation + systems</div>
+              <div style="font-size: 9px; color: #86efac;"><strong>Job:</strong> Make cash engine undeniable</div>
             </div>
             <div style="background: #1a1a1a; border-radius: 4px; padding: 10px; opacity: 0.7;">
               <div style="font-size: 11px; font-weight: 700; color: #666; margin-bottom: 6px;">PHASE 2</div>
               <div style="font-size: 10px; color: #888; font-weight: 600; margin-bottom: 4px;">Capital Allocator</div>
-              <div style="font-size: 9px; color: #666; margin-bottom: 4px;"><strong>Job:</strong> Build allocation discipline</div>
-              <div style="font-size: 9px; color: #666;"><strong>Stop:</strong> Daily operations</div>
-              <div style="font-size: 9px; color: #666;"><strong>Start:</strong> Portfolio thinking</div>
+              <div style="font-size: 9px; color: #666;"><strong>Job:</strong> Allocation discipline</div>
             </div>
             <div style="background: #1a1a1a; border-radius: 4px; padding: 10px; opacity: 0.5;">
               <div style="font-size: 11px; font-weight: 700; color: #666; margin-bottom: 6px;">PHASE 3</div>
               <div style="font-size: 10px; color: #888; font-weight: 600; margin-bottom: 4px;">Portfolio Builder</div>
-              <div style="font-size: 9px; color: #666; margin-bottom: 4px;"><strong>Job:</strong> Governance + portfolio OS</div>
-              <div style="font-size: 9px; color: #666;"><strong>Stop:</strong> Individual deal work</div>
-              <div style="font-size: 9px; color: #666;"><strong>Start:</strong> System design</div>
+              <div style="font-size: 9px; color: #666;"><strong>Job:</strong> Governance + OS</div>
             </div>
             <div style="background: #1a1a1a; border-radius: 4px; padding: 10px; opacity: 0.35;">
               <div style="font-size: 11px; font-weight: 700; color: #666; margin-bottom: 6px;">PHASE 4</div>
               <div style="font-size: 10px; color: #888; font-weight: 600; margin-bottom: 4px;">Architect</div>
-              <div style="font-size: 9px; color: #666; margin-bottom: 4px;"><strong>Job:</strong> Design permanence</div>
-              <div style="font-size: 9px; color: #666;"><strong>Stop:</strong> All operations</div>
-              <div style="font-size: 9px; color: #666;"><strong>Start:</strong> Legacy + succession</div>
-            </div>
-          </div>
-          <div style="margin-top: 10px; font-size: 9px; color: #555;">
-            Velocity: Phase 2 (36mo cycles) → Phase 3 (24mo) → Phase 4 (12-18mo)
-          </div>
-        </div>
-      </div>
-      
-      <!-- PHASE TRANSITION TRACKER -->
-      <div class="module executive-only">
-        <div class="m-header">
-          <span>PHASE 1 → 2 TRANSITION TRACKER</span>
-          <span id="phaseProgress" class="status yellow">IN PROGRESS</span>
-        </div>
-        <div class="m-body">
-          <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 8px;">Exit Criteria for Phase 1 (Founder-Operator)</div>
-          <table>
-            <tbody>
-              <tr>
-                <td>APE BORN self-running (Operator time &lt;20%)</td>
-                <td style="width: 100px;"><div class="progress"><div class="progress-fill yellow" style="width: 44%;"></div></div></td>
-                <td class="val yellow" style="width: 50px;">44%</td>
-                <td style="width: 90px;"><span class="conf medium">45% → 20%</span></td>
-              </tr>
-              <tr>
-                <td>Revenue engine proven ($5M/mo sustained)</td>
-                <td><div class="progress"><div class="progress-fill yellow" style="width: 49%;"></div></div></td>
-                <td class="val yellow">49%</td>
-                <td><span class="conf medium">$2.5M/$5M</span></td>
-              </tr>
-              <tr>
-                <td>2+ revenue entities generating EBITDA</td>
-                <td><div class="progress"><div class="progress-fill red" style="width: 50%;"></div></div></td>
-                <td class="val red">50%</td>
-                <td><span class="conf low">1 of 2</span></td>
-              </tr>
-              <tr>
-                <td>HoldCo OS documented (&gt;60%)</td>
-                <td><div class="progress"><div class="progress-fill yellow" style="width: 40%;"></div></div></td>
-                <td class="val yellow">40%</td>
-                <td><span class="conf medium">40%/60%</span></td>
-              </tr>
-              <tr>
-                <td>Delegated operators in key roles</td>
-                <td><div class="progress"><div class="progress-fill yellow" style="width: 35%;"></div></div></td>
-                <td class="val yellow">35%</td>
-                <td><span class="conf medium">2/5 roles</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-top: 10px; padding: 10px; background: #0f0f0f; border-radius: 4px; border-left: 3px solid #eab308;">
-            <div style="font-size: 10px; color: #fbbf24; font-weight: 600;">PHASE TRANSITION ETA</div>
-            <div style="font-size: 11px; color: #fff; margin-top: 4px;">
-              Current trajectory: <strong>Q4 2026 - Q1 2027</strong><br>
-              <span style="color: #888;">Acceleration path: Hit $5M/mo + launch LuminDose → Q3 2026</span>
+              <div style="font-size: 9px; color: #666;"><strong>Job:</strong> Permanence + legacy</div>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- UPCOMING MILESTONES -->
-      <div class="module executive-only">
+      <!-- ACTIONABLES -->
+      <div class="module">
         <div class="m-header">
-          <span>🎯 UPCOMING MILESTONES</span>
-          <span id="nextMilestoneCountdown" class="status yellow">13 DAYS</span>
+          <span>TOP ACTIONABLES — Highest AUM Impact</span>
         </div>
         <div class="m-body">
           <table>
             <thead>
-              <tr><th>Milestone</th><th>Date</th><th>Days</th><th>Owner</th><th>Status</th></tr>
+              <tr><th>Priority</th><th>Action</th><th>AUM Impact</th><th>Owner</th><th>Deadline</th></tr>
             </thead>
             <tbody>
-              <tr style="background: #0f150f;">
-                <td class="val green">🚀 Amazon FBA Launch</td>
-                <td>Mar 6, 2026</td>
-                <td class="val green" id="amazonDays">13</td>
+              <tr>
+                <td class="val green">1</td>
+                <td>Hit $3M/mo revenue by Q1 end</td>
+                <td class="val green">+$2M AUM</td>
                 <td>Manoop</td>
-                <td><span class="status green">ON TRACK</span></td>
+                <td>Mar 31</td>
               </tr>
               <tr>
-                <td>Q1 Close (Revenue Target)</td>
-                <td>Mar 31, 2026</td>
-                <td class="val">38</td>
+                <td class="val green">2</td>
+                <td>Launch LuminDose (revenue generating)</td>
+                <td class="val green">+$0.5-2M</td>
                 <td>Michael</td>
-                <td><span class="status yellow">IN PROGRESS</span></td>
-              </tr>
-              <tr>
-                <td>3 SOPs Documented</td>
-                <td>Mar 15, 2026</td>
-                <td class="val">22</td>
-                <td>Michael</td>
-                <td><span class="status yellow">PENDING</span></td>
-              </tr>
-              <tr>
-                <td>LuminDose Entity Formation</td>
                 <td>Q2 2026</td>
-                <td class="val muted">~60</td>
+              </tr>
+              <tr>
+                <td class="val yellow">3</td>
+                <td>Reduce Operator time to <30%</td>
+                <td class="val">Velocity unlock</td>
                 <td>Michael</td>
-                <td><span class="status gray">PLANNED</span></td>
+                <td>Mar 31</td>
+              </tr>
+              <tr>
+                <td class="val yellow">4</td>
+                <td>Document 3 critical SOPs</td>
+                <td class="val">Scale unlock</td>
+                <td>Michael</td>
+                <td>Mar 15</td>
               </tr>
             </tbody>
           </table>
-          <div style="margin-top: 8px; font-size: 10px; color: #888;">
-            <strong style="color: #4ade80;">Priority Focus:</strong> Amazon launch is the next major revenue expansion event. All supporting work should ladder to this.
-          </div>
         </div>
       </div>
       
-      <!-- KILL SWITCHES -->
-      <div class="module executive-only">
-        <div class="m-header">
-          <span>KILL SWITCHES & GUARDRAILS</span>
-          <span class="status green">CLEAR</span>
-        </div>
-        <div class="m-body">
-          <!-- Capital Structure (3-Metric Framework per CFO Josh 2026-02-17) -->
-          <div style="font-size: 9px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Capital Structure (CFO Framework)</div>
-          <table style="margin-bottom: 12px;">
-            <thead>
-              <tr><th>Metric</th><th>Target</th><th>Alert</th><th>Red Flag</th><th>Current</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Debt/EBITDA</td>
-                <td class="val">4.0x-4.7x</td>
-                <td class="val yellow">>4.8x</td>
-                <td class="val red"><4.0x under</td>
-                <td class="val green">0x</td>
-              </tr>
-              <tr>
-                <td>Interest Coverage</td>
-                <td class="val">≥2.5x</td>
-                <td class="val yellow"><2.5x</td>
-                <td class="val red"><2.0x</td>
-                <td class="val green">N/A</td>
-              </tr>
-              <tr>
-                <td>DSCR</td>
-                <td class="val">≥1.3x</td>
-                <td class="val yellow"><1.3x</td>
-                <td class="val red"><1.2x</td>
-                <td class="val green">N/A</td>
-              </tr>
-            </tbody>
-          </table>
-          <!-- Operational Guardrails -->
-          <div style="font-size: 9px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Operational Guardrails</div>
-          <table>
-            <thead>
-              <tr><th>Trigger</th><th>Threshold</th><th>Current</th><th>Action</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Single Asset Concentration</td>
-                <td class="val">>50%</td>
-                <td class="val red">95%</td>
-                <td>Diversify within 90d</td>
-              </tr>
-              <tr>
-                <td>ROAS (30-day)</td>
-                <td class="val"><1.5x</td>
-                <td class="val green">2.0x</td>
-                <td>Capital Protection Mode</td>
-              </tr>
-              <tr>
-                <td>EBITDA Margin</td>
-                <td class="val"><12%</td>
-                <td class="val green">15%</td>
-                <td>Cost review</td>
-              </tr>
-              <tr>
-                <td>Founder Operator %</td>
-                <td class="val">>50%</td>
-                <td class="val yellow">45%</td>
-                <td>Delegation sprint</td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-top: 8px; font-size: 9px; color: #4ade80;">
-            ✓ Capital Structure framework confirmed by CFO (2026-02-17)
-          </div>
-        </div>
-      </div>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 2: RISK RADAR -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="tab-risk" class="tab-content">
       
-      <!-- DUAL VALUATION -->
-      <div class="module institutional-only">
+      <!-- BLIND SPOT ALERTS (Josh Section 4) -->
+      <div class="module">
         <div class="m-header">
-          <span>DUAL VALUATION LAYERS</span>
+          <span>⚠️ STRATEGIC BLIND SPOTS — Silent Killers</span>
         </div>
         <div class="m-body">
-          <table>
-            <thead>
-              <tr><th>Scenario</th><th>EBITDA</th><th>Multiple</th><th>Margin</th><th>AUM</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="val">Base Case</td>
-                <td>$2.0M (TTM)</td>
-                <td>4.0x</td>
-                <td>15%</td>
-                <td class="val">$8.4M</td>
-              </tr>
-              <tr>
-                <td class="val">Run-Rate</td>
-                <td>$4.5M</td>
-                <td>4.0x</td>
-                <td>15%</td>
-                <td class="val green">$17.4M</td>
-              </tr>
-              <tr style="background: #1f0f0f;">
-                <td class="val red">Stress Case</td>
-                <td>$1.3M</td>
-                <td>3.0x</td>
-                <td>10%</td>
-                <td class="val red">$4.5M</td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-top: 8px; font-size: 10px; color: #fca5a5;">
-            Stress Case = downside compression always visible. -46% from Base.
-          </div>
-        </div>
-      </div>
-      
-      <!-- FOUNDER MANDATE -->
-      <div class="module executive-only">
-        <div class="m-header">
-          <span>FOUNDER MANDATE & DRIFT CONTROL</span>
-        </div>
-        <div class="m-body">
-          <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">12-Month Non-Negotiables</div>
-          <table style="margin-bottom: 12px;">
-            <tbody>
-              <tr>
-                <td>APE BORN ≥$10M EBITDA/yr</td>
-                <td style="width: 80px;"><div class="progress"><div class="progress-fill green" style="width: 45%;"></div></div></td>
-                <td class="val" style="width: 50px;">45%</td>
-                <td style="width: 80px;"><span class="status green">ON TRACK</span></td>
-              </tr>
-              <tr>
-                <td>1-2 additional revenue entities</td>
-                <td><div class="progress"><div class="progress-fill yellow" style="width: 10%;"></div></div></td>
-                <td class="val yellow">10%</td>
-                <td><span class="status yellow">PENDING</span></td>
-              </tr>
-              <tr>
-                <td>Documented HoldCo OS</td>
-                <td><div class="progress"><div class="progress-fill yellow" style="width: 40%;"></div></div></td>
-                <td class="val">40%</td>
-                <td><span class="status yellow">IN PROGRESS</span></td>
-              </tr>
-              <tr>
-                <td>Delegated operators in place</td>
-                <td><div class="progress"><div class="progress-fill yellow" style="width: 35%;"></div></div></td>
-                <td class="val">35%</td>
-                <td><span class="status yellow">IN PROGRESS</span></td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">Role Allocation</div>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            
+            <!-- Working Capital Drag -->
+            <div class="metric-card" style="border-left: 3px solid #fbbf24;">
+              <div class="metric-value yellow" id="workingCapitalDrag">0.8x</div>
+              <div class="metric-label">Working Capital Drag</div>
+              <div class="metric-sub">(CA - CL) / Monthly Rev</div>
+              <div style="margin-top: 8px; font-size: 9px; color: #fbbf24;">
+                ⚠️ Cash trapped in inventory
+              </div>
+              <div style="margin-top: 4px; font-size: 9px; color: #666;">
+                Awaiting data from Josh
+              </div>
+            </div>
+            
+            <!-- Platform Dependency -->
             <div class="metric-card" style="border-left: 3px solid #ef4444;">
-              <div class="metric-value red">45%</div>
-              <div class="metric-label">Operator</div>
-              <div class="metric-sub">Target: &lt;20%</div>
+              <div class="metric-value red" id="platformDependency">—%</div>
+              <div class="metric-label">Platform Dependency</div>
+              <div class="metric-sub">% Revenue from Top Platform</div>
+              <div style="margin-top: 8px; font-size: 9px; color: #ef4444;">
+                ⚠️ Policy change = business risk
+              </div>
+              <div style="margin-top: 4px; font-size: 9px; color: #666;">
+                Pulling from TW...
+              </div>
             </div>
+            
+            <!-- Multiple Compression -->
             <div class="metric-card" style="border-left: 3px solid #22c55e;">
-              <div class="metric-value yellow">40%</div>
-              <div class="metric-label">Allocator</div>
-              <div class="metric-sub">Target: &gt;60%</div>
+              <div class="metric-value green" id="multipleCompression">1.0x</div>
+              <div class="metric-label">Multiple Compression Risk</div>
+              <div class="metric-sub">Exit / Acquisition Multiple</div>
+              <div style="margin-top: 8px; font-size: 9px; color: #4ade80;">
+                ✓ No compression risk yet
+              </div>
+              <div style="margin-top: 4px; font-size: 9px; color: #666;">
+                Only 1 asset currently
+              </div>
             </div>
-            <div class="metric-card" style="border-left: 3px solid #3b82f6;">
-              <div class="metric-value">15%</div>
-              <div class="metric-label">Architect</div>
-              <div class="metric-sub">Target: &gt;20%</div>
-            </div>
-          </div>
-          
-          <div class="alert yellow" style="margin-top: 10px;">
-            <span class="alert-title">⚠️ DRIFT WARNING:</span> Operator time (45%) exceeds 20% target. Sustained &gt;30 days = structural risk.
+            
           </div>
         </div>
       </div>
       
-      <!-- TOP STRUCTURAL RISKS -->
-      <div class="module executive-only">
+      <!-- ROAS TRENDS -->
+      <div class="module">
         <div class="m-header">
-          <span>TOP 3 STRUCTURAL RISKS</span>
+          <span>📊 ROAS TRENDS (TW Linear Paid)</span>
+          <span class="status yellow" id="roasStatus">MONITOR</span>
+        </div>
+        <div class="m-body">
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px;">
+            <div class="metric-card">
+              <div class="metric-value" id="roas1day">—</div>
+              <div class="metric-label">Yesterday</div>
+              <div class="metric-sub">Single day</div>
+            </div>
+            <div class="metric-card" style="border: 1px solid #333;">
+              <div class="metric-value yellow" id="roas3plus1">—</div>
+              <div class="metric-label">3+1 Blended</div>
+              <div class="metric-sub">Short-term momentum</div>
+            </div>
+            <div class="metric-card" style="border: 2px solid #3b82f6;">
+              <div class="metric-value green" id="roas7plus1">—</div>
+              <div class="metric-label">7+1 Blended</div>
+              <div class="metric-sub">Primary trend</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="roas30day">—</div>
+              <div class="metric-label">30-Day</div>
+              <div class="metric-sub">Long-term baseline</div>
+            </div>
+          </div>
+          <div style="font-size: 10px; color: #666;">
+            <strong>Alert Thresholds:</strong> 7+1 < 2.5x = Yellow | 7+1 < 2.0x = Red | Single day > ±15% = Anomaly flag
+          </div>
+        </div>
+      </div>
+      
+      <!-- CHANNEL PERFORMANCE -->
+      <div class="module">
+        <div class="m-header">
+          <span>CHANNEL PERFORMANCE HEALTH</span>
+          <span class="status green">HEALTHY</span>
         </div>
         <div class="m-body">
           <table>
             <thead>
-              <tr><th>Risk</th><th>Signal</th><th>Threshold</th><th>Current</th><th>Owner</th></tr>
+              <tr><th>Channel</th><th>Daily Spend</th><th>7-Day ROAS</th><th>% of Spend</th><th>Trend</th><th>Health</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="val">Meta</td>
+                <td>$14,656</td>
+                <td class="val green">2.42x</td>
+                <td class="val yellow">48%</td>
+                <td style="color: #4ade80;">↑ +5%</td>
+                <td><span class="status green">STRONG</span></td>
+              </tr>
+              <tr>
+                <td class="val">Axon</td>
+                <td>$7,385</td>
+                <td class="val green">2.44x</td>
+                <td>24%</td>
+                <td style="color: #4ade80;">↑ +3%</td>
+                <td><span class="status green">STRONG</span></td>
+              </tr>
+              <tr>
+                <td class="val">Google</td>
+                <td>$6,867</td>
+                <td class="val yellow">1.96x</td>
+                <td>23%</td>
+                <td style="color: #888;">→ 0%</td>
+                <td><span class="status yellow">MONITOR</span></td>
+              </tr>
+              <tr>
+                <td class="val">Snapchat</td>
+                <td>$1,277</td>
+                <td class="val yellow">1.36x</td>
+                <td>4%</td>
+                <td style="color: #fca5a5;">↓ -8%</td>
+                <td><span class="status yellow">WATCH</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="alert yellow" style="margin-top: 10px;">
+            <span class="alert-title">DIVERSIFICATION:</span> Meta at 48% of spend. Target: <40% to reduce platform dependency.
+          </div>
+        </div>
+      </div>
+      
+      <!-- STRUCTURAL RISKS -->
+      <div class="module">
+        <div class="m-header">
+          <span>TOP STRUCTURAL RISKS</span>
+        </div>
+        <div class="m-body">
+          <table>
+            <thead>
+              <tr><th>Risk</th><th>Signal</th><th>Threshold</th><th>Current</th><th>Status</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td class="val">Founder Bandwidth</td>
                 <td>Operator %</td>
-                <td>&gt;50%</td>
+                <td>>50%</td>
                 <td class="val yellow">45%</td>
-                <td>Michael</td>
+                <td><span class="status yellow">WATCH</span></td>
               </tr>
               <tr>
                 <td class="val">Single Asset Concentration</td>
                 <td>APE BORN %</td>
-                <td>&gt;90%</td>
+                <td>>90%</td>
                 <td class="val red">95%</td>
-                <td>Michael</td>
+                <td><span class="status red">HIGH</span></td>
               </tr>
               <tr>
-                <td class="val">Second Entity Launch</td>
-                <td>Revenue entities</td>
-                <td>&lt;2 by Q4</td>
-                <td class="val yellow">1</td>
-                <td>Michael/Manoop</td>
+                <td class="val">Meta Dependency</td>
+                <td>% of ad spend</td>
+                <td>>60%</td>
+                <td class="val yellow">48%</td>
+                <td><span class="status yellow">WATCH</span></td>
+              </tr>
+              <tr>
+                <td class="val">Key-Person (Manoop)</td>
+                <td>SOP coverage</td>
+                <td><50%</td>
+                <td class="val yellow">40%</td>
+                <td><span class="status yellow">MEDIUM</span></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
       
-      <!-- ACTIONABLES -->
-      <div class="module executive-only grid-full">
-        <div class="m-header">
-          <span>ACTIONABLES — Highest AUM Impact</span>
-        </div>
-        <div class="m-body">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <div class="actionable">
-              <div class="actionable-header">
-                <span class="actionable-title">1. Hit $3M/mo revenue by Q1 end</span>
-                <span class="actionable-impact">+$2M AUM</span>
-              </div>
-              <div class="actionable-meta">
-                <span>Owner: Manoop</span>
-                <span>KPI: Monthly revenue</span>
-                <span>Deadline: Mar 31</span>
-              </div>
-            </div>
-            <div class="actionable">
-              <div class="actionable-header">
-                <span class="actionable-title">2. Launch LuminDose (revenue generating)</span>
-                <span class="actionable-impact">+$0.5-2M AUM</span>
-              </div>
-              <div class="actionable-meta">
-                <span>Owner: Michael/Manoop</span>
-                <span>KPI: First revenue</span>
-                <span>Deadline: Q2 2026</span>
-              </div>
-            </div>
-            <div class="actionable">
-              <div class="actionable-header">
-                <span class="actionable-title">3. Launch digital/subscription offer</span>
-                <span class="actionable-impact">Multiple 4x→5x</span>
-              </div>
-              <div class="actionable-meta">
-                <span>Owner: Michael</span>
-                <span>KPI: Sub revenue %</span>
-                <span>Deadline: Q2 2026</span>
-              </div>
-            </div>
-            <div class="actionable">
-              <div class="actionable-header">
-                <span class="actionable-title">4. Reduce Operator time to &lt;30%</span>
-                <span class="actionable-impact">Velocity unlock</span>
-              </div>
-              <div class="actionable-meta">
-                <span>Owner: Michael</span>
-                <span>KPI: Weekly time audit</span>
-                <span>Deadline: Mar 31</span>
-              </div>
-            </div>
-            <div class="actionable">
-              <div class="actionable-header">
-                <span class="actionable-title">5. Document 3 critical SOPs for delegation</span>
-                <span class="actionable-impact">Scale unlock</span>
-              </div>
-              <div class="actionable-meta">
-                <span>Owner: Michael</span>
-                <span>KPI: SOPs completed</span>
-                <span>Deadline: Mar 15</span>
-              </div>
-            </div>
-            <div class="actionable">
-              <div class="actionable-header">
-                <span class="actionable-title">6. Scale Meta to $600k/mo (maintain ROAS)</span>
-                <span class="actionable-impact">+$1.5M AUM</span>
-              </div>
-              <div class="actionable-meta">
-                <span>Owner: Manoop</span>
-                <span>KPI: Spend + ROAS</span>
-                <span>Deadline: Q2 2026</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+    
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 3: INFRASTRUCTURE -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="tab-infra" class="tab-content">
       
-      <!-- ASSUMPTION INTEGRITY (Institutional) -->
-      <div class="module institutional-only">
+      <!-- TEAM READINESS -->
+      <div class="module">
         <div class="m-header">
-          <span>ASSUMPTION INTEGRITY</span>
+          <span>👥 TEAM READINESS INDEX</span>
+          <span class="status yellow">75%</span>
         </div>
         <div class="m-body">
           <table>
             <thead>
-              <tr><th>Assumption</th><th>Conf</th><th>Owner</th><th>Next Validation</th><th>If Wrong</th></tr>
+              <tr><th>Role</th><th>Owner</th><th>SOP Coverage</th><th>Backup</th><th>Risk Level</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td>4x EBITDA Multiple</td>
-                <td><span class="conf medium">MED</span></td>
-                <td>Michael</td>
-                <td>Q2 (sub launch)</td>
-                <td class="val red">-25% AUM</td>
+                <td class="val">Media Buying</td>
+                <td>Manoop</td>
+                <td><div class="progress" style="width: 80px;"><div class="progress-fill yellow" style="width: 40%;"></div></div></td>
+                <td class="val yellow">None</td>
+                <td><span class="status yellow">MEDIUM</span></td>
               </tr>
               <tr>
-                <td>15% EBITDA Margin</td>
-                <td><span class="conf high">HIGH</span></td>
+                <td class="val">Finance/CFO</td>
                 <td>Josh</td>
-                <td>Monthly P&L</td>
-                <td class="val red">-$1M+ AUM per pt</td>
+                <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 70%;"></div></div></td>
+                <td class="val green">Docs</td>
+                <td><span class="status green">LOW</span></td>
               </tr>
               <tr>
-                <td>ArnoldAI $200k</td>
-                <td><span class="conf low">LOW</span></td>
-                <td>Shervin</td>
-                <td>Q3 funding</td>
-                <td class="val muted">~2% AUM impact</td>
+                <td class="val">Creative</td>
+                <td>Team</td>
+                <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 60%;"></div></div></td>
+                <td class="val green">Multiple</td>
+                <td><span class="status green">LOW</span></td>
               </tr>
               <tr>
-                <td>~100% TTM CAGR</td>
-                <td><span class="conf medium">MED</span></td>
-                <td>Jarvis</td>
-                <td>Apr 1 (Q1 close)</td>
-                <td class="val red">Timeline slip</td>
+                <td class="val">Ops/Fulfillment</td>
+                <td>3PL</td>
+                <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 85%;"></div></div></td>
+                <td class="val green">Automated</td>
+                <td><span class="status green">LOW</span></td>
               </tr>
               <tr>
-                <td>LuminDose 50% ownership</td>
-                <td><span class="conf high">HIGH</span></td>
+                <td class="val">Strategic/CEO</td>
                 <td>Michael</td>
-                <td>Entity formation</td>
-                <td class="val muted">Low impact</td>
+                <td><div class="progress" style="width: 80px;"><div class="progress-fill red" style="width: 20%;"></div></div></td>
+                <td class="val red">None</td>
+                <td><span class="status red">HIGH</span></td>
               </tr>
             </tbody>
           </table>
-          <div style="margin-top: 8px; font-size: 10px; color: #666;">
-            Rule: No assumption &gt;90 days without validation.
+          <div class="alert yellow" style="margin-top: 10px;">
+            <span class="alert-title">⚠️ KEY-PERSON RISK:</span> Manoop (Media) and Michael (Strategy) have limited backup coverage. Priority: Document 3 critical SOPs by Mar 15.
           </div>
         </div>
       </div>
       
-      <!-- CONCENTRATION INTELLIGENCE (Institutional) -->
-      <div class="module institutional-only">
-        <div class="m-header">
-          <span>CONCENTRATION INTELLIGENCE</span>
-          <span class="status red">95% — PHASE 1</span>
-        </div>
-        <div class="m-body">
-          <table>
-            <thead>
-              <tr><th>Milestone</th><th>Target Conc.</th><th>Required New Assets</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>$100M AUM</td>
-                <td>&lt;75%</td>
-                <td class="val">$25M in non-APE BORN</td>
-              </tr>
-              <tr>
-                <td>$1B AUM</td>
-                <td>&lt;50%</td>
-                <td class="val">$500M in non-APE BORN</td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-top: 8px; font-size: 10px; color: #fca5a5; background: #1f0f0f; padding: 8px; border-radius: 4px;">
-            <strong>Glidepath Math:</strong> To hit 75% at $100M, need $25M in new entities. LuminDose at $2M EBITDA × 4x × 50% = $4M. Gap: $21M. Requires 1-2 more entities or M&A.
-          </div>
-        </div>
-      </div>
-      
-      <!-- FRAGILITY WATCHTOWER (Institutional) -->
-      <div class="module institutional-only grid-full">
-        <div class="m-header">
-          <span>FRAGILITY WATCHTOWER</span>
-        </div>
-        <div class="m-body">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div>
-              <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">Internal Fragilities</div>
-              <table>
-                <thead>
-                  <tr><th>Fragility</th><th>Signal</th><th>Threshold</th><th>Current</th><th>Owner</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>Meta Dependency</td><td>% of spend</td><td>&gt;60%</td><td class="val green">52%</td><td>Manoop</td></tr>
-                  <tr><td>Key-Person (Manoop)</td><td>SOP coverage</td><td>&lt;50%</td><td class="val yellow">40%</td><td>Michael</td></tr>
-                  <tr><td>Creative Fatigue</td><td>Win rate</td><td>&lt;15%</td><td class="val green">18%</td><td>Manoop</td></tr>
-                  <tr><td>Margin Compression</td><td>EBITDA %</td><td>&lt;12%</td><td class="val green">15%</td><td>Josh</td></tr>
-                  <tr><td>Founder Bandwidth</td><td>Operator %</td><td>&gt;50%</td><td class="val yellow">45%</td><td>Michael</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div>
-              <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">External Fragilities</div>
-              <table>
-                <thead>
-                  <tr><th>Fragility</th><th>Signal</th><th>Threshold</th><th>Current</th><th>Owner</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>Meta Policy Shift</td><td>Platform news</td><td>Major change</td><td class="val green">Clear</td><td>Manoop</td></tr>
-                  <tr><td>Supply/Tariff Shock</td><td>COGS spike</td><td>&gt;20%</td><td class="val green">Stable</td><td>Josh</td></tr>
-                  <tr><td>Demand Collapse</td><td>CVR decline</td><td>&gt;15%</td><td class="val green">Stable</td><td>Manoop</td></tr>
-                  <tr><td>Competitor Surge</td><td>Share loss</td><td>Visible</td><td class="val green">Clear</td><td>Michael</td></tr>
-                  <tr><td>Interest Spike</td><td>Cost of debt</td><td>&gt;8%</td><td class="val green">N/A</td><td>Josh</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- HOLDCO SYSTEM BUILD (Institutional) -->
-      <div class="module institutional-only">
+      <!-- HOLDCO SYSTEM BUILD -->
+      <div class="module">
         <div class="m-header">
           <span>HOLDCO SYSTEM BUILD</span>
           <span class="status yellow">43%</span>
@@ -999,7 +644,7 @@
         <div class="m-body">
           <table>
             <thead>
-              <tr><th>System</th><th>Status</th><th>%</th></tr>
+              <tr><th>System</th><th>Status</th><th>Progress</th></tr>
             </thead>
             <tbody>
               <tr><td>Capital Allocation Playbook</td><td><span class="status green">TESTED</span></td><td class="val">70%</td></tr>
@@ -1014,355 +659,206 @@
         </div>
       </div>
       
-      <!-- AUM BREAKDOWN (Institutional) -->
-      <div class="module institutional-only">
+      <!-- FOUNDER MANDATE -->
+      <div class="module">
         <div class="m-header">
-          <span>AUM BREAKDOWN</span>
+          <span>FOUNDER TIME ALLOCATION</span>
         </div>
         <div class="m-body">
-          <div style="font-family: monospace; font-size: 10px; color: #888; background: #0f0f0f; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
-            AUM = Σ(EBITDA × Multiple × Ownership%) + Cash − Debt
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px;">
+            <div class="metric-card" style="border-left: 3px solid #ef4444;">
+              <div class="metric-value red">45%</div>
+              <div class="metric-label">Operator</div>
+              <div class="metric-sub">Target: <20%</div>
+            </div>
+            <div class="metric-card" style="border-left: 3px solid #22c55e;">
+              <div class="metric-value yellow">40%</div>
+              <div class="metric-label">Allocator</div>
+              <div class="metric-sub">Target: >60%</div>
+            </div>
+            <div class="metric-card" style="border-left: 3px solid #3b82f6;">
+              <div class="metric-value">15%</div>
+              <div class="metric-label">Architect</div>
+              <div class="metric-sub">Target: >20%</div>
+            </div>
           </div>
-          <table>
-            <thead>
-              <tr><th>Entity</th><th>EBITDA</th><th>Multiple</th><th>Own%</th><th>EV Contrib</th><th>Conf</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="val">APE BORN</td>
-                <td>$2.0M</td>
-                <td>4.0x</td>
-                <td>90%</td>
-                <td class="val">$7.2M</td>
-                <td><span class="conf high">HIGH</span></td>
-              </tr>
-              <tr>
-                <td class="val">ArnoldAI</td>
-                <td class="val muted">—</td>
-                <td class="val muted">—</td>
-                <td>100%</td>
-                <td class="val">$0.2M</td>
-                <td><span class="conf low">LOW</span></td>
-              </tr>
-              <tr>
-                <td class="val">Cash</td>
-                <td class="val muted">—</td>
-                <td class="val muted">—</td>
-                <td>100%</td>
-                <td class="val">$1.0M</td>
-                <td><span class="conf high">HIGH</span></td>
-              </tr>
-              <tr style="background: #0a150a;">
-                <td class="val green">TOTAL</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="val green">$8.4M</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="alert yellow">
+            <span class="alert-title">⚠️ DRIFT WARNING:</span> Operator time (45%) exceeds 20% target. Sustained >30 days = structural risk.
+          </div>
         </div>
       </div>
       
     </div>
     
-    <!-- NEW MODULES - Added 2026-02-22 Overnight -->
-    
-    <!-- LEARNING & DEVELOPMENT PROGRESS -->
-    <div class="module executive-only" style="margin-top: 12px;">
-      <div class="m-header">
-        <span>📚 LEARNING & DEVELOPMENT PROGRESS</span>
-        <span class="status green">ACTIVE</span>
-      </div>
-      <div class="m-body">
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
-          <div class="metric-card" style="border-left: 3px solid #22c55e;">
-            <div class="metric-value green">100%</div>
-            <div class="metric-label">Sharran Deep Dive</div>
-            <div class="metric-sub">50/50 videos complete</div>
-          </div>
-          <div class="metric-card" style="border-left: 3px solid #22c55e;">
-            <div class="metric-value green">125</div>
-            <div class="metric-label">Book Playbooks</div>
-            <div class="metric-sub">CEO-focused summaries</div>
-          </div>
-          <div class="metric-card" style="border-left: 3px solid #3b82f6;">
-            <div class="metric-value">3</div>
-            <div class="metric-label">CEO Shadow Briefs</div>
-            <div class="metric-sub">Strategic frameworks</div>
-          </div>
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 4: VAULT -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="tab-vault" class="tab-content">
+      
+      <!-- CEO SHADOW BRIEFS -->
+      <div class="module">
+        <div class="m-header">
+          <span>📋 CEO SHADOW BRIEFS</span>
+          <span class="status green">5/5 COMPLETE</span>
         </div>
-        <div style="font-size: 9px; color: #555; text-transform: uppercase; margin-bottom: 6px;">Active Learning Tracks</div>
-        <table>
-          <tbody>
-            <tr>
-              <td>Sharran Srivatsaa (YouTube Deep Dive)</td>
-              <td style="width: 100px;"><div class="progress"><div class="progress-fill green" style="width: 100%;"></div></div></td>
-              <td class="val green" style="width: 50px;">100%</td>
-              <td style="width: 80px;"><span class="status green">DONE</span></td>
-            </tr>
-            <tr>
-              <td>CEO Shadow Brief Series</td>
-              <td><div class="progress"><div class="progress-fill green" style="width: 60%;"></div></div></td>
-              <td class="val green">3/5</td>
-              <td><span class="status yellow">ACTIVE</span></td>
-            </tr>
-            <tr>
-              <td>Book Synthesis (Priority 10)</td>
-              <td><div class="progress"><div class="progress-fill yellow" style="width: 30%;"></div></div></td>
-              <td class="val yellow">3/10</td>
-              <td><span class="status yellow">ACTIVE</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="margin-top: 8px; font-size: 10px; color: #86efac; background: #0f1f0f; padding: 8px; border-radius: 4px;">
-          <strong>Key Insight Applied:</strong> "You can't earn your way to a billion. You have to own your way there." — Sharran (via Hormozi)
-        </div>
-      </div>
-    </div>
-    
-    <!-- CHANNEL PERFORMANCE HEALTH -->
-    <div class="module executive-only" style="margin-top: 12px;">
-      <div class="m-header">
-        <span>📊 CHANNEL PERFORMANCE HEALTH</span>
-        <span id="channelStatus" class="status green">HEALTHY</span>
-      </div>
-      <div class="m-body">
-        <table>
-          <thead>
-            <tr><th>Channel</th><th>Daily Spend</th><th>7-Day ROAS</th><th>Trend</th><th>Action</th><th>Health</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="val">Meta</td>
-              <td>$14,656</td>
-              <td class="val green">2.42x</td>
-              <td style="color: #4ade80;">↑ +5%</td>
-              <td>Scale candidate</td>
-              <td><span class="status green">STRONG</span></td>
-            </tr>
-            <tr>
-              <td class="val">Axon</td>
-              <td>$7,385</td>
-              <td class="val green">2.44x</td>
-              <td style="color: #4ade80;">↑ +3%</td>
-              <td>Maintain</td>
-              <td><span class="status green">STRONG</span></td>
-            </tr>
-            <tr>
-              <td class="val">Google</td>
-              <td>$6,867</td>
-              <td class="val yellow">1.96x</td>
-              <td style="color: #888;">→ 0%</td>
-              <td>Agency managed</td>
-              <td><span class="status yellow">MONITOR</span></td>
-            </tr>
-            <tr>
-              <td class="val">Snapchat</td>
-              <td>$1,277</td>
-              <td class="val yellow">1.36x</td>
-              <td style="color: #fca5a5;">↓ -8%</td>
-              <td>Reduce if <1.2x</td>
-              <td><span class="status yellow">WATCH</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="margin-top: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
-          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
-            <div style="font-size: 16px; font-weight: 700; color: #fff;">$30.2k</div>
-            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Daily Spend</div>
-          </div>
-          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
-            <div style="font-size: 16px; font-weight: 700; color: #4ade80;">2.19x</div>
-            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Blended ROAS</div>
-          </div>
-          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
-            <div style="font-size: 16px; font-weight: 700; color: #fff;">48%</div>
-            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Meta Share</div>
-          </div>
-          <div style="background: #0f0f0f; border-radius: 4px; padding: 8px; text-align: center;">
-            <div style="font-size: 16px; font-weight: 700; color: #4ade80;">4/4</div>
-            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Channels Live</div>
+        <div class="m-body">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Brief Title</th><th>Key Theme</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="val">1</td>
+                <td>How to Be the Best CEO</td>
+                <td>CEO fundamentals & mindset</td>
+                <td><span class="status green">DONE</span></td>
+              </tr>
+              <tr style="background: #0f150f;">
+                <td class="val green">2</td>
+                <td class="val">Operator to CEO Transition</td>
+                <td>90-day exit plan, delegation</td>
+                <td><span class="status green">READ THIS</span></td>
+              </tr>
+              <tr>
+                <td class="val">3</td>
+                <td>Capital Allocator Mindset</td>
+                <td>PE thinking, portfolio management</td>
+                <td><span class="status green">DONE</span></td>
+              </tr>
+              <tr>
+                <td class="val">4</td>
+                <td>Deal-Making & M&A Framework</td>
+                <td>Roll-up strategy, integration</td>
+                <td><span class="status green">DONE</span></td>
+              </tr>
+              <tr>
+                <td class="val">5</td>
+                <td>Team Building & Culture</td>
+                <td>Culture code, org design</td>
+                <td><span class="status green">DONE</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 8px; font-size: 10px; color: #86efac;">
+            Location: /memory/ceo-shadow-briefs/ | Ask Jarvis to send any brief to Telegram
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- WEEKLY VELOCITY TRENDS -->
-    <div class="module executive-only" style="margin-top: 12px;">
-      <div class="m-header">
-        <span>📈 4-WEEK VELOCITY TRENDS</span>
-        <span class="status green">ACCELERATING</span>
-      </div>
-      <div class="m-body">
-        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-          <div style="flex: 1; background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center;">
-            <div style="font-size: 9px; color: #555; margin-bottom: 4px;">Week -4</div>
-            <div style="font-size: 18px; font-weight: 700; color: #888;">$1.7M</div>
-            <div style="font-size: 10px; color: #666;">Base</div>
-          </div>
-          <div style="flex: 1; background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center;">
-            <div style="font-size: 9px; color: #555; margin-bottom: 4px;">Week -3</div>
-            <div style="font-size: 18px; font-weight: 700; color: #4ade80;">$1.85M</div>
-            <div style="font-size: 10px; color: #4ade80;">+9%</div>
-          </div>
-          <div style="flex: 1; background: #0f0f0f; border-radius: 4px; padding: 12px; text-align: center;">
-            <div style="font-size: 9px; color: #555; margin-bottom: 4px;">Week -2</div>
-            <div style="font-size: 18px; font-weight: 700; color: #4ade80;">$1.95M</div>
-            <div style="font-size: 10px; color: #4ade80;">+5%</div>
-          </div>
-          <div style="flex: 1; background: #0f150f; border: 1px solid #22c55e; border-radius: 4px; padding: 12px; text-align: center;">
-            <div style="font-size: 9px; color: #86efac; margin-bottom: 4px;">This Week</div>
-            <div style="font-size: 18px; font-weight: 700; color: #4ade80;">$2.1M</div>
-            <div style="font-size: 10px; color: #4ade80;">+8%</div>
-          </div>
+      
+      <!-- BOOK PLAYBOOKS -->
+      <div class="module">
+        <div class="m-header">
+          <span>📚 BOOK PLAYBOOKS</span>
+          <span class="status green">10/10</span>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-          <div style="background: #0f0f0f; border-radius: 4px; padding: 10px; text-align: center;">
-            <div style="font-size: 14px; font-weight: 700; color: #4ade80;">+24%</div>
-            <div style="font-size: 9px; color: #555; text-transform: uppercase;">4-Week Growth</div>
-          </div>
-          <div style="background: #0f0f0f; border-radius: 4px; padding: 10px; text-align: center;">
-            <div style="font-size: 14px; font-weight: 700; color: #4ade80;">+6%</div>
-            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Avg Weekly</div>
-          </div>
-          <div style="background: #0f0f0f; border-radius: 4px; padding: 10px; text-align: center;">
-            <div style="font-size: 14px; font-weight: 700; color: #4ade80;">ACCEL</div>
-            <div style="font-size: 9px; color: #555; text-transform: uppercase;">Trajectory</div>
+        <div class="m-body">
+          <table>
+            <thead>
+              <tr><th>Book</th><th>Author</th><th>Key Insight</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>What It Takes</td><td>Schwarzman</td><td>Permanent capital thinking</td></tr>
+              <tr><td>Good to Great</td><td>Collins</td><td>Flywheel effect</td></tr>
+              <tr><td>Hard Thing About Hard Things</td><td>Horowitz</td><td>Wartime CEO mindset</td></tr>
+              <tr><td>Scaling Up</td><td>Harnish</td><td>Rockefeller Habits</td></tr>
+              <tr><td>Zero to One</td><td>Thiel</td><td>Definite optimism</td></tr>
+              <tr><td>Effective Executive</td><td>Drucker</td><td>Time management</td></tr>
+              <tr><td>High Output Management</td><td>Grove</td><td>Leverage & meetings</td></tr>
+              <tr><td>Only the Paranoid Survive</td><td>Grove</td><td>Strategic inflection points</td></tr>
+              <tr><td>The E-Myth Revisited</td><td>Gerber</td><td>Work ON not IN</td></tr>
+              <tr><td>Built to Sell</td><td>Warrillow</td><td>Productize services</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 8px; font-size: 10px; color: #666;">
+            125+ synthesized entries in LEARNINGS-LIBRARY.md | Searchable by situation
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- DECISION LOG -->
-    <div class="module executive-only" style="margin-top: 12px;">
-      <div class="m-header">
-        <span>📋 RECENT DECISIONS & CAPITAL DEPLOYMENT</span>
-      </div>
-      <div class="m-body">
-        <table>
-          <thead>
-            <tr><th>Date</th><th>Decision</th><th>Capital</th><th>Expected Impact</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Feb 22</td>
-              <td class="val">Amazon FBA Launch Prep</td>
-              <td>$15K</td>
-              <td>+$200K Y1 revenue</td>
-              <td><span class="status green">EXECUTING</span></td>
-            </tr>
-            <tr>
-              <td>Feb 20</td>
-              <td class="val">Scale Meta Spend +20%</td>
-              <td>$3K/day</td>
-              <td>+$30K/mo revenue</td>
-              <td><span class="status green">LIVE</span></td>
-            </tr>
-            <tr>
-              <td>Feb 17</td>
-              <td class="val">CFO Framework Approved</td>
-              <td>—</td>
-              <td>Debt capacity clarity</td>
-              <td><span class="status green">DONE</span></td>
-            </tr>
-            <tr>
-              <td>Feb 15</td>
-              <td class="val">Axon Test Expanded</td>
-              <td>$7K/day</td>
-              <td>Channel diversification</td>
-              <td><span class="status green">LIVE</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="margin-top: 8px; font-size: 10px; color: #666;">
-          Total Capital Deployed (30d): <strong style="color: #fff;">$45K</strong> | Expected Incremental Rev: <strong style="color: #4ade80;">$250K+</strong>
+      
+      <!-- LEARNING TRACKS -->
+      <div class="module">
+        <div class="m-header">
+          <span>🎯 LEARNING TRACKS</span>
+        </div>
+        <div class="m-body">
+          <table>
+            <tbody>
+              <tr>
+                <td>Sharran Srivatsaa (YouTube Deep Dive)</td>
+                <td style="width: 100px;"><div class="progress"><div class="progress-fill green" style="width: 100%;"></div></div></td>
+                <td class="val green" style="width: 50px;">100%</td>
+                <td style="width: 80px;"><span class="status green">DONE</span></td>
+              </tr>
+              <tr>
+                <td>CEO Shadow Brief Series</td>
+                <td><div class="progress"><div class="progress-fill green" style="width: 100%;"></div></div></td>
+                <td class="val green">5/5</td>
+                <td><span class="status green">DONE</span></td>
+              </tr>
+              <tr>
+                <td>Book Synthesis (Priority 10)</td>
+                <td><div class="progress"><div class="progress-fill green" style="width: 100%;"></div></div></td>
+                <td class="val green">10/10</td>
+                <td><span class="status green">DONE</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 10px; padding: 10px; background: #0f1f0f; border-radius: 4px; border-left: 3px solid #22c55e;">
+            <div style="font-size: 10px; color: #86efac; font-weight: 600;">KEY INSIGHT APPLIED</div>
+            <div style="font-size: 11px; color: #fff; margin-top: 4px;">
+              "You can't earn your way to a billion. You have to own your way there." — Sharran (via Hormozi)
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- TEAM READINESS INDEX -->
-    <div class="module executive-only" style="margin-top: 12px;">
-      <div class="m-header">
-        <span>👥 TEAM READINESS INDEX</span>
-        <span class="status yellow">75%</span>
-      </div>
-      <div class="m-body">
-        <table>
-          <thead>
-            <tr><th>Role</th><th>Owner</th><th>SOP Coverage</th><th>Backup</th><th>Risk Level</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="val">Media Buying</td>
-              <td>Manoop</td>
-              <td><div class="progress" style="width: 80px;"><div class="progress-fill yellow" style="width: 40%;"></div></div></td>
-              <td class="val yellow">None</td>
-              <td><span class="status yellow">MEDIUM</span></td>
-            </tr>
-            <tr>
-              <td class="val">Finance/CFO</td>
-              <td>Josh</td>
-              <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 70%;"></div></div></td>
-              <td class="val green">Docs</td>
-              <td><span class="status green">LOW</span></td>
-            </tr>
-            <tr>
-              <td class="val">Creative</td>
-              <td>Team</td>
-              <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 60%;"></div></div></td>
-              <td class="val green">Multiple</td>
-              <td><span class="status green">LOW</span></td>
-            </tr>
-            <tr>
-              <td class="val">Ops/Fulfillment</td>
-              <td>3PL</td>
-              <td><div class="progress" style="width: 80px;"><div class="progress-fill green" style="width: 85%;"></div></div></td>
-              <td class="val green">Automated</td>
-              <td><span class="status green">LOW</span></td>
-            </tr>
-            <tr>
-              <td class="val">Strategic/CEO</td>
-              <td>Michael</td>
-              <td><div class="progress" style="width: 80px;"><div class="progress-fill red" style="width: 20%;"></div></div></td>
-              <td class="val red">None</td>
-              <td><span class="status red">HIGH</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="alert yellow" style="margin-top: 10px;">
-          <span class="alert-title">⚠️ KEY-PERSON RISK:</span> Manoop (Media) and Michael (Strategy) have limited backup coverage. Priority: Document 3 critical SOPs by Mar 15.
-        </div>
-      </div>
+      
     </div>
     
     <div class="footer">
-      <div>Capital Command System v2.2 | Revenue → EBITDA → EV → AUM → Optionality</div>
-      <div>Mode: <span id="currentMode">Executive</span> | Dynamic ETA enabled</div>
+      <div>Capital Command System v3.0 | Tab Architecture by CFO Josh | Revenue → EBITDA → EV → AUM → Optionality</div>
+      <div id="lastUpdate">Last updated: Loading...</div>
     </div>
   </div>
   
   <script>
-    function setMode(mode) {
-      document.body.classList.remove('mode-executive', 'mode-institutional');
-      document.body.classList.add('mode-' + mode);
-      document.getElementById('btn-executive').classList.remove('active');
-      document.getElementById('btn-institutional').classList.remove('active');
-      document.getElementById('btn-' + mode).classList.add('active');
-      document.getElementById('currentMode').textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      event.target.classList.add('active');
     }
     
-    // Dynamic calculations
-    const STATE = {
-      realizedAUM: 8.4,
-      runRateAUM: 17.4,
-      currentRevenue: 2.0, // $M/month - will be updated from data.json
-      targetRevenue: 10.0,
-      ttmCAGR: 100,
-      margin: 0.15,
-      multiple: 4
-    };
+    // Mode switching
+    function setMode(mode) {
+      // Currently modes affect visibility of certain institutional-only content
+      // Can be extended later
+      document.getElementById('btn-executive').classList.toggle('active', mode === 'executive');
+      document.getElementById('btn-institutional').classList.toggle('active', mode === 'institutional');
+    }
+    
+    // Load live data
+    async function loadLiveData() {
+      try {
+        const response = await fetch('data.json?t=' + Date.now());
+        const data = await response.json();
+        
+        if (data.rollingRevenue30DayMillions) {
+          document.getElementById('monthlyRevenue').textContent = '$' + data.rollingRevenue30DayMillions.toFixed(2) + 'M';
+        }
+        if (data.wowChange !== undefined) {
+          const wowEl = document.getElementById('wowTrend');
+          const sign = data.wowChange >= 0 ? '+' : '';
+          const colorClass = data.wowChange >= 0 ? 'green' : 'yellow';
+          wowEl.innerHTML = 'WoW: <span class="' + colorClass + '">' + sign + data.wowChange.toFixed(1) + '%</span>';
+        }
+        if (data.updated) {
+          document.getElementById('lastUpdate').textContent = 'Last updated: ' + data.updated;
+        }
+      } catch (e) {
+        console.log('Could not load live data:', e);
+      }
+    }
     
     // Calculate dynamic ETA
     function calculateETA(startAUM, targetAUM, cagr) {
@@ -1374,104 +870,11 @@
       return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     }
     
-    // Update ETAs
-    document.getElementById('etaTTM').textContent = calculateETA(STATE.realizedAUM, 100, STATE.ttmCAGR);
-    document.getElementById('etaRunRate').textContent = calculateETA(STATE.runRateAUM, 100, 200);
-    
-    // Fetch live data from TW
-    async function loadLiveData() {
-      try {
-        const response = await fetch('data.json?t=' + Date.now());
-        const data = await response.json();
-        
-        if (data.rollingRevenue30DayMillions) {
-          const revM = data.rollingRevenue30DayMillions;
-          STATE.currentRevenue = revM;
-          
-          // Update Current Month display
-          document.getElementById('currentRevenue').textContent = '$' + revM.toFixed(1) + 'M';
-          
-          // Update date range subtitle
-          const startDate = new Date(data.startDate + 'T00:00:00');
-          const endDate = new Date(data.endDate + 'T00:00:00');
-          const dateRange = startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + 
-                          ' - ' + endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          document.querySelector('#currentRevenue').closest('.metric-card').querySelector('.metric-sub').textContent = '30-day rolling';
-          
-          // Update progress percentage
-          const progressPct = Math.round((revM / STATE.targetRevenue) * 100);
-          document.getElementById('revenueStatus').textContent = progressPct + '% TO TARGET';
-          document.getElementById('revenueProgress').textContent = '$' + revM.toFixed(1) + 'M (' + progressPct + '%)';
-          
-          // Update required MoM growth (months remaining to Dec 2026)
-          const now = new Date();
-          const targetDate = new Date('2026-12-31');
-          const monthsRemaining = Math.max(1, (targetDate.getFullYear() - now.getFullYear()) * 12 + targetDate.getMonth() - now.getMonth());
-          const requiredGrowth = Math.pow(STATE.targetRevenue / revM, 1 / monthsRemaining) - 1;
-          document.getElementById('requiredGrowth').textContent = '+' + Math.round(requiredGrowth * 100) + '%';
-          
-          // Update WoW trend indicator
-          if (data.wowChange !== undefined) {
-            const wowEl = document.getElementById('wowTrend');
-            const wow = data.wowChange;
-            const arrow = wow >= 0 ? '↑' : '↓';
-            const color = wow >= 0 ? '#4ade80' : '#fca5a5';
-            wowEl.innerHTML = '<span style="color:' + color + '">' + arrow + ' ' + Math.abs(wow).toFixed(1) + '% WoW</span>';
-          }
-          
-          // Update last sync from data
-          const syncDate = new Date(data.lastUpdated);
-          document.getElementById('lastSync').textContent = syncDate.toLocaleString('en-US', { 
-            month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' 
-          });
-        }
-      } catch (e) {
-        console.log('Could not load live data:', e);
-        // Fall back to static display
-        document.getElementById('lastSync').textContent = new Date().toLocaleString('en-US', { 
-          month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' 
-        });
-      }
-    }
-    
-    // Load live data on page load
+    // Initialize
+    document.getElementById('etaTTM').textContent = calculateETA(8.4, 100, 100);
+    document.getElementById('etaRunRate').textContent = calculateETA(17.4, 100, 200);
     loadLiveData();
-    
-    // Calculate milestone countdowns
-    function updateMilestoneCountdowns() {
-      const milestones = [
-        { id: 'amazonDays', date: '2026-03-06' },
-      ];
-      
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      milestones.forEach(m => {
-        const targetDate = new Date(m.date + 'T00:00:00');
-        const diffTime = targetDate - today;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        const el = document.getElementById(m.id);
-        if (el) {
-          el.textContent = diffDays;
-          if (diffDays <= 7) {
-            el.className = 'val red';
-          } else if (diffDays <= 14) {
-            el.className = 'val yellow';
-          } else {
-            el.className = 'val green';
-          }
-        }
-      });
-      
-      // Update header countdown
-      const amazonCountdown = document.getElementById('nextMilestoneCountdown');
-      const amazonDays = document.getElementById('amazonDays');
-      if (amazonCountdown && amazonDays) {
-        amazonCountdown.textContent = amazonDays.textContent + ' DAYS';
-      }
-    }
-    updateMilestoneCountdowns();
+    setInterval(loadLiveData, 60000); // Refresh every minute
   </script>
 </body>
 </html>
