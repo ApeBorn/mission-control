@@ -449,85 +449,90 @@
       <div class="module">
         <div class="m-header">
           <span>📊 ROAS — TW ATTRIBUTED (Source of Truth)</span>
-          <span class="status green" id="roasStatus">HEALTHY</span>
+          <span class="status yellow" id="roasStatus">BELOW TARGET</span>
         </div>
         <div class="m-body">
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
-            <div class="metric-card" style="border: 2px solid #22c55e; background: #0a150a;">
-              <div class="metric-value green" style="font-size: 28px;">2.58x</div>
+            <div class="metric-card" style="border: 2px solid #fbbf24; background: #1a1508;">
+              <div class="metric-value yellow" style="font-size: 28px;">2.21x</div>
               <div class="metric-label">TW Attributed ROAS</div>
-              <div class="metric-sub">Linear Paid — 7 Day</div>
-              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ Above 2.5x target</div>
+              <div class="metric-sub">Linear Paid — Feb 22</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #fbbf24;">⚠️ Below 2.5x target</div>
             </div>
             <div class="metric-card">
-              <div class="metric-value">2.11x</div>
-              <div class="metric-label">Platform Blended</div>
-              <div class="metric-sub">For reference only</div>
-              <div style="margin-top: 6px; font-size: 9px; color: #666;">Platforms over-report</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value green">2.5x</div>
+              <div class="metric-value yellow">2.5x</div>
               <div class="metric-label">Target Floor</div>
               <div class="metric-sub">Constraint threshold</div>
-              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ GREEN = Scale permission</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #fbbf24;">YELLOW = Optimize</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value red">2.0x</div>
+              <div class="metric-label">Red Line</div>
+              <div class="metric-sub">Capital protection</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #666;">Currently above</div>
             </div>
           </div>
-          <div style="font-size: 10px; color: #666; background: #0f0f0f; padding: 8px; border-radius: 4px;">
-            <strong style="color: #4ade80;">RULE:</strong> Always use TW Attributed ROAS, never platform-reported. |
-            <strong>Alert:</strong> &lt;2.5x = Yellow | &lt;2.0x = Red
+          <div style="font-size: 10px; color: #fbbf24; background: #1a1508; padding: 8px; border-radius: 4px; border: 1px solid #a16207;">
+            <strong>⚠️ CONSTRAINT MODE:</strong> TW ROAS (2.21x) below 2.5x target. Focus on efficiency before scaling. |
+            <strong>Rule:</strong> &lt;2.5x = Yellow (optimize) | &lt;2.0x = Red (pause/cut)
           </div>
         </div>
       </div>
       
-      <!-- CHANNEL SPEND BREAKDOWN -->
+      <!-- CHANNEL TW ATTRIBUTED ROAS -->
       <div class="module">
         <div class="m-header">
-          <span>CHANNEL SPEND BREAKDOWN (7-Day)</span>
-          <span class="status yellow">47% META</span>
+          <span>CHANNEL TW ROAS (Linear Attribution) — Feb 22</span>
+          <span class="status yellow">MONITOR AXON</span>
         </div>
         <div class="m-body">
           <table>
             <thead>
-              <tr><th>Channel</th><th>7-Day Spend</th><th>% of Total</th><th>Notes</th></tr>
+              <tr><th>Channel</th><th>Daily Spend</th><th>TW ROAS</th><th>% of Spend</th><th>Status</th></tr>
             </thead>
             <tbody>
               <tr>
                 <td class="val">Meta</td>
-                <td>$127.6K</td>
-                <td class="val yellow">46.6%</td>
-                <td style="font-size: 10px; color: #fbbf24;">Target: &lt;40%</td>
-              </tr>
-              <tr>
-                <td class="val">Axon</td>
-                <td>$74.7K</td>
-                <td>27.3%</td>
-                <td style="font-size: 10px; color: #666;">Good diversification</td>
+                <td>$17.4K</td>
+                <td class="val yellow">2.31x</td>
+                <td class="val yellow">50%</td>
+                <td><span class="status yellow">MONITOR</span></td>
               </tr>
               <tr>
                 <td class="val">Google</td>
-                <td>$60.2K</td>
-                <td>22.0%</td>
-                <td style="font-size: 10px; color: #666;">Agency managed</td>
+                <td>$8.0K</td>
+                <td class="val yellow">2.02x</td>
+                <td>23%</td>
+                <td><span class="status yellow">MONITOR</span></td>
+              </tr>
+              <tr>
+                <td class="val">Axon</td>
+                <td>$8.1K</td>
+                <td class="val yellow">1.91x</td>
+                <td>23%</td>
+                <td><span class="status yellow">WATCH</span></td>
               </tr>
               <tr>
                 <td class="val">Snapchat</td>
-                <td>$9.0K</td>
-                <td>3.3%</td>
-                <td style="font-size: 10px; color: #666;">Small test</td>
+                <td>$1.4K</td>
+                <td class="val yellow">1.76x</td>
+                <td>4%</td>
+                <td><span class="status yellow">SMALL</span></td>
               </tr>
               <tr style="background: #0f0f0f;">
-                <td class="val">Total</td>
-                <td class="val">$273.7K</td>
+                <td class="val">Blended</td>
+                <td class="val">$35.0K</td>
+                <td class="val yellow">2.21x</td>
                 <td>100%</td>
-                <td style="font-size: 10px; color: #4ade80;">~$39K/day avg</td>
+                <td><span class="status yellow">BELOW 2.5</span></td>
               </tr>
             </tbody>
           </table>
           <div class="alert yellow" style="margin-top: 10px;">
-            <span class="alert-title">PLATFORM DEPENDENCY:</span> Meta at 47% of spend. A policy change could impact half of ad performance. Target: diversify to &lt;40%.
+            <span class="alert-title">⚠️ ROAS ALERT:</span> Blended TW ROAS (2.21x) is below 2.5x target. All channels showing <2.5x. Meta at 50% of spend — platform dependency risk.
           </div>
-          <div style="margin-top: 8px; font-size: 10px; color: #666;">
-            Note: Channel-level ROAS should be checked in TW dashboard (Linear Paid attribution). API shows spend only.
+          <div style="margin-top: 8px; font-size: 10px; color: #4ade80;">
+            Data: TW Attribution API | Model: Linear (paid) | Updated: Feb 22
           </div>
         </div>
       </div>
