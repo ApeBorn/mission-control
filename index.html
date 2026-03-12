@@ -192,17 +192,17 @@
       <!-- OPERATING MODE ALERT -->
       <div class="alert yellow" id="operatingModeAlert" style="margin-bottom: 12px;">
         <div class="alert-title" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>🔴 MARGIN DEFENSE MODE — ROAS 1.60x (Critical)</span>
-          <span class="status red">1.60x</span>
+          <span>🟡 MARGIN DEFENSE MODE — ROAS 2.21x (Recovering)</span>
+          <span class="status yellow">2.21x</span>
         </div>
         <div style="margin-top: 8px; font-size: 10px;">
-          Target: ≥2.5x | Exit Condition: 7-day blended ≥2.5 | GeoLift LAG PERIOD Day 3 | Last Updated: Mar 10, 2026
+          Target: ≥2.5x | Exit Condition: 7-day blended ≥2.5 | GeoLift LAG PERIOD Day 4 | Last Updated: Mar 11, 2026
         </div>
         <div style="margin-top: 6px; font-size: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
-          <div>Meta: <span class="val red">1.66x</span> ($14.3K)</div>
-          <div>Google: <span class="val red">1.58x</span> ($7.4K)</div>
-          <div>Axon: <span class="val red">1.18x</span> ($6.4K)</div>
-          <div>Snap: <span class="val red">1.59x</span> ($1.0K)</div>
+          <div>Meta: <span class="val green">3.16x</span> ($13.8K)</div>
+          <div>Google: <span class="val red">1.37x</span> ($6.5K)</div>
+          <div>Axon: <span class="val yellow">2.28x</span> ($3.7K)</div>
+          <div>Snap: <span class="val green">4.75x</span> ($0.9K)</div>
         </div>
       </div>
       
@@ -466,15 +466,15 @@
       <div class="module">
         <div class="m-header">
           <span>📊 ROAS — TW ATTRIBUTED (Source of Truth)</span>
-          <span class="status yellow" id="roasStatus">BELOW TARGET</span>
+          <span class="status yellow" id="roasStatus">RECOVERING</span>
         </div>
         <div class="m-body">
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
-            <div class="metric-card" style="border: 2px solid #fbbf24; background: #1a1608;">
-              <div class="metric-value yellow" style="font-size: 28px;">2.12x</div>
+            <div class="metric-card" style="border: 2px solid #4ade80; background: #0a1a0a;">
+              <div class="metric-value yellow" style="font-size: 28px;">2.21x</div>
               <div class="metric-label">TW Attributed ROAS</div>
-              <div class="metric-sub">Linear Paid — Mar 7</div>
-              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">🟢 Improving (+0.26 vs Mar 6)</div>
+              <div class="metric-sub">Linear Paid — Mar 11</div>
+              <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">🟢 Strong recovery (+38% vs Mar 10)</div>
             </div>
             <div class="metric-card">
               <div class="metric-value yellow">2.5x</div>
@@ -489,8 +489,8 @@
               <div style="margin-top: 6px; font-size: 9px; color: #4ade80;">✓ Currently above</div>
             </div>
           </div>
-          <div style="font-size: 10px; color: #ef4444; background: #1a0f0f; padding: 8px; border-radius: 4px; border: 1px solid #991b1b;">
-            <strong>🔴 CRITICAL:</strong> TW ROAS (1.60x) at new low — Trend: 1.90x → 1.75x → 1.60x. Google collapsed (1.95→1.58x). GeoLift Lag Period Day 3 (decision Mar 15). |
+          <div style="font-size: 10px; color: #4ade80; background: #0f1a0f; padding: 8px; border-radius: 4px; border: 1px solid #166534;">
+            <strong>🟢 RECOVERING:</strong> TW ROAS bounced from 1.60x → 2.21x (+38%). Trend: 1.60x → 2.21x. Spend reduced 54% ($55K→$25K, GeoLift effect). Net profit positive ($5.1K). GeoLift Lag Period Day 4 (decision Mar 15). |
             <strong>Rule:</strong> &lt;2.5x = Optimize | &lt;2.0x = Capital Protection
           </div>
         </div>
@@ -499,8 +499,8 @@
       <!-- CHANNEL TW ATTRIBUTED ROAS -->
       <div class="module">
         <div class="m-header">
-          <span>CHANNEL TW ROAS (Linear Attribution) — Mar 7</span>
-          <span class="status yellow">GEOLIFT DAY 13 OF 14</span>
+          <span>CHANNEL TW ROAS (Linear Attribution) — Mar 11</span>
+          <span class="status yellow">GEOLIFT LAG DAY 4 OF 7</span>
         </div>
         <div class="m-body">
           <table>
@@ -510,46 +510,46 @@
             <tbody>
               <tr>
                 <td class="val">Meta</td>
-                <td>$15.6K</td>
-                <td class="val yellow">2.11x</td>
-                <td class="val">49%</td>
-                <td><span class="status green">IMPROVED ↑</span></td>
+                <td>$13.8K</td>
+                <td class="val green">3.16x</td>
+                <td class="val">55%</td>
+                <td><span class="status green">STRONG ↑</span></td>
               </tr>
               <tr>
                 <td class="val">Google</td>
-                <td>$8.0K</td>
-                <td class="val yellow">2.38x</td>
-                <td>25%</td>
-                <td><span class="status yellow">NEAR TARGET ↑</span></td>
+                <td>$6.5K</td>
+                <td class="val red">1.37x</td>
+                <td>26%</td>
+                <td><span class="status red">BELOW TARGET</span></td>
               </tr>
               <tr>
                 <td class="val">Axon</td>
-                <td>$6.8K</td>
-                <td class="val red">1.41x</td>
-                <td>21%</td>
-                <td><span class="status red">PRIMARY DRAG ↓</span></td>
+                <td>$3.7K</td>
+                <td class="val yellow">2.28x</td>
+                <td>15%</td>
+                <td><span class="status yellow">IMPROVING ↑</span></td>
               </tr>
               <tr>
                 <td class="val">Snapchat</td>
                 <td>$0.9K</td>
-                <td class="val red">1.24x</td>
-                <td>3%</td>
-                <td><span class="status red">LOW VOLUME</span></td>
+                <td class="val green">4.75x</td>
+                <td>4%</td>
+                <td><span class="status green">STRONG</span></td>
               </tr>
               <tr style="background: #0f1a0f;">
                 <td class="val">Blended</td>
-                <td class="val">$31.7K</td>
-                <td class="val red">1.75x</td>
-                <td>70%</td>
-                <td><span class="status red">DECLINING ↓</span></td>
+                <td class="val">$25.2K</td>
+                <td class="val yellow">2.21x</td>
+                <td>100%</td>
+                <td><span class="status green">RECOVERING ↑</span></td>
               </tr>
             </tbody>
           </table>
           <div class="alert green" style="margin-top: 10px; background: #0f1f0f; border: 1px solid #166534; color: #4ade80;">
-            <span class="alert-title">🔴 DECLINING:</span> Blended dropped 1.90x → 1.75x (-8%). All channels below target. Meta (1.65x) and Axon (1.41x) primary drags. GeoLift Lag Period Day 2. Decision Mar 15.
+            <span class="alert-title">🟢 RECOVERING:</span> Blended jumped 1.60x → 2.21x (+38%). Revenue $55.7K, Orders 347 (+7%). Net profit $5.1K (positive!). Spend cut 54% improving efficiency. GeoLift Lag Period Day 4. Decision Mar 15.
           </div>
           <div style="margin-top: 8px; font-size: 10px; color: #4ade80;">
-            ✓ Data: TW Attribution API | Model: Linear (paid) | Updated: Mar 9 22:00 EST | GeoLift Lag Period (Day 2/7)
+            ✓ Data: TW Attribution API | Model: Linear (paid) | Updated: Mar 11 22:00 EST | GeoLift Lag Period (Day 4/7)
           </div>
         </div>
       </div>
