@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2026-05-04T08:00:43.515912",
-  "startDate": "2026-04-04",
-  "endDate": "2026-05-03",
-  "rollingRevenue30Day": 1907877.84,
-  "rollingRevenue30DayMillions": 1.91,
-  "last7DaysRevenue": 475032.01,
-  "prev7DaysRevenue": 512321.31,
-  "wowChange": -7.3,
-  "dailyAvg7d": 67861.72,
-  "monthlyRunRate": 2035851.47,
-  "monthlyRunRateMillions": 2.04
+  "lastUpdated": "2026-05-05T08:00:13.227424",
+  "startDate": "2026-04-05",
+  "endDate": "2026-05-04",
+  "rollingRevenue30Day": 1899448.14,
+  "rollingRevenue30DayMillions": 1.9,
+  "last7DaysRevenue": 468947.04,
+  "prev7DaysRevenue": 527209.19,
+  "wowChange": -11.1,
+  "dailyAvg7d": 66992.43,
+  "monthlyRunRate": 2009773.03,
+  "monthlyRunRateMillions": 2.01
 }
